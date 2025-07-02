@@ -130,26 +130,15 @@ Modern healthcare systems suffer from:
 
 ---
 
-## 📷 Website Preview
-
-> *(Add images or deployment link here)*
-> Homepage, Bed Booking, AI Bot, Virtual Consults
-
----
-
 ## 👨‍💻 Team
 
 * Enakshy Mondal
 * Diya Sarkar
 * Moumita Das
-* **Krishna Mohanty**
+* Krishna Mohanty
 
 ---
 
 ## 📜 License
+All rights reserved to the authors.
 
-This project is for educational/demo purposes. All rights reserved to the authors.
-
----
-
-Let me know if you'd like this in `.docx`, or to auto-generate one from your actual project code!
