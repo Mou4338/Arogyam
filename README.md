@@ -1,7 +1,3 @@
-Here's a clean and professional `README.md` for your **AROGYAM** project, based on your PowerPoint:
-
----
-
 # 🩺 AROGYAM — Your AI-Powered Healthcare Companion
 
 **Arogyam** means *"the state of being free from diseases"*.
