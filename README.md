@@ -1,36 +1,144 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🩺 AROGYAM — Your AI-Powered Healthcare Companion
 
-## Getting Started
+**Arogyam** means *"the state of being free from diseases"*.
+We envision a world where **healthcare is not a privilege, but a right** — making access to emergency, wellness, and preventive health support seamless and universal.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚨 Problem Statement
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Modern healthcare systems suffer from:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+* ❌ No real-time hospital bed availability
+* ❌ Chaotic emergency navigation
+* ❌ Unreliable health advice from unverified sources
+* ❌ Lack of preventive habit reinforcement
+* ❌ Poor awareness of local outbreaks
+* ❌ Limited access to doctors in rural/remote areas
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🌟 Our Vision
 
-To learn more about Next.js, take a look at the following resources:
+> **“A world where access to health support is never a privilege, but a right.”**
+> AROGYAM is a specialized healthcare platform that:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+* Bridges the gap between patients and hospitals
+* Supports wellness and preventive care
+* Uses AI to improve accessibility and responsiveness
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🧠 Key Features
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 🏥 Hospital Bed Booking
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+* Real-time availability map (color-coded)
+* AI-powered wait time predictions
+* Emergency SOS and transport booking (ambulance/cab)
+
+### 🤖 AI Healthbot
+
+* Symptom checker trained on real medical data
+* Personalized remedies (herbal, homeopathy, allopathy)
+* Recommends doctor consultations for critical cases
+
+### 💡 Healthy Reminders
+
+* Smart alerts for water intake, exercise, mental wellness
+* Track medication, appointments, and goals
+* Motivational nudges to build long-term habits
+
+### 📢 Public Health Alerts
+
+* Government-issued outbreak and vaccination alerts
+* Push notifications for urgent health risks
+* Education on disease prevention
+
+### 💬 Virtual Doctor Consultations
+
+* Secure video calls with doctors
+* E-prescriptions and direct medicine orders
+* Digitally stored health records
+
+---
+
+## 🔧 Technical Stack
+
+*(Details to be added if codebase is available — e.g., React, Node.js, MongoDB, TensorFlow, etc.)*
+
+---
+
+## 🌍 Impact: Targeted UN SDGs
+
+| SDG    | Goal                                       |
+| ------ | ------------------------------------------ |
+| SDG 3  | Good Health & Well-Being                   |
+| SDG 1  | No Poverty (affordable access)             |
+| SDG 4  | Quality Education (health literacy)        |
+| SDG 10 | Reduced Inequalities (rural-first)         |
+| SDG 11 | Sustainable Cities (emergency support)     |
+| SDG 16 | Strong Institutions (trust & transparency) |
+| SDG 17 | Partnerships for the Goals                 |
+| SDG 9  | Innovation & Infrastructure                |
+
+---
+
+## 📊 Market Highlights
+
+* 🔼 Rapid growth in India’s AI healthcare market
+* 📱 Strong smartphone + internet adoption
+* 📈 Post-COVID rise in telemedicine acceptance
+* 🏃‍♂️ Water tracking, workouts & habit reminders in high demand
+
+---
+
+## 🧩 SWOT Analysis
+
+**Strengths:**
+
+* All-in-one platform (emergency + AI + wellness)
+* Multi-treatment options (allopathy, herbal, homeopathy)
+* Real-time alerts and AI personalization
+
+**Weaknesses:**
+
+* Relies on hospital data integration
+* Legal/accuracy concerns in AI diagnosis
+* Requires robust data privacy & trust
+
+**Opportunities:**
+
+* Government + hospital partnerships
+* Health tech investor interest
+* B2B wellness integration for companies
+
+**Threats:**
+
+* Competition from giants (Practo, 1mg)
+* Regulation and liability issues
+* Resistance from traditional hospitals
+
+---
+
+## 🚀 Future Enhancements
+
+* Doctor search filters by language/specialty
+* AI-powered mental health assistant
+* Offline mode for rural areas
+* Integration with wearable health devices
+
+---
+
+## 👨‍💻 Team
+
+* Enakshy Mondal
+* Diya Sarkar
+* Moumita Das
+* Krishna Mohanty
+
+---
+
+## 📜 License
+All rights reserved to the authors.
+
