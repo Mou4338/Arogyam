@@ -3,6 +3,7 @@ import {
   Hospital, Ambulance, Pill, ShieldAlert, PhoneCall, BotMessageSquare,
   HeartPulse, Zap, CalendarCheck, ClipboardList
 } from 'lucide-react';
+import Testimonial from './Testimonial';
 
 export default function HeroSection() {
   const services = [
@@ -137,6 +138,7 @@ export default function HeroSection() {
         />
       </div>
     </section>
+    <Testimonial />
 
     </>
   );
