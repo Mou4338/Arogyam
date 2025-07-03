@@ -1,3 +1,4 @@
+import React from 'react'
 import AuthForm from 'src\components\AuthForm.jsx'
 
 export default function RegisterPage() {

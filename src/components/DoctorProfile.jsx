@@ -1,3 +1,4 @@
+import React from 'react'
 export default function DoctorProfile() {
   return (
     <div className="bg-white rounded-lg shadow p-6 space-y-6">
