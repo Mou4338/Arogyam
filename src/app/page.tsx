@@ -1,12 +1,10 @@
 import React from 'react'
-
+import HeroSection from '@/components/HeroSection'
 
 const page = () => {
   return (
     <>
-    <div className='bg-slate-100'>
-arogyam
-    </div>
+    <HeroSection />
     </>
   )
 }

@@ -13,15 +13,15 @@ const Footer = () => {
   return (
     <footer className="bg-secondary border-t py-6">
       <div className="flex flex-col md:flex-row items-center justify-between max-w-6xl mx-auto px-4">
-        <div className="flex space-x-6 mb-4 md:mb-0">
+        <div className="flex  mb-4 md:mb-0">
           {Foottags.map((tag, idx) => (
             <Link
               key={idx}
               href={tag.target}
-              className="text-light font-body transition-colors duration-200"
+              className="text-black font-body transition-colors duration-200"
             >
-              {idx < Foottags.length  && (
-                <span className="hidden sm:inline border-l border-white h-4 mx-2"></span>
+              {idx < Foottags.length - 1 && (
+                <span className="hidden sm:inline border-l border-black h-4 mx-4"></span>
               )}
               {tag.label}
             </Link>
