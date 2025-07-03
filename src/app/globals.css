@@ -4,14 +4,14 @@
   --background: #ebf2f0;      /* light from Tailwind config */
   --foreground: #253642;      /* dark from Tailwind config */
   --primary: #132d2e;         /* primary from Tailwind config */
-  --secondary: #64bcae;       /* secondary from Tailwind config */
+  --secondary: #3f8578;       /* secondary from Tailwind config */
   --font-sans: 'Arial', 'sans-serif';         /* body font from Tailwind config */
   --font-heading: 'Segoe UI', 'sans-serif';   /* heading font from Tailwind config */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #253642;    /* dark from Tailwind config */
+    --background: var(--secondary);    /* dark from Tailwind config */
     --foreground: #ebf2f0;    /* light from Tailwind config */
   }
 }
@@ -21,7 +21,7 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
 }
-
+/* 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   color: var(--primary);
@@ -29,10 +29,9 @@ h1, h2, h3, h4, h5, h6 {
 
 a {
   color: var(--secondary);
-  text-decoration: underline;
-}
+} */
 
-button, .btn {
+/* button, .btn {
   background-color: var(--secondary);
   color: var(--primary);
   font-family: var(--font-sans);
@@ -45,4 +44,4 @@ button, .btn {
 button:hover, .btn:hover {
   background-color: var(--primary);
   color: var(--secondary);
-}
+} */
