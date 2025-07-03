@@ -13,12 +13,12 @@ const Navbar = () => {
     ];
 
     return (
-        <nav className="bg-slate-100 mx-4 ">
+        <nav className="bg-green-800  ">
             <div className="flex items-center justify-between p-2">
                 <img src='./arogyam.png' className='w-23' />
                 <div className="flex space-x-6 p-2">
                     {Navtags.map((nav, index) => (
-                        <Link key={index} href={nav.target} passHref className="text-black hover:text-blue-500 transition-colors duration-200">
+                        <Link key={index} href={nav.target} passHref className="text-white hover:text-black transition-colors duration-200">
                             {nav.label}
                         </Link>
                     ))}

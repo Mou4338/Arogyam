@@ -11,11 +11,11 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-blue-700 text-white p-4 ">
+    <footer className="bg-green-800 text-white p-4 ">
       <div className="flex flex-wrap justify-center ">
         {Foottags.map((nav, index) => (
           <React.Fragment key={index}>
-            <Link href={nav.target} passHref className="hover:text-black transition-colors duration-200">
+            <Link href={nav.target} passHref className="hover:text-black rounded hover:bg-slate-200 hover:px-2 transition-colors duration-200">
                 {nav.label}
             </Link>
             {index < Foottags.length - 1 && (
