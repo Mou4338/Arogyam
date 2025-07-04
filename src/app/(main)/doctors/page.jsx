@@ -3,6 +3,7 @@ import React from "react"
 import Head from "next/head"
 import DoctorCard from "@/components/DoctorProfile.jsx"
 import ScheduleCard from "@/components/ScheduleForm.jsx"
+import Consultation from '@/components/Consultation'
 
 export default function Home() {
   return (
@@ -18,9 +19,14 @@ export default function Home() {
               Schedule video calls with doctors, receive prescriptions, and manage your health from anywhere.
             </p>
           </section>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <DoctorCard />
-            <ScheduleCard />
+          <div className="flex gap-8">
+            <div className="flex-2/3">
+              <DoctorCard />
+              <Consultation/>
+            </div>
+            <div className="flex-1/3">
+              <ScheduleCard />
+            </div>
           </div>
         </main>
       </div>

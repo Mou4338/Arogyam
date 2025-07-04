@@ -1,52 +1,67 @@
-import React from 'react'
-import { useState } from 'react'
+"use client";
+
+import React from 'react';
+import { useForm } from 'react-hook-form';
 
 export default function ScheduleForm() {
-  const [form, setForm] = useState({
-    date: '',
-    time: '',
-    timezone: 'Asia/Kolkata (IST)',
-  })
+  const {
+    register,handleSubmit,formState: { errors }} = useForm({
+    defaultValues: {
+      subject: '',
+      date: '',
+      time: '',
+      timezone: 'Asia/Kolkata (IST)',
+    },
+  });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setForm({ ...form, [name]: value })
+  const onSubmit = async(data) => {
+    console.log(data);
+    try{
+      const res=await fetch('api/consultation',{
+        method:"POST",
+        headers: {"Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      const result=await res.json();
+      if(res.ok){
+        console.log("Consultation set successfully", result);
+        alert("Appointment booked successfully!");
+      }
+    }catch(error){
+      console.log("Error setting consultation",error);
+    }
   }
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    alert(`Appointment booked on ${form.date} at ${form.time} (${form.timezone})`)
-  }
-
   return (
-    <div className="bg-white shadow-xl border border-gray-100 rounded-xl p-6 space-y-6">
-      <h3 className="text-xl font-semibold text-teal-700 flex items-center gap-2">
-        📆 Book Your Appointment
+    <div className="bg-[#3f8578] shadow-xl border border-gray-100 rounded-xl p-6 space-y-6 text-white">
+      <h3 className="text-xl font-semibold flex items-center gap-2">
+         Book Your Appointment
       </h3>
 
-      <form className="space-y-5" onSubmit={handleSubmit}>
-        {/* Date */}
+      <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <label className="block text-sm text-gray-600 font-medium">Select Date</label>
+          <label className="block text-sm font-medium mb-1">Consult For</label>
+          <input
+            type="text"
+            {...register('subject', { required: true })}
+            placeholder='Enter subject of consultation'
+            className="w-full px-4 py-2 rounded-lg border border-gray-300 text-black focus:outline-none focus:ring-2 focus:ring-white transition"
+          />
+          {errors.subject && <span className="text-sm text-red-200">Subject is required</span>}
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-1">Select Date</label>
           <input
             type="date"
-            name="date"
-            value={form.date}
-            onChange={handleChange}
-            required
-            className="mt-1 w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 transition"
+            {...register('date', { required: true })}
+            className="w-full px-4 py-2 rounded-lg border border-gray-300 text-black focus:outline-none focus:ring-2 focus:ring-white transition"
           />
+          {errors.date && <span className="text-sm text-red-200">Date is required</span>}
         </div>
-
-        {/* Time */}
         <div>
-          <label className="block text-sm text-gray-600 font-medium">Select Time</label>
+          <label className="block text-sm font-medium mb-1">Select Time</label>
           <select
-            name="time"
-            value={form.time}
-            onChange={handleChange}
-            required
-            className="mt-1 w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 transition"
+            {...register('time', { required: true })}
+            className="w-full px-4 py-2 rounded-lg border border-gray-300 text-black focus:outline-none focus:ring-2 focus:ring-white transition"
           >
             <option value="">-- Choose a slot --</option>
             <option>09:00 AM</option>
@@ -54,16 +69,14 @@ export default function ScheduleForm() {
             <option>02:00 PM</option>
             <option>04:30 PM</option>
           </select>
+          {errors.time && <span className="text-sm text-red-200">Time is required</span>}
         </div>
 
-        {/* Timezone */}
         <div>
-          <label className="block text-sm text-gray-600 font-medium">Timezone</label>
+          <label className="block text-sm font-medium mb-1">Timezone</label>
           <select
-            name="timezone"
-            value={form.timezone}
-            onChange={handleChange}
-            className="mt-1 w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 transition"
+            {...register('timezone')}
+            className="w-full px-4 py-2 rounded-lg border border-gray-300 text-black focus:outline-none focus:ring-2 focus:ring-white transition"
           >
             <option>Asia/Kolkata (IST)</option>
             <option>GMT</option>
@@ -72,14 +85,11 @@ export default function ScheduleForm() {
           </select>
         </div>
 
-        {/* Button */}
-        <button
-          type="submit"
-          className="w-full py-3 text-center font-semibold text-white bg-teal-600 hover:bg-teal-700 rounded-lg transition shadow-md"
-        >
-          ✅ Confirm Appointment
+        <button type="submit"
+          className="w-full py-3 text-center font-semibold text-[#3f8578] bg-white hover:bg-gray-100 rounded-lg transition shadow-md">
+           Confirm Appointment
         </button>
       </form>
     </div>
-  )
+  );
 }

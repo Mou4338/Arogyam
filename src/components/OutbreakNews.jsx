@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { fetchDiseaseNews } from "@/utils/alertsFeed";
-import Quicktips from '@/components/Quicktips';
+import HealthResources from "./HealthResources";
 
 const OutbreakNews = () => {
   const [articles, setArticles] = useState([]);
@@ -26,7 +26,7 @@ const OutbreakNews = () => {
       <div className="flex flex-col lg:flex-row gap-6">
 
         {/* News Section */}
-        <div className="w-full lg:w-3/4 space-y-4 border border-gray-300 p-4 rounded bg-white text-gray-800">
+        <div className="w-full lg:w-2/3 space-y-4 border border-gray-300 p-4 rounded bg-white text-gray-800">
           <div className="relative mb-2">
             <input
               type="search"
@@ -41,7 +41,7 @@ const OutbreakNews = () => {
             <p className="text-sm text-gray-500">No news found.</p>
           )}
 
-          {articles.slice(0, 10).map((item, index) => (
+          {articles.slice(0, 5).map((item, index) => (
             <div key={index} className="flex gap-4 border border-gray-200 rounded-md p-3 bg-slate-50 shadow-sm">
               {item.thumbnail && (
                 <img
@@ -69,8 +69,8 @@ const OutbreakNews = () => {
         </div>
 
         {/* Sidebar */}
-        <div className="w-full lg:w-1/4 p-2">
-          <Quicktips />
+        <div className="w-full lg:w-1/3 p-2">
+          <HealthResources/>
         </div>
       </div>
     </div>
