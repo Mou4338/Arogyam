@@ -20,7 +20,7 @@ const Footer = () => {
               href={tag.target}
               className="text-black font-body transition-colors duration-200"
             >
-              {idx < Foottags.length - 1 && (
+              {idx < Foottags.length  && (
                 <span className="hidden sm:inline border-l border-black h-4 mx-4"></span>
               )}
               {tag.label}
