@@ -58,7 +58,7 @@ export default function AuthForm({ type = 'login', onSubmit }) {
           type="submit"
           className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 rounded-md transition"
         >
-          {isLogin ? 'Sign In' : 'Sign Up'}
+          {isLogin ? 'Log In' : 'Sign Up'}
         </button>
       </form>
 
@@ -87,7 +87,7 @@ export default function AuthForm({ type = 'login', onSubmit }) {
       <p className="text-sm text-center text-gray-600">
         {isLogin ? "Don't have an account?" : 'Already registered?'}{' '}
         <Link href={isLogin ? '/register' : '/login'}>
-          <span className="text-teal-600 hover:underline">{isLogin ? 'Sign Up' : 'Sign In'}</span>
+          <span className="text-teal-600 hover:underline">{isLogin ? 'Log In' : 'Sign In'}</span>
         </Link>
       </p>
     </div>
