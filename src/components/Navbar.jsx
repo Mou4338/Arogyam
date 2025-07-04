@@ -14,7 +14,7 @@ const Navbar = () => {
 
   return (
     <nav className=" px-6 py-2 flex items-center justify-between">
-      <img src='./arogyam.png' className='w-23' />
+      <img src='/arogyam.png' className='w-23' />
       <div className="flex items-center space-x-6">
         {Navtags.map((nav, index) => (
           <Link

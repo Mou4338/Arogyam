@@ -7,20 +7,20 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { app } from "@/lib/firebaseConfig"; 
 
 const Page = () => {
-  // const [user, setUser] = useState(null);
-  // const auth = getAuth(app);
+  const [user, setUser] = useState(null);
+  const auth = getAuth(app);
 
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-  //     setUser(currentUser);
-  //   });
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
 
-  //   return () => unsubscribe(); 
-  // }, [auth]);
+    return () => unsubscribe(); 
+  }, [auth]);
 
   return (
     <>
-      {/* {user ? ( */}
+      {user ? (
         <>
           <RemainderHeroSection />
 
@@ -36,9 +36,9 @@ const Page = () => {
             </div>
           </div>
         </>
-      {/* ) : (
+       ) : (
         <div className="text-center p-10 text-xl text-gray-600">Please log in to access your reminders.</div>
-      )} */}
+      )} 
     </>
   );
 };

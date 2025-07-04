@@ -1,9 +1,8 @@
+"use client"
 import React from "react"
 import Head from "next/head"
-import Header from "src\components\Header.jsx"
-import DoctorCard from "src\components\DoctorProfile.jsx"
-import ScheduleCard from "src\components\ScheduleForm.jsx"
-import Footer from "src\components\Footer.jsx"
+import DoctorCard from "@/Components/DoctorProfile.jsx"
+import ScheduleCard from "@/Components/ScheduleForm.jsx"
 
 export default function Home() {
   return (
@@ -12,7 +11,7 @@ export default function Home() {
         <title>Arogyam | Virtual Doctor Consultation</title>
       </Head>
       <div className="min-h-screen flex flex-col bg-gray-100">
-        <Header />
+        {/* <Header /> */}
         <main className="flex-grow px-4 md:px-16 py-10 space-y-12">
           <section>
             <h1 className="text-4xl font-bold text-teal-700 mb-4">Virtual Doctor Consultation</h1>
@@ -25,7 +24,7 @@ export default function Home() {
             <ScheduleCard />
           </div>
         </main>
-        <Footer />
+        {/* <Footer /> */}
       </div>
     </>
   )
