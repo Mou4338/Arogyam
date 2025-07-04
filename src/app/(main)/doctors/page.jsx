@@ -1,8 +1,8 @@
 "use client"
 import React from "react"
 import Head from "next/head"
-import DoctorCard from "@/Components/DoctorProfile.jsx"
-import ScheduleCard from "@/Components/ScheduleForm.jsx"
+import DoctorCard from "@/components/DoctorProfile.jsx"
+import ScheduleCard from "@/components/ScheduleForm.jsx"
 
 export default function Home() {
   return (
