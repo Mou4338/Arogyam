@@ -20,3 +20,16 @@ module.exports = {
     },
     plugins: [],
 };
+module.exports = {
+  content: ['./pages/**/*.{js,jsx}', './components/**/*.{js,jsx}'],
+  theme: {
+    extend: {
+      colors: {
+        arogyam: '#64bcae',
+        darkteal: '#132d2e',
+        offwhite: '#f8f9f9'
+      }
+    }
+  },
+  plugins: []
+};
