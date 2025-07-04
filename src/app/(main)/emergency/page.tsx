@@ -1,5 +1,6 @@
 import React from 'react';
 import {Phone} from 'lucide-react';
+import Quicktips from '@/components/Quicktips';
 
 const Page = () => {
   return (
@@ -10,7 +11,7 @@ const Page = () => {
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.
         </p>
       </div>
-
+      <div className='flex flex-col gap-4'>
       <div className="flex flex-col items-center justify-center bg-[#3f8578] rounded-lg p-4 basis-[30%]">
         <Phone className="text-white" size={25} />
         <span className='border-b border-white w-25 my-2'></span>
@@ -20,6 +21,9 @@ const Page = () => {
           Call 123-456-7890
         </a>
       </div>
+      <Quicktips />
+       </div>
+      
     </div>
   );
 };

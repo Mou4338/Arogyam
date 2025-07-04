@@ -1,10 +1,10 @@
 import React from 'react'
-import Outbreaks from '@/components/OutbreakNews'
+import OutbreakNews from '@/components/OutbreakNews'
 
 const page = () => {
   return (
     <>
-      <Outbreaks/>
+      <OutbreakNews />
     </>
   )
 }
