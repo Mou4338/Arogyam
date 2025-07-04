@@ -86,7 +86,7 @@ export default function AuthForm({ type = 'login', onSubmit }) {
       {/* Switch between login/register */}
       <p className="text-sm text-center text-gray-600">
         {isLogin ? "Don't have an account?" : 'Already registered?'}{' '}
-        <Link href={isLogin ? '/register' : '/login'}>
+        <Link href={isLogin ? '/auth/signup' : '/auth/login'}>
           <span className="text-teal-600 hover:underline">{isLogin ? 'Log In' : 'Sign In'}</span>
         </Link>
       </p>
