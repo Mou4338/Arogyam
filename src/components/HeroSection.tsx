@@ -82,10 +82,10 @@ export default function HeroSection() {
             Real-time hospital bed booking, AI health advice, and personalized care at your fingertips. Arogyam simplifies your health journey.
           </p>
           <div className="flex gap-4 flex-wrap justify-center">
-            <button className="bg-[#64bcae] text-white font-heading font-semibold px-6 py-2 rounded hover:bg-[#3a8981] transition-colors duration-200">
+            <button className="bg-[#3a8981] text-white font-heading font-semibold px-6 py-2 rounded hover:bg-[#f8f9f9] hover:text-black transition-colors duration-200">
               Find a Hospital
             </button>
-            <button className="bg-[#64bcae] text-white font-heading font-semibold px-6 py-2 rounded hover:bg-[#3a8981] transition-colors duration-200">
+            <button className="bg-[#3a8981] text-white font-heading font-semibold px-6 py-2 rounded hover:bg-[#f8f9f9] hover:text-black transition-colors duration-200">
               Explore Services
             </button>
           </div>
@@ -166,4 +166,3 @@ export default function HeroSection() {
     </>
   );
 }
-
