@@ -4,7 +4,7 @@ export default function DoctorProfile() {
     <div className="bg-white rounded-lg shadow p-6 space-y-6">
       <div className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6">
         <img
-          src="public\doctor-ananya.png"
+          src="/doctor-ananya.png"
           alt="Dr. Ananya Sharma"
           className="w-32 h-32 rounded-full object-cover border-2 border-teal-500"
         />

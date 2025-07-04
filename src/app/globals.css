@@ -26,9 +26,14 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
 
 }
+input{
+  color: black;
+}
+select,option{
+  color:black
+}
 
-
-button, .btn {
+/* button, .btn {
   background-color: var(--foreground);
   color: var(--secondary);
   font-family: var(--font-sans);
@@ -42,4 +47,4 @@ button, .btn {
 button:hover, .btn:hover {
   background-color: var(--background);
   color: var(--primary);
-}
+} */

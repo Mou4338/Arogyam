@@ -61,9 +61,9 @@ return (
             <div className="flex items-center mb-2 px-2 ">
                 <label className="block text-md ">Frequency</label>
                 <select {...register("frequency", { required: true })}>
-                    <option value="daily" className='bg-[#132d2e] px-1 hover:cursor-pointer'>Daily</option>
-                    <option value="weekly" className='bg-[#132d2e] px-1 hover:cursor-pointer'>Weekly</option>
-                    <option value="monthly" className='bg-[#132d2e] px-1 hover:cursor-pointer'>Monthly</option>
+                    <option value="daily" className=' px-1 hover:cursor-pointer'>Daily</option>
+                    <option value="weekly" className=' px-1 hover:cursor-pointer'>Weekly</option>
+                    <option value="monthly" className=' px-1 hover:cursor-pointer'>Monthly</option>
                 </select>
             </div>
             <div className="flex items-center mb-2 px-2 ">
