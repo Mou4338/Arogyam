@@ -31,15 +31,15 @@ const partners = [
 
 const Testimonial = () => {
   return (
-    <div className="bg-gradient-to-b from-white to-slate-100 py-4 px-6 text-center rounded-xl">
-      <h2 className="text-3xl text-black font-semibold my-4">Testimonials</h2>
+    <div className="bg-gradient-to-b from-slate-100 to-[#3f8578] py-4 px-6 text-center ">
+      <h2 className="text-3xl text-black font-semibold mb-6">Testimonials</h2>
       <div className="flex justify-center gap-6">
         {testimonials.map((t, index) => (
           <div
             key={index}
             className="hover:cursor-pointer bg-[#3f8578] shadow-lg rounded-xl p-6 w-80 transition hover:scale-105 duration-300"
           >
-            <div className="text-black mb-4">{t.content}</div>
+            <div className=" mb-4">{t.content}</div>
             <div className="flex items-center justify-center mt-4 bg-[#132d2e] rounded-full p-3">
               {t.icon}
               <div className="text-sm text-gray-300">
@@ -58,7 +58,7 @@ const Testimonial = () => {
             key={i}
             src={url}
             alt="Partner logo"
-            className="h-10 w-10 object-contain"
+            className="h-7 w-7 object-contain"
           />
         ))}
       </div>

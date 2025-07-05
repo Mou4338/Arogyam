@@ -107,7 +107,7 @@ const AddRemainder = () => {
             {...register("time", { required: true })}
           />
         </div>
-        <button type="submit" className='bg-blue-600 px-4 py-2 rounded text-white'>Add Reminder</button>
+        <button type="submit" className='btn-slide px-6 py-2 rounded-md text-white font-medium shadow'>Add Reminder</button>
       </form>
     </>
   );

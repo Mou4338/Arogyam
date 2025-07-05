@@ -18,10 +18,10 @@ const Footer = () => {
             <Link
               key={idx}
               href={tag.target}
-              className="text-black font-body transition-colors duration-200"
+              className="text-black font-body transition-colors duration-200 pl-2"
             >
               {idx < Foottags.length  && (
-                <span className="hidden sm:inline border-l border-black h-4 mx-4"></span>
+                <span className="hidden sm:inline border-l border-black h-4 mx-4 "></span>
               )}
               {tag.label}
             </Link>

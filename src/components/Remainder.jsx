@@ -47,7 +47,7 @@ const Remainder = () => {
 
     return (
         <>
-            <h3 className="text-xl text-black font-semibold mb-2">Your Reminders</h3>
+            <h3 className="text-2xl  font-semibold mb-2">Your Reminders</h3>
             {remainders.length > 0 ? (
                 <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-[#3f8578] p-4 rounded-md">
                     {remainders.map((reminder) => (
@@ -75,9 +75,9 @@ const Remainder = () => {
                                 <button className="bg-white/70 rounded p-1 cursor-pointer" onClick={()=>deleteReminder(reminder.id)}>
                                     <Trash2 className="w-4 h-4 text-red-600 hover:text-red-800 transition" />
                                 </button>
-                                <button className="bg-white/70 rounded p-1 cursor-pointer">
+                                {/* <button className="bg-white/70 rounded p-1 cursor-pointer">
                                     <Pencil className="w-4 h-4 text-blue-600 hover:text-blue-800 transition" />
-                                </button>
+                                </button> */}
                             </div>
                         </div>
                     ))}

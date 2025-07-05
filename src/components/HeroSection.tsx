@@ -71,7 +71,6 @@ export default function HeroSection() {
 
   return (
     <>
-      {/* Hero Section */}
       <section className="relative flex items-center justify-center min-h-[60vh] bg-[url('/bg-hero.png')] bg-cover bg-center">
         <div className="absolute inset-0 bg-white/30 backdrop-blur-xs" />
         <div className="relative z-10 flex flex-col items-center text-center px-4 py-16">
@@ -82,17 +81,16 @@ export default function HeroSection() {
             Real-time hospital bed booking, AI health advice, and personalized care at your fingertips. Arogyam simplifies your health journey.
           </p>
           <div className="flex gap-4 flex-wrap justify-center">
-            <button className="bg-[#3a8981] text-white font-heading font-semibold px-6 py-2 rounded hover:bg-[#f8f9f9] hover:text-black transition-colors duration-200">
+            <button className="btn-slide px-6 py-2 rounded-md text-white font-medium shadow ">
               Find a Hospital
             </button>
-            <button className="bg-[#3a8981] text-white font-heading font-semibold px-6 py-2 rounded hover:bg-[#f8f9f9] hover:text-black transition-colors duration-200">
+            <button className="btn-slide px-6 py-2 rounded-md text-white font-medium shadow">
               Explore Services
             </button>
           </div>
         </div>
       </section>
 
-      {/* Services */}
       <section className="bg-slate-100 py-12">
         <h2 className="text-2xl md:text-3xl font-heading font-bold text-center text-black mb-10">
           Comprehensive Health Services
@@ -113,7 +111,6 @@ export default function HeroSection() {
         </div>
       </section>
 
-      {/* Why Choose Arogyam */}
       <section className="py-12 flex flex-col md:flex-row items-center justify-between gap-8 px-4 bg-[#64bcae]">
         <div className="flex-1 flex flex-col rounded shadow-lg px-4 py-2">
           <h2 className="text-2xl md:text-3xl font-heading font-bold mb-4 text-[#132d2e]">
@@ -126,7 +123,7 @@ export default function HeroSection() {
             {healthFeatures.map((feature, index) => (
               <div
                 key={index}
-                className="flex items-start gap-4 bg-white shadow-md rounded-lg p-4 hover:shadow-xl transition"
+                className="flex items-start gap-4 bg-white shadow-md rounded-lg p-4 duration-300 hover:scale-[1.02] hover:shadow-2xl cursor-pointer"
               >
                 <div className="p-2 bg-green-900 rounded-full">
                   <feature.icon className="text-white" size={30} />
@@ -144,7 +141,6 @@ export default function HeroSection() {
         </div>
       </section>
 
-      {/* Our Performance */}
       <section className="bg-slate-100 py-12">
         <h2 className="text-2xl md:text-3xl font-heading font-bold text-center text-black mb-10">
           Our Performance
@@ -153,10 +149,10 @@ export default function HeroSection() {
           {stats.map((item, idx) => (
             <div
               key={idx}
-              className="bg-white rounded-lg shadow-md py-6 px-4 hover:shadow-lg transition"
+              className="duration-300 hover:scale-[1.02] hover:shadow-2xl cursor-pointer bg-[#3f8578] rounded-lg shadow-md py-6 px-4  transition"
             >
-              <p className="text-3xl font-bold text-[#132d2e]">{item.value}</p>
-              <p className="text-sm text-gray-700 mt-2 font-medium">{item.label}</p>
+              <p className="text-3xl font-bold ">{item.value}</p>
+              <p className="text-sm text-gray-200 mt-2 font-medium">{item.label}</p>
             </div>
           ))}
         </div>

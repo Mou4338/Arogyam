@@ -18,7 +18,7 @@ const RemainderHeroSection = () => {
           Set smart reminders for water, exercise and habits to stay on track
           towards your health goals.
         </p>
-        <button className="bg-teal-500 hover:bg-teal-600 text-white font-medium py-2 px-4 rounded-md transition">
+        <button className="btn-slide px-6 py-2 rounded-md text-white font-medium shadow">
           Get Started
         </button>
       </div>
