@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
-import { getAuth } from "firebase/auth";
+import { getAuth,onAuthStateChanged  } from "firebase/auth";
 import { app } from "@/lib/firebaseConfig";
 import { User } from "lucide-react";
 
@@ -12,8 +12,17 @@ const Navbar = () => {
   const [user, setUser] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  const auth = getAuth(app);
-
+  useEffect(() => {
+    const auth = getAuth(app);
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      if (firebaseUser) {
+        setUser(firebaseUser);
+      } else {
+        setUser(null);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   const Navtags = [
     { label: "Home", target: "/" },

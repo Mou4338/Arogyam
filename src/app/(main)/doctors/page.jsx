@@ -1,11 +1,29 @@
 "use client"
-import React from "react"
+import React,{useState,useEffect} from "react"
 import Head from "next/head"
 import DoctorCard from "@/components/DoctorProfile.jsx"
 import ScheduleCard from "@/components/ScheduleForm.jsx"
 import Consultation from '@/components/Consultation'
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { app } from "@/lib/firebaseConfig";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const [user, setUser] = useState(null);
+  const auth = getAuth(app);
+  const router = useRouter();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (!currentUser) {
+        router.push("/auth/signup"); 
+      } else {
+        setUser(currentUser);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [auth, router]);
   return (
     <>
       <Head>

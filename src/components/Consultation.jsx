@@ -26,11 +26,11 @@ const Consultation = () => {
     <div className='p-4 rounded bg-[#3f8578] border-slate-100 mt-4'>
         <h3 className='text-xl font-bold  my-1 mb-2'>My Consultations</h3>
       {consultation.length > 0 ? (
-        <ul className='flex space-y-4 rounded border border-gray-300 px-4'>
+        <ul className='flex flex-col gap-4  px-4'>
           {consultation.map(item => (
-            <li key={item.id} className=' border-slate-200 pb-2 '>
-              <h4 className='font-semibold text-black text-lg px-2'>{item.subject}</h4>
-              <p className='text-sm text-red-400 px-2'>{item.date} at {item.time} </p>
+            <li key={item.id} className='flex align-center border gap-4 rounded border-black p-2 '>
+              <h4 className='font-semibold  text-2xl px-2'>{item.subject}</h4>
+              <p className='text-md text-red-500 mt-2 px-2'>{item.date} at {item.time} </p>
             </li>
           ))}
         </ul>

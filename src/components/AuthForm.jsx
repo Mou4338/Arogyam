@@ -1,12 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-// inside AuthForm.jsx
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "@/lib/firebaseConfig"; // adjust path
-
-
-
 
 export default function AuthForm({ type = 'login', onSubmit }) {
   const isLogin = type === 'login'
@@ -23,10 +19,8 @@ export default function AuthForm({ type = 'login', onSubmit }) {
     const user = result.user;
     console.log("Google User:", user);
 
-    // OPTIONAL: You can send token to your backend for session or database entry
     const token = await user.getIdToken();
 
-    // e.g., send token to your API route
     await fetch('/api/auth/firebase-login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
