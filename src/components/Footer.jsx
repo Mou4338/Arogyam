@@ -4,21 +4,20 @@ import Link from 'next/link';
 const Footer = () => {
   const Foottags = [
     { label: "About Arogyam", target: "/about" },
-    { label: "Feedback", target: "/feedback" },
-    { label: "Contact us", target: "/contactus" },
+    { label: "Contact us", target: "/contact" },
     { label: "Terms of Use", target: "/termsofuse" },
     { label: "Privacy", target: "/privacy" },
   ];
 
   return (
-    <footer className="bg-secondary border-t py-6">
+    <footer className="bg-secondary  py-6">
       <div className="flex flex-col md:flex-row items-center justify-between max-w-6xl mx-auto px-4">
         <div className="flex  mb-4 md:mb-0">
           {Foottags.map((tag, idx) => (
             <Link
               key={idx}
               href={tag.target}
-              className="text-black font-body transition-colors duration-200 pl-2"
+              className="text-black hover:text-white font-body transition-colors duration-200 pl-2"
             >
               {idx < Foottags.length  && (
                 <span className="hidden sm:inline border-l border-black h-4 mx-4 "></span>

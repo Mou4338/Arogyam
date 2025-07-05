@@ -4,8 +4,8 @@ import React from "react";
 
 export default function AboutPage() {
   return (
-    <main className="p-6 max-w-5xl mx-auto text-gray-800">
-      <h1 className="text-4xl font-bold mb-4 text-blue-700">About Arogyam</h1>
+    <main className="p-6 max-w-5xl mx-auto text-gray-800 bg-slate-100">
+      <h1 className="text-4xl font-bold mb-4 text-black">About Arogyam</h1>
 
       <p className="text-lg mb-6">
         <strong>Arogyam</strong> means <em>"the state of being free from diseases"</em>.
