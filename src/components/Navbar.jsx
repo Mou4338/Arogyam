@@ -20,7 +20,8 @@ const Navbar = () => {
   return (
     <nav className="px-6 py-3 flex items-center justify-between bg-[#3f8578] shadow-md">
       <div className="flex items-center">
-        <img src="/arogyam.png" alt="Arogyam Logo" className="w-24" />
+        <img src="/logo.png" alt="Arogyam Logo" className="w-10" />
+        <h1 className="text-xl font-bold text-primary ">Arogyam</h1>
       </div>
 
       <div className="hidden md:flex items-center space-x-6">

@@ -26,8 +26,10 @@ const Footer = () => {
             </Link>
           ))}
         </div>
-        <div className="text-light text-sm font-body">
-          © 2025 Arogyam.
+        <div className="flex text-light text-sm font-body">
+          © 2025
+          <img src="/logo.png" alt="Arogyam Logo" className="w-5" />
+           Arogyam.
         </div>
       </div>
     </footer>
