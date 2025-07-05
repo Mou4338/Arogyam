@@ -9,7 +9,7 @@ const Navbar = () => {
 
   const Navtags = [
     { label: "Home", target: "/" },
-    { label: "Hospitals", target: "/HospitalBed" },
+    { label: "Hospital Bed", target: "/hospitals" },
     { label: "Emergency", target: "/emergency" },
     { label: "Chatbot", target: "/chatbot" },
     { label: "Reminders", target: "/reminders" },
