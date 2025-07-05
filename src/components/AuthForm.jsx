@@ -1,6 +1,12 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
+// inside AuthForm.jsx
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from "@/lib/firebaseConfig"; // adjust path
+
+
+
 
 export default function AuthForm({ type = 'login', onSubmit }) {
   const isLogin = type === 'login'
@@ -11,9 +17,28 @@ export default function AuthForm({ type = 'login', onSubmit }) {
     setForm({ ...form, [name]: value })
   }
 
-  const handleGoogleClick = () => {
-    alert('Google Auth clicked (frontend-only mock)')
+  const handleGoogleClick = async () => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+    console.log("Google User:", user);
+
+    // OPTIONAL: You can send token to your backend for session or database entry
+    const token = await user.getIdToken();
+
+    // e.g., send token to your API route
+    await fetch('/api/auth/firebase-login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token })
+    });
+
+    alert("Google login successful!");
+  } catch (error) {
+    console.error("Google Auth Error:", error);
+    alert("Google login failed!");
   }
+};
 
   return (
     <div className="bg-white shadow-xl rounded-xl px-8 py-6 w-full max-w-md mx-auto space-y-6">

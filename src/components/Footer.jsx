@@ -6,7 +6,6 @@ const Footer = () => {
     { label: "About Arogyam", target: "/about" },
     { label: "Contact us", target: "/contact" },
     { label: "Terms of Use", target: "/termsofuse" },
-    { label: "Privacy", target: "/privacy" },
   ];
 
   return (

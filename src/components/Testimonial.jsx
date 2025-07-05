@@ -31,18 +31,19 @@ const partners = [
 
 const Testimonial = () => {
   return (
-    <div className="bg-gradient-to-b from-slate-100 to-[#3f8578] py-4 px-6 text-center ">
+    <div className="bg-gradient-to-b from-slate-100 to-gray-600 py-4 px-6 text-center ">
       <h2 className="text-3xl text-black font-semibold mb-6">Testimonials</h2>
-      <div className="flex justify-center gap-6">
+      <div className="flex flex-wrap justify-center gap-6">
         {testimonials.map((t, index) => (
           <div
             key={index}
-            className="hover:cursor-pointer bg-[#3f8578] shadow-lg rounded-xl p-6 w-80 transition hover:scale-105 duration-300"
+            className="flex flex-col justify-between bg-[#3f8578] shadow-lg rounded-xl p-6 w-80 min-h-[200px] transition hover:scale-105 duration-300"
           >
-            <div className=" mb-4">{t.content}</div>
-            <div className="flex items-center justify-center mt-4 bg-[#132d2e] rounded-full p-3">
+            <div className="text-white ">{t.content}</div>
+
+            <div className="flex items-center justify-center mt-2 bg-[#132d2e] rounded-full p-3 gap-2">
               {t.icon}
-              <div className="text-sm text-gray-300">
+              <div className="text-sm text-gray-300 text-center">
                 <strong>{t.name}</strong> <br />
                 <span className="text-xs text-gray-100">{t.role}</span>
               </div>
@@ -50,6 +51,7 @@ const Testimonial = () => {
           </div>
         ))}
       </div>
+
 
       <h3 className="text-xl font-semibold my-4 text-black">Our Trusted Partners</h3>
       <div className="flex justify-center items-center gap-6 flex-wrap">

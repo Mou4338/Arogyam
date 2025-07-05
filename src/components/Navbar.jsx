@@ -2,10 +2,18 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react"; 
+import { Menu, X } from "lucide-react";
+import { getAuth } from "firebase/auth";
+import { app } from "@/lib/firebaseConfig";
+import { User } from "lucide-react";
 
 const Navbar = () => {
+
+  const [user, setUser] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+
+  const auth = getAuth(app);
+
 
   const Navtags = [
     { label: "Home", target: "/" },
@@ -34,15 +42,12 @@ const Navbar = () => {
             {nav.label}
           </Link>
         ))}
+        {user && (<Link href='/profile' className="p-2 ">
+          <User className="text-black rounded-full hover:cursor-pointer " />
+        </Link>)}
+
       </div>
 
-      <div className="hidden md:block relative">
-        <input
-          type="search"
-          placeholder="Search health services.."
-          className="border border-gray-600 bg-white text-black rounded-md p-2 w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
 
       <div className="md:hidden ">
         <button onClick={() => setIsOpen(!isOpen)} className="hover:cursor-pointer">
@@ -63,11 +68,17 @@ const Navbar = () => {
                 {nav.label}
               </Link>
             ))}
-            <input
-              type="search"
-              placeholder="Search health services.."
-              className="mt-2 border border-gray-600 bg-white text-black rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            {user && (
+              <Link
+                href="/profile"
+                className="flex items-center gap-2 text-black font-medium hover:bg-[#3f8578] hover:text-white p-2 rounded"
+                onClick={() => setIsOpen(false)}
+              >
+                <User className="w-5 h-5" />
+                Profile
+              </Link>
+            )}
+
           </div>
         </div>
       )}
