@@ -2,10 +2,10 @@
 
 import React from "react";
 
-export default function TermsOfUse() {
+export default function termsofuse() {
   return (
-    <main className="p-6 max-w-5xl mx-auto text-gray-800">
-      <h1 className="text-4xl font-bold text-blue-700 mb-6">Terms of Use</h1>
+    <main className="p-6 max-w-5xl mx-auto text-gray-800 bg-slate-100">
+      <h1 className="text-4xl font-bold text-black mb-6">Terms of Use</h1>
 
       <p className="mb-6 text-lg">
         Welcome to <strong>Arogyam</strong> — a specialized healthcare platform
@@ -69,13 +69,7 @@ export default function TermsOfUse() {
         </p>
       </section>
 
-      <section>
-        <h2 className="text-2xl font-semibold mb-2 text-green-700">7. Contact Information</h2>
-        <p>
-          For any questions or concerns, reach us at: <br />
-          📧 <a href="mailto:contact@arogyam.in" className="text-blue-600 underline">contact@arogyam.in</a>
-        </p>
-      </section>
+      
     </main>
   );
 }

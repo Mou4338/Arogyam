@@ -39,7 +39,7 @@ export default function FilterControls({ onFilter }) {
                 <option value="distance">Nearest</option>
                 <option value="availability">Most Beds</option>
             </select>
-            <button onClick={handleApplyFilters} className="bg-[#64bcae] text-white font-medium px-6 py-2 rounded-lg hover:bg-[#4ea79c] transition duration-200" >
+            <button onClick={handleApplyFilters} className="bg-[#64bcae] text-white font-medium hover:cursor-pointer px-6 py-2 rounded-lg hover:bg-[#4ea79c] transition duration-200" >
                 Apply Filters
             </button>
         </div>

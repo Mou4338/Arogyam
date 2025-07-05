@@ -15,7 +15,7 @@ export default function FilterSidebar() {
         <p className="text-xs text-gray-500 mt-1">Up to 5 km</p>
       </div>
 
-      <button className="w-full bg-[#64bcae] text-white py-2 rounded hover:bg-[#4ea79c] transition">
+      <button className="w-full bg-[#64bcae] text-white py-2 rounded hover:bg-[#4ea79c] hover:cursor-pointer transition">
         Apply Filters
       </button>
     </div>

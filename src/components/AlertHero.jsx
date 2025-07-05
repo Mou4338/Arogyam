@@ -25,7 +25,7 @@ export default function AlertHero() {
 
         {/* Button */}
         <div className="mt-6">
-          <button className="bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition">
+          <button className="btn-slide px-6 py-2 rounded-md text-white font-medium shadow">
             View All Alerts
           </button>
         </div>
