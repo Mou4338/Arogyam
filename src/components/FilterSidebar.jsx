@@ -1,7 +1,7 @@
 export default function FilterSidebar() {
   return (
     <div className="bg-white p-4 rounded shadow-md space-y-4">
-      <h3 className="text-lg font-semibold text-[#132d2e]">🔍 Filters</h3>
+      <h3 className="text-lg font-semibold text-[#132d2e]"> Filters</h3>
 
       <div>
         <label className="block text-sm text-gray-600 mb-1">Available Beds</label>

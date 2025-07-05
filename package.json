@@ -9,12 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-<<<<<<< HEAD
     "@emailjs/browser": "^4.4.1",
-=======
     "autoprefixer": "^10.4.21",
     "chart.js": "^4.5.0",
->>>>>>> ba1d81c9e07a6aaef8ccddd9adc89b14ef6c2eae
     "firebase": "^11.10.0",
     "google-search-results-nodejs": "^2.1.0",
     "leaflet": "^1.9.4",
@@ -22,11 +19,8 @@
     "mapbox-gl": "^3.13.0",
     "mongodb": "^6.17.0",
     "next": "15.3.4",
-<<<<<<< HEAD
     "openai": "^5.8.2",
-=======
     "postcss": "^8.5.6",
->>>>>>> ba1d81c9e07a6aaef8ccddd9adc89b14ef6c2eae
     "react": "^19.0.0",
     "react-chartjs-2": "^5.3.0",
     "react-dom": "^19.0.0",
