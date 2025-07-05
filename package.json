@@ -12,6 +12,7 @@
     "@emailjs/browser": "^4.4.1",
     "autoprefixer": "^10.4.21",
     "chart.js": "^4.5.0",
+    "emailjs": "^4.0.3",
     "firebase": "^11.10.0",
     "google-search-results-nodejs": "^2.1.0",
     "leaflet": "^1.9.4",
