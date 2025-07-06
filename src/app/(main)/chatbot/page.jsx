@@ -40,8 +40,8 @@ const quickactions = [
   },
   {
     icon: <ExternalLink className="w-6 h-6 text-white" />,
-    text: 'Order Recommended Medicine',
-    href: 'https://www.1mg.com/', // Replace with your preferred partner
+    text: 'Order via Medicine Partners',
+    href: '#', // Replace with your preferred partner
     external: true,
   },
 ];
@@ -49,12 +49,10 @@ const quickactions = [
 const Page = () => {
   return (
     <div className="flex flex-col md:flex-row gap-4 bg-slate-100 p-4 min-h-screen">
-      {/* Chatbot */}
       <div className="flex-1">
         <Chatbot />
       </div>
 
-      {/* Quick Actions */}
       <div className="w-full md:max-w-xs bg-white rounded-lg shadow-md p-4">
         <h3 className="text-lg font-semibold text-black mb-4">⚡ Quick Actions</h3>
         <div className="space-y-4">

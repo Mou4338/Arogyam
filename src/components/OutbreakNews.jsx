@@ -5,6 +5,7 @@ import HealthResources from "./HealthResources";
 
 const OutbreakNews = () => {
   const [articles, setArticles] = useState([]);
+  const [input, setInput] = useState("");
 
   useEffect(() => {
     const loadNews = async () => {
@@ -19,21 +20,39 @@ const OutbreakNews = () => {
     loadNews();
   }, []);
 
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    const trimmed = input.trim();
+    if (!trimmed) return;
+
+    try {
+      const res = await fetch('/api/news', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: trimmed }),
+      });
+      const result = await res.json();
+      setArticles(result); // Update UI with search results
+    } catch (error) {
+      console.log("Couldn't search the params", error);
+    }
+  };
+
   return (
     <div id="outbreaknews" className="p-4 bg-slate-100 rounded shadow">
       <h2 className="text-3xl text-black font-semibold mb-6">Disease Outbreak Alerts</h2>
-      
-      <div className="flex flex-col lg:flex-row gap-6">
 
-        {/* News Section */}
+      <div className="flex flex-col lg:flex-row gap-6">
         <div className="w-full lg:w-2/3 space-y-4 border border-gray-300 p-4 rounded bg-white text-gray-800">
-          <div className="relative mb-2">
+          <form onSubmit={handleSearch} className="relative mb-2">
             <input
               type="search"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
               placeholder="Search outbreaks and dangers"
               className="border border-gray-600 bg-white text-black rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-          </div>
+          </form>
 
           <h3 className="text-xl font-bold text-black">Recent Alerts</h3>
 
@@ -54,6 +73,7 @@ const OutbreakNews = () => {
                 <a
                   href={item.link}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="text-lg font-semibold text-blue-700 hover:underline"
                 >
                   {item.title}
@@ -68,9 +88,8 @@ const OutbreakNews = () => {
           ))}
         </div>
 
-        {/* Sidebar */}
         <div className="w-full lg:w-1/3 p-2">
-          <HealthResources/>
+          <HealthResources />
         </div>
       </div>
     </div>
