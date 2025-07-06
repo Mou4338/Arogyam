@@ -89,13 +89,11 @@ const Chatbot = () => {
 
   return (
     <div className="flex flex-col h-[550px] bg-black border border-white rounded-lg shadow-lg text-white">
-      {/* Header */}
       <div className="flex items-center justify-center gap-2 border-b border-white text-lg font-semibold py-2 px-4">
         <RabbitIcon className="text-white" />
         Arogyam AI Shevak
       </div>
 
-      {/* Chat Area */}
       <div
         ref={chatRef}
         className="flex-1 overflow-y-auto px-4 py-3 space-y-4 scrollbar-thin scrollbar-thumb-gray-600"
@@ -126,8 +124,6 @@ const Chatbot = () => {
           </div>
         )}
       </div>
-
-      {/* Input */}
       <div className="border-t border-gray-600 bg-black px-4 py-3 flex items-center gap-2">
         <textarea
           rows={1}
