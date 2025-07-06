@@ -1,24 +1,59 @@
+'use client';
+
+import React, { useState } from 'react';
+
 export default function FilterSidebar() {
+  const [waitTime, setWaitTime] = useState(30);
+  const [distance, setDistance] = useState(5);
+
   return (
-    <div className="bg-[#3f8578] p-4 rounded shadow-md space-y-4">
-      <h3 className="text-lg font-semibold "> Filters</h3>
+    <div className="bg-teal-50 border border-teal-500 shadow-xl rounded-2xl p-6 space-y-8">
+      <h3 className="text-xl font-bold text-teal-800 tracking-wide flex items-center gap-2">
+        🧭 Filter Results
+      </h3>
 
+      {/* Wait Time Filter */}
       <div>
-        <label className="block text-sm  mb-1">Available Beds</label>
-        <input type="range" min="0" max="20" defaultValue="5" className="w-full" />
-        <p className="text-xs  mt-1">Min 5 beds</p>
+        <label className="block text-sm font-semibold text-teal-700 mb-2">
+          Avg Wait Time (mins): <span className="text-teal-900 font-bold">{waitTime} min</span>
+        </label>
+        <input
+          type="range"
+          min="0"
+          max="120"
+          value={waitTime}
+          onChange={(e) => setWaitTime(e.target.value)}
+          className="w-full accent-teal-600"
+        />
+        <p className="text-xs text-teal-600 mt-1">
+          From 0 to 2 hours
+        </p>
       </div>
 
+      {/* Distance Filter */}
       <div>
-        <label className="block text-sm  mb-1">Max Distance</label>
-        <input type="range" min="1" max="10" defaultValue="5" className="w-full" />
-        <p className="text-xs  mt-1">Up to 5 km</p>
+        <label className="block text-sm font-semibold text-teal-700 mb-2">
+          Max Distance: <span className="text-teal-900 font-bold">{distance} km</span>
+        </label>
+        <input
+          type="range"
+          min="2"
+          max="15"
+          value={distance}
+          onChange={(e) => setDistance(e.target.value)}
+          className="w-full accent-teal-600"
+        />
+        <p className="text-xs text-teal-600 mt-1">
+          Select between 2 km to 15 km
+        </p>
       </div>
 
-      <button className="w-full bg-[#64bcae] text-white py-2 rounded hover:bg-[#4ea79c] hover:cursor-pointer transition">
-        Apply Filters
+      {/* Apply Button */}
+      <button className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 rounded-lg shadow-lg transition duration-200">
+        ✅ Apply Filters
       </button>
     </div>
-  )
+  );
 }
+
 
