@@ -1,7 +1,7 @@
-import React from 'react'
-import Chatbot from '@/components/Chatbot'
-import { Calendar, MessageCircle, Pin, ZapIcon } from 'lucide-react'
-import Link from 'next/link'
+import React from 'react';
+import Chatbot from '@/components/Chatbot';
+import { Calendar, MessageCircle, Pin, ZapIcon } from 'lucide-react';
+import Link from 'next/link';
 
 const quickactions = [
   {
@@ -17,34 +17,36 @@ const quickactions = [
   {
     icon: <Pin className="text-white" />,
     text: "Find Hospital Near Me",
-    href: '/hospital'
+    href: '/hospitals' // fixed typo from '/hospital'
   },
   {
     icon: <MessageCircle className="text-white" />,
     text: "Review Health Reminders",
-    href: '/reminder'
+    href: '/reminders' // fixed typo from '/reminder'
   },
 ];
 
 const Page = () => {
   return (
-    <div className=" flex gap-4 bg-slate-100 p-4">
-        <div className='flex-2/3 '>
-      <Chatbot />
+    <div className="flex flex-col lg:flex-row gap-4 bg-slate-100 p-4 min-h-screen">
+      <div className="lg:basis-2/3">
+        <Chatbot />
       </div>
-      <div className="bg-[#3f8578] p-2 rounded flex-1/3">
-        <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
-        {quickactions.map((act, idx) => (
-          <div
-            key={idx}
-            className="bg-[#3f8578] flex items-center gap-3 p-2 rounded-md my-2 shadow"
-          >
-            <Link href={act.href} className="flex items-center gap-2">
+
+      <div className="lg:basis-1/3 bg-[#3f8578] p-4 rounded-xl shadow text-white">
+        <h3 className="text-xl font-semibold mb-4 text-white">Quick Actions</h3>
+        <div className="space-y-3">
+          {quickactions.map((act, idx) => (
+            <Link
+              key={idx}
+              href={act.href}
+              className="flex items-center gap-3 bg-[#306960] hover:bg-[#2a5c54] transition px-4 py-3 rounded-lg shadow-md"
+            >
               {act.icon}
               <span className="text-md">{act.text}</span>
             </Link>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
