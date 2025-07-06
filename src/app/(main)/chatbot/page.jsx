@@ -35,12 +35,12 @@ const quickactions = [
   },
   {
     icon: <AlertTriangle className="w-6 h-6 text-white" />,
-    text: 'View Emergency Alerts',
+    text: 'View Public Health Alerts',
     href: '/alerts',
   },
   {
     icon: <ExternalLink className="w-6 h-6 text-white" />,
-    text: 'Order via Medicine Partners',
+    text: 'Order Recommended Medicine',
     href: 'https://www.1mg.com/', // Replace with your preferred partner
     external: true,
   },
