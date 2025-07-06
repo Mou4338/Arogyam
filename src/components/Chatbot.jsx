@@ -1,75 +1,147 @@
-"use client";
-import React, { useState } from 'react';
-import { RabbitIcon, Send } from 'lucide-react';
+'use client';
 
-const text = [
-  "Stay calm and assess the situation safely.",
-  "Call emergency services immediately if needed.",
-  "Control bleeding with direct pressure.",
-  "Comfort the injured person and keep them warm.",
-  "Do not move someone with a suspected spinal injury.",
-];
+import React, { useState, useRef, useEffect } from 'react';
+import { RabbitIcon, Send, Loader2 } from 'lucide-react';
 
 const Chatbot = () => {
   const [messages, setMessages] = useState([
-    { from: 'bot', text: 'Hello! I am Arogyam AI Shevak. How can I assist you today?' }
+    {
+      from: 'bot',
+      text: 'Hello! I am Arogyam AI Shevak. How can I assist you today?',
+      timestamp: Date.now(),
+    },
   ]);
   const [input, setInput] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const [clientReady, setClientReady] = useState(false);
+  const chatRef = useRef(null);
 
-  const handleSend = () => {
-    if (!input.trim()) return;
+  useEffect(() => {
+    setClientReady(true);
+  }, []);
 
-    setMessages(prev => [...prev, { from: 'user', text: input }]);
+  useEffect(() => {
+    chatRef.current?.scrollTo(0, chatRef.current.scrollHeight);
+  }, [messages, isTyping]);
+
+  const formatTime = (ts) =>
+    new Intl.DateTimeFormat([], {
+      hour: '2-digit',
+      minute: '2-digit',
+    }).format(new Date(ts));
+
+  const handleSend = async () => {
+    const trimmed = input.trim();
+    if (!trimmed) return;
+
+    const userMsg = { from: 'user', text: trimmed, timestamp: Date.now() };
+    setMessages((prev) => [...prev, userMsg]);
     setInput('');
+    setIsTyping(true);
 
-    setTimeout(() => {
-        const randomTip = text[Math.floor(Math.random() * text.length)];
-      setMessages(prev => [...prev, { from: 'bot', text: randomTip }]);
-    }, 500);
+    try {
+      const res = await fetch('/api/chatbot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: trimmed }),
+      });
+
+      let data;
+
+      try {
+        data = await res.json();
+      } catch (parseError) {
+        throw new Error('Invalid JSON from server');
+      }
+
+      if (!res.ok || !data.reply) {
+        throw new Error('Invalid response');
+      }
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          from: 'bot',
+          text: data.reply,
+          timestamp: Date.now(),
+        },
+      ]);
+    } catch (err) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          from: 'bot',
+          text: '🤖 Sorry, I couldn’t understand your problem. Please try rephrasing.',
+          timestamp: Date.now(),
+        },
+      ]);
+    } finally {
+      setIsTyping(false);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
   };
 
   return (
-    <div className=" p-2 bg-black border border-white rounded-lg shadow-lg ">
-      <nav className="flex items-center justify-center gap-2 border-b border-white text-white text-lg font-semibold py-2">
+    <div className="flex flex-col h-[550px] bg-black border border-white rounded-lg shadow-lg text-white">
+      {/* Header */}
+      <div className="flex items-center justify-center gap-2 border-b border-white text-lg font-semibold py-2 px-4">
         <RabbitIcon className="text-white" />
         Arogyam AI Shevak
-      </nav>
+      </div>
 
-      <div className="max-h-96 overflow-y-auto p-3 space-y-3">
-        {messages.map((msg, index) => (
+      {/* Chat Area */}
+      <div
+        ref={chatRef}
+        className="flex-1 overflow-y-auto px-4 py-3 space-y-4 scrollbar-thin scrollbar-thumb-gray-600"
+      >
+        {messages.map((msg, i) => (
           <div
-            key={index}
-            className={`flex ${
-              msg.from === 'bot' ? 'justify-start' : 'justify-end'
-            }`}
+            key={i}
+            className={`flex ${msg.from === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             <div
-              className={`flex items-start gap-2 px-3 py-2 rounded-lg max-w-xs text-sm ${
+              className={`max-w-[75%] px-4 py-2 rounded-lg text-sm shadow-md whitespace-pre-line ${
                 msg.from === 'bot'
-                  ? 'bg-[#3f8578] text-black'
+                  ? 'bg-[#3f8578] text-white'
                   : 'bg-white text-black'
               }`}
             >
-              {msg.from === 'bot' && <RabbitIcon size={16} />}
-              <span>{msg.text}</span>
+              {msg.text}
+              <div className="text-[10px] text-right text-gray-300 mt-1">
+                {clientReady && formatTime(msg.timestamp)}
+              </div>
             </div>
           </div>
         ))}
+        {isTyping && (
+          <div className="flex justify-start pl-2 items-center text-gray-400 text-sm gap-2">
+            <Loader2 className="animate-spin w-4 h-4" />
+            Shevak is typing...
+          </div>
+        )}
       </div>
 
-      <div className="flex items-center mt-4 border-t border-gray-700 pt-2">
-        <input
-          type="text"
+      {/* Input */}
+      <div className="border-t border-gray-600 bg-black px-4 py-3 flex items-center gap-2">
+        <textarea
+          rows={1}
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Type your message..."
-          className="flex-1 px-2 py-1 rounded-l bg-white text-black focus:outline-none"
+          onKeyDown={handleKeyDown}
+          placeholder="Type your problem..."
+          className="flex-1 resize-none text-sm px-3 py-2 bg-white text-black rounded-md focus:outline-none focus:ring-2 focus:ring-[#3f8578]"
         />
         <button
           onClick={handleSend}
-          className="bg-[#3f8578] px-4 py-2 rounded-r text-white hover:bg-[#356b61] transition"
+          className="p-2 bg-[#3f8578] text-white rounded-md hover:bg-[#2f6f62] transition"
         >
-          <Send size={16} />
+          <Send size={18} />
         </button>
       </div>
     </div>
