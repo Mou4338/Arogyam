@@ -20,7 +20,7 @@ const OutbreakNews = () => {
   }, []);
 
   return (
-    <div className="p-4 bg-slate-100 rounded shadow">
+    <div id="outbreaknews" className="p-4 bg-slate-100 rounded shadow">
       <h2 className="text-3xl text-black font-semibold mb-6">Disease Outbreak Alerts</h2>
       
       <div className="flex flex-col lg:flex-row gap-6">

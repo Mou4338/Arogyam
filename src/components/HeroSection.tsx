@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import {
   Hospital, Ambulance, Pill, ShieldAlert, PhoneCall, BotMessageSquare,
   HeartPulse, Zap, CalendarCheck, ClipboardList
@@ -74,19 +75,19 @@ export default function HeroSection() {
       <section className="relative flex items-center justify-center min-h-[60vh] bg-[url('/bg-hero.png')] bg-cover bg-center">
         <div className="absolute inset-0 bg-white/30 backdrop-blur-xs" />
         <div className="relative z-10 flex flex-col items-center text-center px-4 py-16">
-          <h1 className="text-4xl md:text-5xl font-heading font-bold text-black mb-4">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-black mb-4">
             Your Health, Our Priority.
           </h1>
-          <p className="text-lg md:text-xl text-gray-700 mb-8 max-w-2xl">
+          <p className="text-base sm:text-lg md:text-xl text-gray-700 mb-8 max-w-2xl">
             Real-time hospital bed booking, AI health advice, and personalized care at your fingertips. Arogyam simplifies your health journey.
           </p>
-          <div className="flex gap-4 flex-wrap justify-center">
-            <button className="btn-slide px-6 py-2 rounded-md text-white font-medium shadow ">
+          <div className="flex flex-col sm:flex-row gap-4 w-full max-w-md sm:max-w-none justify-center">
+            <Link href='/hospitals' className="btn-slide px-6 py-2 rounded-md text-white font-medium shadow text-center">
               Find a Hospital
-            </button>
-            <button className="btn-slide px-6 py-2 rounded-md text-white font-medium shadow">
+            </Link>
+            <Link href='/auth/signup' className="btn-slide px-6 py-2 rounded-md text-white font-medium shadow text-center">
               Explore Services
-            </button>
+            </Link>
           </div>
         </div>
       </section>
@@ -95,7 +96,7 @@ export default function HeroSection() {
         <h2 className="text-2xl md:text-3xl font-heading font-bold text-center text-black mb-10">
           Comprehensive Health Services
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto px-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto px-4">
           {services.map((service, index) => (
             <div
               key={index}
@@ -103,7 +104,7 @@ export default function HeroSection() {
             >
               <div className="flex items-center mb-4">
                 {service.icon}
-                <h3 className="text-xl font-semibold ml-3">{service.title}</h3>
+                <h3 className="text-lg sm:text-xl font-semibold ml-3">{service.title}</h3>
               </div>
               <p className="text-slate-200 text-sm">{service.description}</p>
             </div>
@@ -112,14 +113,14 @@ export default function HeroSection() {
       </section>
 
       <section className="py-12 flex flex-col md:flex-row items-center justify-between gap-8 px-4 bg-[#64bcae]">
-        <div className="flex-1 flex flex-col rounded shadow-lg px-4 py-2">
+        <div className="flex-1 flex flex-col rounded shadow-lg px-2 sm:px-4 py-2">
           <h2 className="text-2xl md:text-3xl font-heading font-bold mb-4 text-[#132d2e]">
             Why Choose Arogyam?
           </h2>
-          <p className="text-md text-gray-800 mb-4">
+          <p className="text-sm sm:text-base text-gray-800 mb-4">
             Arogyam is designed to provide you with seamless access to essential health services, empowering you to take control of your well-being with confidence and ease.
           </p>
-          <div className="grid grid-cols-1 gap-6">
+          <div className="grid grid-cols-1 gap-4">
             {healthFeatures.map((feature, index) => (
               <div
                 key={index}
@@ -137,7 +138,7 @@ export default function HeroSection() {
           </div>
         </div>
         <div className="flex-1 flex items-center justify-center">
-          <img src="/feature.png" alt="Arogyam Health Services" className="h-auto max-w-[500px] md:max-w-[600px]" />
+          <img src="/feature.png" alt="Arogyam Health Services" className="w-full max-w-[500px] md:max-w-[600px]" />
         </div>
       </section>
 
@@ -145,14 +146,14 @@ export default function HeroSection() {
         <h2 className="text-2xl md:text-3xl font-heading font-bold text-center text-black mb-10">
           Our Performance
         </h2>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-5xl mx-auto px-6 text-center">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 max-w-5xl mx-auto px-4 text-center">
           {stats.map((item, idx) => (
             <div
               key={idx}
-              className="duration-300 hover:scale-[1.02] hover:shadow-2xl cursor-pointer bg-[#3f8578] rounded-lg shadow-md py-6 px-4  transition"
+              className="bg-[#3f8578] rounded-lg shadow-md py-6 px-4 transition duration-300 hover:scale-[1.02] hover:shadow-2xl cursor-pointer"
             >
-              <p className="text-3xl font-bold ">{item.value}</p>
-              <p className="text-sm text-gray-200 mt-2 font-medium">{item.label}</p>
+              <p className="text-2xl sm:text-3xl font-bold text-white">{item.value}</p>
+              <p className="text-xs sm:text-sm text-gray-200 mt-2 font-medium">{item.label}</p>
             </div>
           ))}
         </div>
@@ -162,4 +163,3 @@ export default function HeroSection() {
     </>
   );
 }
-

@@ -25,7 +25,7 @@ export default function AlertHero() {
 
         {/* Button */}
         <div className="mt-6">
-          <button className="btn-slide px-6 py-2 rounded-md text-white font-medium shadow">
+          <button onClick={() => window.location.href = '#outbreaknews'} className="btn-slide px-6 py-2 rounded-md text-white font-medium shadow">
             View All Alerts
           </button>
         </div>
