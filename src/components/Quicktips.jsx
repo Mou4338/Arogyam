@@ -12,13 +12,13 @@ const tips = [
 
 const QuickAdd = () => {
   return (
-    <div className="bg-[#3f8578] p-4 rounded-xl shadow-md border max-w-md mx-auto text-center">
+    <div className="bg-teal-50 border border-teal-500 shadow-xl rounded-2xl p-6 space-y-8">
       <div className="flex justify-center mb-4 text-pink-500">
         <Lightbulb className="h-6 w-6" />
       </div>
-      <h2 className="text-white text-lg font-semibold mb-2">Quick First Aid Tips</h2>
-      <hr className="my-2 border-gray-200" />
-      <ul className="text-sm text-gray-100 space-y-2 mt-4 text-left">
+      <h2 className="text-black text-lg font-semibold mb-2">Quick First Aid Tips</h2>
+      <hr className="my-2 border-gray-600" />
+      <ul className="text-sm text-black space-y-2 mt-4 text-left">
         {tips.map((tip, index) => (
           <li key={index}>• {tip}</li>
         ))}

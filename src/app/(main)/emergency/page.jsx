@@ -3,6 +3,7 @@ import { Phone } from 'lucide-react';
 import Quicktips from '@/components/Quicktips';
 import MapSection from '@/components/emergencymap.jsx';
 import EmergencyHospital from '@/components/EmergencyHospital.jsx';
+import CabBooking from '@/components/CabBooking.jsx';
 
 const Page = () => {
   return (
@@ -36,6 +37,7 @@ const Page = () => {
         </div>
 
         <Quicktips />
+        <CabBooking />
       </div>
     </div>
   );

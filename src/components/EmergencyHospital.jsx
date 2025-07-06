@@ -36,7 +36,7 @@ export default function NearbyHospitalsHorizontal() {
         🏥 Nearby Hospitals
       </h3>
 
-      <div className="flex space-x-2 max-w-[830px] overflow-x-auto pr-2 scrollbar-thin scrollbar-thumb-teal-400">
+      <div className="flex space-x-2 max-w-[830px] max-h-[200px] overflow-x-auto pr-2 scrollbar-thin scrollbar-thumb-teal-400">
         {hospitals.length === 0 ? (
           <div className="text-white text-sm">No hospitals found nearby.</div>
         ) : (
@@ -47,7 +47,7 @@ export default function NearbyHospitalsHorizontal() {
             return (
               <div
                 key={h.id || `${h.name}-${i}`}
-                className="max-w-[280px] bg-white border border-teal-200 rounded-lg p-4 shadow-md shadow-teal-100 text-teal-900 flex-shrink-0"
+                className="max-w-[280px] max-h-[200px] bg-white border border-teal-200 rounded-lg p-4 shadow-md shadow-teal-100 text-teal-900 flex-shrink-0"
               >
                 <p className="text-base font-semibold">{h.name}</p>
                 <p className="text-sm">{h.address}</p>
