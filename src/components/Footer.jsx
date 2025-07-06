@@ -5,7 +5,8 @@ const Footer = () => {
   const Foottags = [
     { label: "About Arogyam", target: "/about" },
     { label: "Contact us", target: "/contact" },
-    { label: "Terms of Use", target: "/termsofuse" },
+    { label: "Terms of Use", target: "/termsofUse" },
+    { label: "Privacy Policy", target: "/privacy" },
   ];
 
   return (

@@ -1,10 +1,9 @@
-"use client";
+import React from 'react'
 
-import React from "react";
-
-export default function termsofuse() {
+const page = () => {
   return (
-    <main className="p-6 max-w-5xl mx-auto text-gray-800 bg-slate-100">
+    <>
+      <main className="p-6 max-w-5xl mx-auto text-gray-800 bg-slate-100">
       <h1 className="text-4xl font-bold text-black mb-6">Terms of Use</h1>
 
       <p className="mb-6 text-lg">
@@ -71,5 +70,8 @@ export default function termsofuse() {
 
       
     </main>
-  );
+    </>
+  )
 }
+
+export default page
