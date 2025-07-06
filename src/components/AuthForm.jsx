@@ -1,38 +1,48 @@
-"use client";
-import React, { useState } from "react";
-import Link from "next/link";
-import { signInWithPopup } from "firebase/auth";
-import { auth, provider } from "@/lib/firebaseConfig"; // adjust path
+'use client';
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { signInWithPopup } from 'firebase/auth';
+import { Eye, EyeOff } from 'lucide-react';
+import { auth, provider } from '@/lib/firebaseConfig';
 
 export default function AuthForm({ type = 'login', onSubmit }) {
-  const isLogin = type === 'login'
-  const [form, setForm] = useState({ email: '', password: '' })
+  const isLogin = type === 'login';
+
+  const [form, setForm] = useState({
+    email: '',
+    password: '',
+    firstName: '',
+    lastName: '',
+    birthDate: '',
+    gender: '',
+    phone: '',
+  });
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setForm({ ...form, [name]: value })
-  }
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleGoogleClick = async () => {
-  try {
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
-    console.log("Google User:", user);
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      const token = await user.getIdToken();
 
-    const token = await user.getIdToken();
+      await fetch('/api/auth/firebase-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token }),
+      });
 
-    await fetch('/api/auth/firebase-login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token })
-    });
-
-    alert("Google login successful!");
-  } catch (error) {
-    console.error("Google Auth Error:", error);
-    alert("Google login failed!");
-  }
-};
+      alert('Google login successful!');
+    } catch (error) {
+      console.error('Google Auth Error:', error);
+      alert('Google login failed!');
+    }
+  };
 
   return (
     <div className="bg-white shadow-xl rounded-xl px-8 py-6 w-full max-w-md mx-auto space-y-6">
@@ -47,8 +57,86 @@ export default function AuthForm({ type = 'login', onSubmit }) {
         </p>
       </div>
 
-      {/* Email/Password Form */}
-      <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); onSubmit(form) }}>
+      <form
+        className="space-y-4"
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSubmit(form);
+        }}
+      >
+        {!isLogin && (
+          <>
+            <div className="flex gap-4">
+              <div className="w-1/2">
+                <label className="block text-sm font-medium text-gray-700">First Name</label>
+                <input
+                  type="text"
+                  name="firstName"
+                  value={form.firstName}
+                  onChange={handleChange}
+                  required
+                  placeholder="John"
+                  className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-500"
+                />
+              </div>
+              <div className="w-1/2">
+                <label className="block text-sm font-medium text-gray-700">Last Name</label>
+                <input
+                  type="text"
+                  name="lastName"
+                  value={form.lastName}
+                  onChange={handleChange}
+                  required
+                  placeholder="Doe"
+                  className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-500"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Birth Date</label>
+              <input
+                type="date"
+                name="birthDate"
+                value={form.birthDate}
+                onChange={handleChange}
+                required
+                className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Gender</label>
+              <select
+                name="gender"
+                value={form.gender}
+                onChange={handleChange}
+                required
+                className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-500"
+              >
+                <option value="">Select gender</option>
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+                <option value="other">Other</option>
+                <option value="preferNotSay">Prefer not to say</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Phone Number</label>
+              <input
+                type="tel"
+                name="phone"
+                value={form.phone}
+                onChange={handleChange}
+                required
+                placeholder="+91-9876543210"
+                className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-500"
+              />
+            </div>
+          </>
+        )}
+
         <div>
           <label className="block text-sm font-medium text-gray-700">Email</label>
           <input
@@ -61,18 +149,29 @@ export default function AuthForm({ type = 'login', onSubmit }) {
             className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-500"
           />
         </div>
+
         <div>
           <label className="block text-sm font-medium text-gray-700">Password</label>
-          <input
-            type="password"
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-            required
-            placeholder="••••••••"
-            className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-500"
-          />
+          <div className="mt-1 relative">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              required
+              placeholder="••••••••"
+              className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-500"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
         </div>
+
         <button
           type="submit"
           className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 rounded-md transition"
@@ -81,7 +180,6 @@ export default function AuthForm({ type = 'login', onSubmit }) {
         </button>
       </form>
 
-      {/* Divider */}
       <div className="relative text-center">
         <div className="absolute inset-0 flex items-center">
           <div className="w-full border-t border-gray-300" />
@@ -89,7 +187,6 @@ export default function AuthForm({ type = 'login', onSubmit }) {
         <span className="relative bg-white px-3 text-sm text-gray-500">or</span>
       </div>
 
-      {/* Google Sign In Button */}
       <button
         onClick={handleGoogleClick}
         className="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 hover:shadow-md text-gray-700 font-medium py-2 px-4 rounded-md transition"
@@ -102,13 +199,16 @@ export default function AuthForm({ type = 'login', onSubmit }) {
         Continue with Google
       </button>
 
-      {/* Switch between login/register */}
       <p className="text-sm text-center text-gray-600">
         {isLogin ? "Don't have an account?" : 'Already registered?'}{' '}
         <Link href={isLogin ? '/auth/signup' : '/auth/login'}>
-          <span className="text-teal-600 hover:underline">{isLogin ? 'Log In' : 'Sign In'}</span>
+          <span className="text-teal-600 hover:underline">
+            {isLogin ? 'Sign Up' : 'Log In'}
+          </span>
         </Link>
       </p>
     </div>
-  )
+  );
 }
+
+

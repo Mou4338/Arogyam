@@ -31,7 +31,7 @@ const partners = [
 
 const Testimonial = () => {
   return (
-    <div className="bg-gradient-to-b from-slate-100 to-gray-600 py-4 px-6 text-center ">
+    <div className="bg-gradient-to-b from-slate-100 to-gray-400 py-4 px-6 text-center ">
       <h2 className="text-3xl text-black font-semibold mb-6">Testimonials</h2>
       <div className="flex flex-wrap justify-center gap-6">
         {testimonials.map((t, index) => (
