@@ -21,7 +21,7 @@ const Navbar = () => {
     <nav className="px-6 py-3 flex items-center justify-between bg-[#3f8578] shadow-md">
       <div className="flex items-center">
         <img src="/logo.png" alt="Arogyam Logo" className="w-10" />
-        <h1 className="text-xl font-bold text-primary ">Arogyam</h1>
+        <h1 className="text-xl font-bold text-white ">Arogyam</h1>
       </div>
 
       <div className="hidden md:flex items-center space-x-6">
@@ -29,7 +29,7 @@ const Navbar = () => {
           <Link
             key={index}
             href={nav.target}
-            className="hover:bg-slate-200 rounded px-2 font-heading text-black transition-colors duration-100"
+            className="hover:bg-slate-200 hover:text-black rounded px-2 font-heading text-white transition-colors duration-100"
           >
             {nav.label}
           </Link>
