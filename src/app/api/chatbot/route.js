@@ -15,6 +15,20 @@ const remedyMap = {
   sorethroat: "🗣️ Gargle with warm salt water and drink ginger-infused warm liquids. Honey is also known to help soothe irritation.",
   acidity: "🍋 For acidity, avoid spicy/oily food, eat smaller meals, and try drinking cold milk or basil-infused warm water.",
   diarrhea: "🚰 Stay hydrated with ORS or coconut water. Avoid solid or oily food. A banana and rice diet can help settle your stomach.",
+  Acne: "Keep skin clean, use benzoyl peroxide or salicylic acid, and avoid picking or popping pimples",
+  Allergies: "Avoid allergens, use antihistamines, and consider immunotherapy",
+  Foot: "Wear comfortable shoes, stretch, and use orthotics or arch supports",
+  Eye: "Follow 20-20-20 rule (every 20 minutes, look away from screen for 20 seconds), adjust display settings, and blink regularly",
+  Pain: "Stretch, exercise, maintain good posture, and use heat or cold therapy",
+  Fatigue: "Get enough sleep, exercise regularly, eat a balanced diet, and manage stress",
+  Hangover: "Stay hydrated, rest, and consider over-the-counter pain relievers",
+  Menstrual: "Use heat therapy, take over-the-counter pain relievers, and consider hormonal birth control",
+  doctor: "If symptoms persist or worsen, consult a healthcare professional for proper diagnosis and treatment",
+  severe: "If symptoms persist or worsen, consult a healthcare professional for proper diagnosis and treatment",
+  hygiene: "Practice good hygiene to prevent the spread of illnesses",
+  hydration: "Drink plenty of fluids to help your body recover",
+  Thank: "Thank you for using Arogyam AI Shevak",
+  Thanks: "Thank you for using Arogyam AI Shevak",
 };
 
 export async function POST(req) {

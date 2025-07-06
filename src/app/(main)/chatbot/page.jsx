@@ -35,7 +35,7 @@ const quickactions = [
   },
   {
     icon: <AlertTriangle className="w-6 h-6 text-white" />,
-    text: 'View Emergency Alerts',
+    text: 'View Public Health Alerts',
     href: '/alerts',
   },
   {
