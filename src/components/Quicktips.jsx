@@ -16,7 +16,7 @@ const QuickAdd = () => {
       <div className="flex justify-center mb-4 text-pink-500">
         <Lightbulb className="h-6 w-6" />
       </div>
-      <h2 className="text-lg font-semibold mb-2">Quick First Aid Tips</h2>
+      <h2 className="text-white text-lg font-semibold mb-2">Quick First Aid Tips</h2>
       <hr className="my-2 border-gray-200" />
       <ul className="text-sm text-gray-100 space-y-2 mt-4 text-left">
         {tips.map((tip, index) => (

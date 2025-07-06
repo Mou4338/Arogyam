@@ -7,9 +7,9 @@ export default function NearbyHospitals() {
 
   useEffect(() => {
     fetch('/api/hospitals')
-      .then(res => res.json())
-      .then(data => setHospitals(data))
-      .catch(err => console.error('Failed to fetch hospitals:', err));
+      .then((res) => res.json())
+      .then((data) => setHospitals(data))
+      .catch((err) => console.error('Failed to fetch hospitals:', err));
   }, []);
 
   return (
@@ -19,49 +19,57 @@ export default function NearbyHospitals() {
       </h3>
 
       {/* Scrollable hospital list */}
-      <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
+      <div className="space-y-2 max-h-[350px] overflow-y-auto pr-2">
         {hospitals.length === 0 ? (
           <p className="text-white text-sm">No hospitals found nearby.</p>
         ) : (
-          hospitals.map((h, i) => (
-            <div
-              key={h.id || `${h.name}-${i}`}
-              className="bg-white border border-teal-200 rounded-lg p-4 shadow-md shadow-teal-100 text-teal-900"
-            >
-              <p className="text-base font-semibold">{h.name}</p>
-              <p className="text-sm">{h.address}</p>
-              <p className="text-sm mt-1">
-                📍 Distance: {h.distance || '–'}
-              </p>
-              <p className="text-sm mt-1">
-                ⏱️ Wait Time: {h.wait || '–'}
-              </p>
+          hospitals.map((h, i) => {
+            const unavailableBeds = h.beds
+              ? Object.entries(h.beds)
+                  .filter(([_, count]) => count === 0)
+                  .map(([type]) => type)
+              : [];
 
+            return (
+              <div
+                key={h.id || `${h.name}-${i}`}
+                className="bg-white border border-teal-200 rounded-lg p-4 shadow-md shadow-teal-100 text-teal-900"
+              >
+                <p className="text-base font-semibold">{h.name}</p>
+                <p className="text-sm">{h.address}</p>
+                <p className="text-sm mt-1">📍 Distance: {h.distance || '–'}</p>
+                <p className="text-sm mt-1">🚗 Time: {h.Time || '–'}</p>
+                {/* Show wait time for unavailable beds */}
+                {unavailableBeds.length > 0 && h.wait && (
+                  <div className="text-xs mt-1 space-y-0">
+                    {unavailableBeds.map((type) => (
+                      <p className="text-xs" key={type}>
+                        ⏱️ {type}: Wait Time: {h.wait || '–'}
+                      </p>
+                    ))}
+                  </div>
+                )}
 
-              {h.beds && (
-                <div className="mt-3 grid grid-cols-2 gap-1 text-xs">
-                  <span className="bg-teal-400 rounded px-1 py-1 text-center">
-                    General: <strong>{h.beds.general}</strong>
-                  </span>
-                  <span className="bg-teal-400 rounded px-1 py-1 text-center">
-                    ICU: <strong>{h.beds.icu}</strong>
-                  </span>
-                  <span className="bg-teal-400 rounded px-1 py-1 text-center">
-                    Maternity: <strong>{h.beds.maternity}</strong>
-                  </span>
-                  <span className="bg-teal-400 rounded px-1 py-1 text-center">
-                    Emergency: <strong>{h.beds.emergency}</strong>
-                  </span>
-                </div>
-              )}
-            </div>
-          ))
+                {/* Bed Grid */}
+                {h.beds && (
+                  <div className="mt-3 grid grid-cols-2 gap-1 text-sm font-medium">
+                    {Object.entries(h.beds).map(([type, count]) => (
+                      <span
+                        key={type}
+                        className="bg-teal-400 rounded px-1 py-1 text-center text-white"
+                      >
+                        {type.charAt(0).toUpperCase() + type.slice(1)}:{' '}
+                        <strong>{count}</strong>
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })
         )}
       </div>
     </div>
   );
 }
-
-
-
 

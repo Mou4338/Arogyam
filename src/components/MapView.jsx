@@ -14,8 +14,8 @@ if (!mapRef.current || !mapboxgl.accessToken) return;
 const map = new mapboxgl.Map({
   container: mapRef.current,
   style: 'mapbox://styles/mapbox/streets-v11',
-  center: [85.8245, 20.2961], // Bhubaneswar
-  zoom: 12,
+  center: [85.8412, 20.2965],
+  zoom: 15,
 });
 
 map.addControl(new mapboxgl.NavigationControl(), 'top-right');
