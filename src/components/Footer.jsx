@@ -10,31 +10,42 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-secondary  py-6">
-      <div className="flex flex-col md:flex-row items-center justify-between max-w-6xl mx-auto px-4">
-        <div className="flex  mb-4 md:mb-0">
+    <footer className="bg-[#3f8578] py-8 px-4">
+      <div className="max-w-6xl mx-auto flex flex-col items-center text-center">
+
+        {/* Top - Navigation Links */}
+        <div className="flex flex-wrap justify-center items-center gap-6 text-white font-semibold text-lg mb-4">
           {Foottags.map((tag, idx) => (
-            <Link
-              key={idx}
-              href={tag.target}
-              className="text-black hover:text-white font-body transition-colors duration-200 pl-2"
-            >
-              {idx < Foottags.length  && (
-                <span className="hidden sm:inline border-l border-black h-4 mx-4 "></span>
+            <React.Fragment key={idx}>
+              {idx > 0 && (
+                <span className="hidden sm:inline h-5 border-l border-white/60 mx-2" />
               )}
-              {tag.label}
-            </Link>
+              <Link
+                href={tag.target}
+                className="hover:underline hover:text-white/90 transition-all"
+              >
+                {tag.label}
+              </Link>
+            </React.Fragment>
           ))}
         </div>
-        <div className="flex text-light text-sm font-body">
-          © 2025
-          <img src="/logo.png" alt="Arogyam Logo" className="w-5" />
-           Arogyam.
+         
+         <div className="flex flex-wrap justify-center items-center mb-4 space-y-8"></div>
+
+        {/* Bottom - Logo & Copyright */}
+        <div className="text-medium text-white/90 mt-2 flex items-center justify-center gap-1">
+          <span>© 2025</span>
+          <img
+            src="/logo.png"
+            alt="Arogyam Logo"
+            className="w-5 h-5 object-contain"
+          />
+          <span>@ Arogyam</span>
         </div>
       </div>
     </footer>
-
   );
 };
 
 export default Footer;
+
