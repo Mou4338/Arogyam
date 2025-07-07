@@ -87,9 +87,9 @@ const Remainder = () => {
   const renderReminderCard = (reminder) => (
     <div
       key={reminder.id}
-      className="bg-teal-50 rounded-2xl shadow-xl p-5 relative border border-black max-h-[200px] flex flex-col"
+      className="bg-teal-50 rounded-2xl shadow-xl p-5 relative border border-black max-h-[200px] scrollbar-color-black flex flex-col"
     >
-      <div className="overflow-y-auto pr-2">
+      <div className="overflow-y-auto scrollbar-color-black pr-2">
         <div className="flex justify-between items-center mb-3">
           <h4 className="text-xl border-[1px] border-[#3f8578] rounded-xl p-1.5 font-semibold text-gray-800">{reminder.title}</h4>
           <div className="flex gap-2">
