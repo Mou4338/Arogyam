@@ -53,7 +53,7 @@ const Page = () => {
         <Chatbot />
       </div>
 
-      <div className="w-full md:max-w-xs bg-white rounded-lg shadow-md p-4">
+      <div className="w-full md:max-w-xs bg-teal-50 border border-teal-600 shadow-xl rounded-2xl p-6 space-y-8">
         <h3 className="text-lg font-semibold text-black mb-4">⚡ Quick Actions</h3>
         <div className="space-y-4">
           {quickactions.map((action, idx) => {
