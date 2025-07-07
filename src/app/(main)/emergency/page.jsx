@@ -7,9 +7,9 @@ import CabBooking from '@/components/CabBooking.jsx';
 
 const Page = () => {
   return (
-    <div className="flex bg-slate-100 flex-row gap-4 p-4">
+    <div className="flex bg-slate -100 flex-row gap-4 p-4">
       {/* Left: Map + Emergency Hospitals */}
-      <div className="flex flex-col gap-4 basis-[70%]">
+      <div className="w-[70vw] flex flex-col gap-4 basis-[70%]">
         {/* Map Section - white background */}
         <div className="bg-white rounded-lg p-4">
           <MapSection />

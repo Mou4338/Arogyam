@@ -47,7 +47,8 @@ export default function NearbyHospitalsHorizontal() {
             return (
               <div
                 key={h.id || `${h.name}-${i}`}
-                className="max-w-[280px] max-h-[200px] bg-white border border-teal-200 rounded-lg p-4 shadow-md shadow-teal-100 text-teal-900 flex-shrink-0"
+                className="lng:w-1/2 bg-white border border-teal-200 rounded-lg p-4 shadow-md shadow-teal-100 text-teal-900 flex-shrink-0 overflow-x-auto pr-2"
+
               >
                 <p className="text-base font-semibold">{h.name}</p>
                 <p className="text-sm">{h.address}</p>
