@@ -4,21 +4,21 @@ const testimonials = [
   {
     name: "Michelle Simson",
     role: "Busy Parent",
-    icon: <User className="w-5 h-5 mr-2 text-yellow-200" />,
+    icon: <User className="w-5 h-5 mr-2 text-yellow-400" />,
     content:
       "Arogyam helped me find the nearest hospital for my son instantly during an emergency.",
   },
   {
     name: "Marco Smith",
     role: "Emergency Responder",
-    icon: <HeartPulse className="w-5 h-5 mr-2 text-red-500" />,
+    icon: <HeartPulse className="w-5 h-5 mr-2 text-red-600" />,
     content:
       "Real-time bed availability is a game changer for first responders like us.",
   },
   {
     name: "John Williamson",
     role: "Fitness Enthusiast",
-    icon: <Dumbbell className="w-5 h-5 mr-2 text-green-300" />,
+    icon: <Dumbbell className="w-5 h-5 mr-2 text-green-500" />,
     content:
       "The AI chatbot helped me choose the best herbal solution for muscle recovery.",
   },
@@ -36,7 +36,7 @@ const Testimonial = () => {
   return (
     <div className="bg-gradient-to-b from-slate-100 to-gray-400 py-10 px-6 text-center">
       
-       {/* Partners Section */}
+      {/* Partners Section */}
       <h3 className="text-3xl font-bold text-black">Our Trusted Partners</h3>
       <p className="text-gray-700 text-sm mb-8">Collaborating for better care</p>
 
@@ -55,9 +55,9 @@ const Testimonial = () => {
         ))}
       </div>
 
-      <h2 className="text-4xl text-black font-bold mt-17">Testimonials</h2>
-
       {/* Testimonials Section */}
+      <h2 className="text-4xl text-black font-bold mt-16">Testimonials</h2>
+
       <div className="flex flex-wrap justify-center mt-10 gap-6">
         {testimonials.map((t, index) => (
           <div
@@ -75,7 +75,6 @@ const Testimonial = () => {
             </div>
           </div>
         ))}
-        <div className="flex flex-wrap justify-center gap-6 mt-6"></div>
       </div>
     </div>
   );
