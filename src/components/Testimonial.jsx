@@ -4,7 +4,7 @@ const testimonials = [
   {
     name: "Michelle Simson",
     role: "Busy Parent",
-    icon: <User className="w-5 h-5 mr-2 text-purple-500" />,
+    icon: <User className="w-5 h-5 mr-2 text-yellow-200" />,
     content:
       "Arogyam helped me find the nearest hospital for my son instantly during an emergency.",
   },
@@ -18,7 +18,7 @@ const testimonials = [
   {
     name: "John Williamson",
     role: "Fitness Enthusiast",
-    icon: <Dumbbell className="w-5 h-5 mr-2 text-green-500" />,
+    icon: <Dumbbell className="w-5 h-5 mr-2 text-green-300" />,
     content:
       "The AI chatbot helped me choose the best herbal solution for muscle recovery.",
   },
@@ -35,31 +35,10 @@ const partners = [
 const Testimonial = () => {
   return (
     <div className="bg-gradient-to-b from-slate-100 to-gray-400 py-10 px-6 text-center">
-      <h2 className="text-3xl text-black font-semibold mb-8">Testimonials</h2>
-
-      {/* Testimonials Section */}
-      <div className="flex flex-wrap justify-center gap-6">
-        {testimonials.map((t, index) => (
-          <div
-            key={index}
-            className="flex flex-col justify-between bg-[#3f8578] shadow-lg rounded-xl p-6 w-[90%] sm:w-80 min-h-[200px] transition hover:scale-105 duration-300"
-          >
-            <div className="text-white text-sm">{t.content}</div>
-
-            <div className="flex items-center justify-center mt-4 bg-[#132d2e] rounded-full p-3 gap-2">
-              {t.icon}
-              <div className="text-sm text-gray-300 text-center">
-                <strong>{t.name}</strong> <br />
-                <span className="text-xs text-gray-100">{t.role}</span>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Partners Section */}
-      <h3 className="text-2xl font-semibold mt-12 text-black">Our Trusted Partners</h3>
-      <p className="text-gray-700 text-sm mb-6">Collaborating for better care</p>
+      
+       {/* Partners Section */}
+      <h3 className="text-3xl font-bold text-black">Our Trusted Partners</h3>
+      <p className="text-gray-700 text-sm mb-8">Collaborating for better care</p>
 
       <div className="flex justify-center items-center flex-wrap gap-6 px-4">
         {partners.map((url, i) => (
@@ -74,6 +53,29 @@ const Testimonial = () => {
             />
           </div>
         ))}
+      </div>
+
+      <h2 className="text-4xl text-black font-bold mt-17">Testimonials</h2>
+
+      {/* Testimonials Section */}
+      <div className="flex flex-wrap justify-center mt-10 gap-6">
+        {testimonials.map((t, index) => (
+          <div
+            key={index}
+            className="flex flex-col justify-between bg-teal-50 border border-teal-500 shadow-xl rounded-2xl p-6 space-y-3 w-[90%] sm:w-80 min-h-[200px] transition hover:scale-105 duration-300"
+          >
+            <div className="text-black text-sm">{t.content}</div>
+
+            <div className="flex items-center justify-center mt-4 bg-[#3f8578] rounded-full p-3 gap-2">
+              {t.icon}
+              <div className="text-sm text-white text-center">
+                <strong>{t.name}</strong> <br />
+                <span className="text-xs text-gray-100">{t.role}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+        <div className="flex flex-wrap justify-center gap-6 mt-6"></div>
       </div>
     </div>
   );

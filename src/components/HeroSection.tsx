@@ -118,7 +118,7 @@ export default function HeroSection() {
             Why Choose Arogyam?
           </h2>
           <p className="text-sm sm:text-base text-gray-800 mb-4">
-            Arogyam is designed to provide you with seamless access to essential health services, empowering you to take control of your well-being with confidence and ease.
+            Arogyam is designed to ensure seamless access to vital healthcare services, empowering individuals to take charge of their well-being with confidence, dignity, and ease.
           </p>
           <div className="grid grid-cols-1 gap-4">
             {healthFeatures.map((feature, index) => (
