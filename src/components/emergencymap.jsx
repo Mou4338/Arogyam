@@ -62,15 +62,15 @@ export default function MapSection() {
       const markerColor = emergencyBeds > 0 ? '#64bcae' : '#d1d5db';
 
       const waitHTML = hospital.wait?.Emergency
-        ? `⏳ <span class="text-yellow-600 font-medium">${hospital.wait.Emergency}</span><br/>`
+        ? `<span class="text-yellow-600 font-medium">${hospital.wait.Emergency}</span><br/>`
         : '';
 
       const popupHTML = `
         <div class="text-sm leading-snug text-gray-800 font-normal">
           <strong class="text-base text-[#132d2e]">${hospital.name}</strong><br/>
           <span>${hospital.address}</span><br/>
-          📍 <span class="text-gray-700 font-medium">${hospital.distance?.toFixed(1) || 'N/A'} km away</span><br/>
-          🛏️ Emergency Beds: <span class="${emergencyBeds > 0 ? 'text-green-700' : 'text-red-600'}">${emergencyBeds}</span><br/>
+          <span class="text-gray-700 font-medium">${hospital.distance?.toFixed(1) || 'N/A'} km away</span><br/>
+          Emergency Beds: <span class="${emergencyBeds > 0 ? 'text-green-700' : 'text-red-600'}">${emergencyBeds}</span><br/>
           ${waitHTML}
         </div>
       `;
@@ -206,9 +206,9 @@ export default function MapSection() {
               travelMode === mode ? 'bg-[#64bcae] text-white' : 'bg-gray-100 text-[#132d2e]'
             }`}
           >
-            {mode === 'driving' && '🚗 Car'}
-            {mode === 'walking' && '🚶 Walk'}
-            {mode === 'cycling' && '🚴 Cycle'}
+            {mode === 'driving' && 'Car'}
+            {mode === 'walking' && 'Walk'}
+            {mode === 'cycling' && 'Cycle'}
             {durations[mode] !== null && ` (${durations[mode]} min)`}
           </button>
         ))}

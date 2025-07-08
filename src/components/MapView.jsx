@@ -77,7 +77,7 @@ export default function MapSection() {
         <div class="text-sm leading-snug text-gray-800 font-normal">
           <strong class="text-base text-[#132d2e]">${hospital.name}</strong><br/>
           <span>${hospital.address}</span><br/>
-          📍 <span class="text-gray-700 font-medium">${hospital.distance?.toFixed(1)||'N/A'} km away</span><br/>
+          <span class="text-gray-700 font-medium">${hospital.distance?.toFixed(1)||'N/A'} km away</span><br/>
           ${waitHTML}
           <button class="start-journey-btn mt-2 px-2 py-1 text-white bg-[#64bcae] rounded text-sm">Start Journey</button>
         </div>
@@ -226,9 +226,9 @@ export default function MapSection() {
               travelMode === mode ? 'bg-[#64bcae] text-white' : 'bg-gray-100 text-[#132d2e]'
             }`}
           >
-            {mode === 'driving' && '🚗 Car'}
-            {mode === 'walking' && '🚶 Walk'}
-            {mode === 'cycling' && '🚴 Cycle'}
+            {mode === 'driving' && 'Car'}
+            {mode === 'walking' && 'Walk'}
+            {mode === 'cycling' && 'Cycle'}
             {durations[mode] !== null && ` (${durations[mode]} min)`}
           </button>
         ))}

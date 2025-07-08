@@ -106,7 +106,7 @@ export default function NearbyHospitalsHorizontal({ addEmergencyBooking }) {
   return (
     <div className="w-full mt-2">
       <h3 className="text-xl font-bold text-white mb-3 px-2 flex items-center gap-2">
-        🏥 Nearby Hospitals
+        Nearby Hospitals
       </h3>
 
       <div className="flex space-x-4 overflow-x-auto pr-2 scrollbar-thin scrollbar-thumb-teal-400 pb-2">
@@ -126,7 +126,7 @@ export default function NearbyHospitalsHorizontal({ addEmergencyBooking }) {
                 <p className="text-xl font-bold">{h.name}</p>
                 <p className="text-semibold text-medium mt-1 mb-2">Address: {h.address}</p>
                 <p className="text-sm mt-1">
-                  📍 Distance:{' '}
+                  Distance:{' '}
                   {typeof h.distance === 'number' ? `${h.distance.toFixed(1)} km` : '–'}
                 </p>
                 {showWait && (
@@ -179,15 +179,15 @@ export default function NearbyHospitalsHorizontal({ addEmergencyBooking }) {
                   </p>
                   <div className="mt-3 space-y-1 text-medium text-teal-800">
                     <p>
-                      📍 Distance:{' '}
+                      Distance:{' '}
                       {typeof selectedHospital?.distance === 'number'
                         ? `${selectedHospital.distance.toFixed(1)} km`
                         : selectedHospital?.distance || '–'}
                     </p>
-                    <p>📞 Phone: {selectedHospital?.phone}</p>
-                    <p>📧 Email: {selectedHospital?.email}</p>
+                    <p>Phone: {selectedHospital?.phone}</p>
+                    <p>Email: {selectedHospital?.email}</p>
                     {selectedHospital?.wait && (
-                      <p>⏱️ Estimated Wait: {selectedHospital.wait}</p>
+                      <p>Estimated Wait: {selectedHospital.wait}</p>
                     )}
                   </div>
 

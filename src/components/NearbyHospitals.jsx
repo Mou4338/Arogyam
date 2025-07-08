@@ -83,7 +83,7 @@ export default function NearbyHospitals({ addBooking }) {
     <div className="bg-teal-600 p-5 rounded-xl shadow-xl w-full max-w-sm">
       <div className="space-y-4"></div>
       <h3 className="text-xl font-bold text-white mb-4 mt-4 flex items-center gap-2">
-        🏥 Nearby Hospitals
+        Nearby Hospitals
       </h3>
 
       <div className="space-y-2 max-h-[420px] p-2 overflow-y-auto">
@@ -108,14 +108,14 @@ export default function NearbyHospitals({ addBooking }) {
                 <p className="text-base font-semibold">{h.name}</p>
                 <p className="text-sm">{h.address}</p>
                 <p className="text-sm mt-1">
-                  📍 Distance: {h.distance ? `${h.distance.toFixed(1)} km` : '–'}
+                  Distance: {h.distance ? `${h.distance.toFixed(1)} km` : '–'}
                 </p>
 
                 {unavailableBeds.length > 0 && h.wait && (
                   <div className="text-xs mt-1">
                     {unavailableBeds.map(([type]) => (
                       <p className="text-xs" key={type}>
-                        ⏱️ {type}: Wait Time: {h.wait?.[type] || '–'}
+                        {type}: Wait Time: {h.wait?.[type] || '–'}
                       </p>
                     ))}
                   </div>
@@ -173,9 +173,9 @@ export default function NearbyHospitals({ addBooking }) {
                   </p>
 
                   <div className="mt-3 text-sm space-y-1 text-teal-800">
-                    <p>📍 Distance: {selectedHospital?.distance ? `${selectedHospital.distance.toFixed(1)} km` : '–'}</p>
-                    <p>📞 Phone: {selectedHospital?.phone}</p>
-                    <p>✉️ Email: {selectedHospital?.email}</p>
+                    <p>Distance: {selectedHospital?.distance ? `${selectedHospital.distance.toFixed(1)} km` : '–'}</p>
+                    <p>Phone: {selectedHospital?.phone}</p>
+                    <p>Email: {selectedHospital?.email}</p>
                   </div>
 
                   {selectedHospital?.beds && selectedHospital?.wait && (
