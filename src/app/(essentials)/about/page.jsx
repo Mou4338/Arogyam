@@ -37,12 +37,12 @@ export default function AboutPage() {
       <section className="mb-8">
         <h2 className="text-2xl font-semibold text-black mb-2">Core Features</h2>
         <ul className="list-disc list-inside space-y-1">
-          <li>📍 Real-time hospital bed booking with filters and wait-time AI</li>
-          <li>🚨 Emergency finder with ambulance/cab integration and SOS alerts</li>
-          <li>🤖 AI-powered chatbot for symptom checking and treatment suggestions</li>
-          <li>💊 Medicine recommendation and e-consultation options</li>
-          <li>📢 Health alerts for diseases, vaccinations, and wellness tips</li>
-          <li>⏰ Custom healthy habit and medication reminders</li>
+          <li>Real-time hospital bed booking with filters and wait-time AI</li>
+          <li>Emergency finder with ambulance/cab integration and SOS alerts</li>
+          <li>AI-powered chatbot for symptom checking and treatment suggestions</li>
+          <li>Medicine recommendation and e-consultation options</li>
+          <li>Health alerts for diseases, vaccinations, and wellness tips</li>
+          <li>Custom healthy habit and medication reminders</li>
         </ul>
       </section>
 

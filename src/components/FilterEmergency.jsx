@@ -39,7 +39,7 @@ export default function FilterControls({ onFilter }) {
         onChange={(e) => setSortBy(e.target.value)}
         className="px-4 py-2 rounded-lg border border-teal-700 focus:ring-2 focus:ring-teal-600 outline-none w-full sm:w-auto text-teal-800"
       >
-        <option value="">↕️ Sort By</option>
+        <option value="">Sort By</option>
         <option value="wait">Shortest Wait time</option>
         <option value="distance">Nearest</option>
       </select>

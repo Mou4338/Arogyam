@@ -119,11 +119,11 @@ const Remainder = () => {
         )}
 
         <div className="grid grid-cols-1 gap-y-1 text-sm text-gray-600">
-          <p>📂 <span className="font-medium">Category:</span> {reminder.category}</p>
-          <p>📅 <span className="font-medium">Frequency:</span> {reminder.frequency}</p>
-          {reminder.weekDay && <p>📌 <span className="font-medium">Day:</span> {reminder.weekDay}</p>}
-          {reminder.monthDate && <p>📌 <span className="font-medium">Date:</span> {reminder.monthDate}</p>}
-          {reminder.specificDate && <p>📌 <span className="font-medium">Specific:</span> {reminder.specificDate}</p>}
+          <p><span className="font-medium">Category:</span> {reminder.category}</p>
+          <p><span className="font-medium">Frequency:</span> {reminder.frequency}</p>
+          {reminder.weekDay && <p><span className="font-medium">Day:</span> {reminder.weekDay}</p>}
+          {reminder.monthDate && <p><span className="font-medium">Date:</span> {reminder.monthDate}</p>}
+          {reminder.specificDate && <p><span className="font-medium">Specific:</span> {reminder.specificDate}</p>}
            {Object.keys(reminder)
             .filter((key) => key.startsWith('time'))
             .map((key) => (
@@ -147,12 +147,12 @@ const Remainder = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-4 rounded-xl">
-      <h3 className="text-3xl font-bold mb-6 text-black">📋 Your Reminders</h3>
+      <h3 className="text-3xl font-bold mb-6 text-black">Your Reminders</h3>
 
       {/* Filters */}
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between bg-teal-50 rounded-2xl shadow-xl p-5 border border-black gap-4 mb-4">
         <div>
-          <label className="block text-[#3f8578] font-bold mb-1">📅 Filter by Date</label>
+          <label className="block text-[#3f8578] font-bold mb-1">Filter by Date</label>
           <DatePicker
             selected={selectedDate}
             onChange={(date) => setSelectedDate(date)}
@@ -209,12 +209,12 @@ const Remainder = () => {
               {selectedReminder?.title}
             </Dialog.Title>
             <div className="space-y-2 text-sm text-gray-800">
-              <p>📝 <span className="font-medium">Description:</span> {selectedReminder?.description || 'N/A'}</p>
-              <p>📂 <span className="font-medium">Category:</span> {selectedReminder?.category}</p>
-              <p>📅 <span className="font-medium">Frequency:</span> {selectedReminder?.frequency}</p>
-              {selectedReminder?.weekDay && <p>🗓️ <span className="font-medium">Weekday:</span> {selectedReminder.weekDay}</p>}
-              {selectedReminder?.monthDate && <p>🗓️ <span className="font-medium">Month Date:</span> {selectedReminder.monthDate}</p>}
-              {selectedReminder?.specificDate && <p>📌 <span className="font-medium">Specific Date:</span> {selectedReminder.specificDate}</p>}
+              <p><span className="font-medium">Description:</span> {selectedReminder?.description || 'N/A'}</p>
+              <p><span className="font-medium">Category:</span> {selectedReminder?.category}</p>
+              <p><span className="font-medium">Frequency:</span> {selectedReminder?.frequency}</p>
+              {selectedReminder?.weekDay && <p><span className="font-medium">Weekday:</span> {selectedReminder.weekDay}</p>}
+              {selectedReminder?.monthDate && <p><span className="font-medium">Month Date:</span> {selectedReminder.monthDate}</p>}
+              {selectedReminder?.specificDate && <p><span className="font-medium">Specific Date:</span> {selectedReminder.specificDate}</p>}
               {Object.keys(selectedReminder || {})
                 .filter((key) => key.startsWith('time'))
                 .map((key) => (

@@ -29,11 +29,11 @@ const AddReminder = ({ existingReminder = null, onSuccess }) => {
   const sendEmail = async (data, userEmail) => {
     const extraInfo =
       data.frequency === 'weekly'
-        ? `📆 Day: ${data.weekDay}`
+        ? `Day: ${data.weekDay}`
         : data.frequency === 'monthly'
-        ? `📆 Date: ${data.monthDate}`
+        ? `Date: ${data.monthDate}`
         : data.frequency === 'specific'
-        ? `📆 Specific Date: ${data.specificDate}`
+        ? `Specific Date: ${data.specificDate}`
         : '';
 
     const timeSlots = Array.from({ length: slotCount }, (_, i) => data[`time${i + 1}`]).join(', ');
@@ -42,12 +42,12 @@ const AddReminder = ({ existingReminder = null, onSuccess }) => {
       from_name: 'Krishna Mohanty',
       from_email: 'mohantykrishna57@gmail.com',
       to_email: userEmail,
-      message: `📝 Reminder: ${data.title}
-📄 Description: ${data.description || 'N/A'}
-🕒 Times: ${timeSlots}
-📅 Frequency: ${data.frequency}
-${extraInfo}
-📂 Category: ${data.category}`,
+      message: `Reminder: ${data.title}
+    Description: ${data.description || 'N/A'}
+    Times: ${timeSlots}
+    Frequency: ${data.frequency}
+    ${extraInfo}
+    Category: ${data.category}`,
     };
 
     try {
@@ -80,7 +80,7 @@ ${extraInfo}
       await setDoc(docRef, data);
       await sendEmail(data, userEmail);
 
-      setSuccessMsg('✅ Reminder saved and email sent!');
+      setSuccessMsg('Reminder saved and email sent!');
       reset();
       onSuccess?.();
       setTimeout(() => setSuccessMsg(''), 3000);
@@ -105,7 +105,7 @@ ${extraInfo}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Reminder Name */}
         <div className="bg-white rounded-lg shadow p-4">
-          <label className="block font-medium text-gray-800 mb-1">📌 Reminder Name *</label>
+          <label className="block font-medium text-gray-800 mb-1">Reminder Name *</label>
           <input
             type="text"
             placeholder="e.g. Take Medicine"
@@ -117,7 +117,7 @@ ${extraInfo}
 
         {/* Description */}
         <div className="bg-white rounded-lg shadow p-4">
-          <label className="block font-medium text-gray-800 mb-1">📝 Description (Optional)</label>
+          <label className="block font-medium text-gray-800 mb-1">Description (Optional)</label>
           <input
             type="text"
             placeholder="e.g. After breakfast or before bed"
@@ -128,7 +128,7 @@ ${extraInfo}
 
         {/* Category */}
         <div className="bg-white rounded-lg shadow p-4">
-          <label className="block font-medium text-gray-800 mb-1">📂 Category *</label>
+          <label className="block font-medium text-gray-800 mb-1">Category *</label>
           <select
             className="w-full p-2 border border-gray-300 rounded text-black"
             {...register('category', { required: true })}
@@ -144,7 +144,7 @@ ${extraInfo}
 
         {/* Frequency */}
         <div className="bg-white rounded-lg shadow p-4">
-          <label className="block font-medium text-gray-800 mb-1">📅 Frequency *</label>
+          <label className="block font-medium text-gray-800 mb-1">Frequency *</label>
           <select
             className="w-full p-2 border border-gray-300 rounded text-black"
             {...register('frequency', { required: true })}
@@ -160,7 +160,7 @@ ${extraInfo}
         {/* Weekly */}
         {frequency === 'weekly' && (
           <div className="bg-white rounded-lg shadow p-4">
-            <label className="block font-medium text-gray-800 mb-1">📆 Day of the Week *</label>
+            <label className="block font-medium text-gray-800 mb-1">Day of the Week *</label>
             <select
               className="w-full p-2 border border-gray-300 rounded text-black"
               {...register('weekDay', { required: true })}
@@ -180,7 +180,7 @@ ${extraInfo}
         {/* Monthly */}
         {frequency === 'monthly' && (
           <div className="bg-white rounded-lg shadow p-4">
-            <label className="block font-medium text-gray-800 mb-1">📆 Date of Month *</label>
+            <label className="block font-medium text-gray-800 mb-1">Date of Month *</label>
             <select
               className="w-full p-2 border border-gray-300 rounded text-black"
               {...register('monthDate', { required: true })}
@@ -198,7 +198,7 @@ ${extraInfo}
         {/* Specific Date */}
         {frequency === 'specific' && (
           <div className="bg-white rounded-lg shadow p-4">
-            <label className="block font-medium text-gray-800 mb-1">📅 Select Specific Date *</label>
+            <label className="block font-medium text-gray-800 mb-1">Select Specific Date *</label>
             <input
               type="date"
               className="w-full p-2 border border-gray-300 rounded text-black"
@@ -209,7 +209,7 @@ ${extraInfo}
 
         {/* Slot Count */}
         <div className="bg-white rounded-lg shadow p-4">
-          <label className="block font-medium text-gray-800 mb-1">🧭 Time Slots (1–5)</label>
+          <label className="block font-medium text-gray-800 mb-1">Time Slots (1–5)</label>
           <select
             className="w-full p-2 border border-gray-300 rounded text-black"
             {...register('slotCount', { required: true })}
@@ -226,7 +226,7 @@ ${extraInfo}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {Array.from({ length: slotCount }, (_, i) => (
             <div key={`time${i + 1}`} className="bg-white rounded-lg shadow p-4 flex flex-col">
-                              <label className="font-medium text-gray-800 mb-1">⏰ Slot {i + 1}</label>
+                              <label className="font-medium text-gray-800 mb-1">Slot {i + 1}</label>
               <input
                 type="time"
                 className="p-2 border border-gray-300 rounded text-black"
@@ -242,7 +242,7 @@ ${extraInfo}
             type="submit"
             className="bg-white text-[#3f8578] font-semibold py-2 px-6 rounded-lg hover:bg-slate-100 transition-transform duration-300 hover:scale-[1.02] hover:shadow-2xl cursor-pointer"
           >
-            {existingReminder ? '✏️ Update Reminder' : '➕ Add Reminder'}
+            {existingReminder ? ' Update Reminder' : ' Add Reminder'}
           </button>
         </div>
       </form>

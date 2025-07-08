@@ -37,12 +37,12 @@ export default function CabBookingWidget() {
 
   return (
     <div className="bg-teal-50 border border-teal-500 shadow-xl rounded-2xl p-6 space-y-8">
-      <h4 className="text-lg font-bold text-[#225b5c] mb-2">🚖 Need a Ride?</h4>
+      <h4 className="text-lg font-bold text-[#225b5c] mb-2">Need a Ride?</h4>
       <p className="text-sm mb-3 text-gray-600">Book an Ola or Uber to reach the hospital quickly.</p>
 
       {!isReady && (
         <div className="text-sm text-yellow-600 mb-3">
-          📍 Getting your location... Please allow permission.
+          Getting your location... Please allow permission.
         </div>
       )}
 
@@ -57,7 +57,7 @@ export default function CabBookingWidget() {
               : 'bg-gray-300 text-gray-600 cursor-not-allowed'
           }`}
         >
-          🚘 Book via Uber
+          Book via Uber
         </a>
 
         <a
@@ -70,7 +70,7 @@ export default function CabBookingWidget() {
               : 'bg-gray-300 text-gray-600 cursor-not-allowed'
           }`}
         >
-          🛺 Book via Ola
+          Book via Ola
         </a>
       </div>
     </div>
