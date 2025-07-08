@@ -3,8 +3,9 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { db } from '@/lib/firebaseConfig';
-import { collection, getDocs } from 'firebase/firestore';
 import { MapPin, Phone, Mail, Globe, StickyNote } from 'lucide-react';
+import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
+
 
 export default function BookedEmergency() {
   const [bookings, setBookings] = useState([]);
@@ -28,6 +29,20 @@ export default function BookedEmergency() {
     setIsDialogOpen(false);
     setSelectedBooking(null);
   };
+
+  const handleDelete = async (bookingId) => {
+  if (!bookingId) return;
+  try {
+    await deleteDoc(doc(db, 'emergencyBookings', bookingId));
+    setBookings((prev) => prev.filter((b) => b.id !== bookingId));
+    // Optionally close dialog if deleting from dialog
+    if (selectedBooking?.id === bookingId) closeDialog();
+  } catch (error) {
+    alert('Failed to delete booking.');
+    console.error(error);
+  }
+};
+
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -163,7 +178,14 @@ export default function BookedEmergency() {
                     >
                       Close
                     </button>
+                    <button
+                      onClick={() => handleDelete(selectedBooking.id)}
+                      className="bg-red-600 hover:bg-black text-white px-4 py-2 rounded w-full sm:w-1/2"
+                    >
+                      Delete
+                    </button>
                   </div>
+
                 </Dialog.Panel>
               </Transition.Child>
             </div>

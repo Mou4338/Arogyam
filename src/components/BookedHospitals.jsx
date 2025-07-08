@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
+import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { useForm } from 'react-hook-form';
 import {
   MapPin,
@@ -15,7 +16,6 @@ import {
   User,
 } from 'lucide-react';
 import { db } from '@/lib/firebaseConfig';
-import { collection, getDocs } from 'firebase/firestore';
 
 export default function BookedHospitalsPage() {
   const [bookings, setBookings] = useState([]);
@@ -57,7 +57,7 @@ export default function BookedHospitalsPage() {
   useEffect(() => {
     const fetchHospitalBookings = async () => {
       try {
-        const snapshot = await getDocs(collection(db, 'hospitalBookings'));
+        const snapshot = await getDocs(collection(db, 'bookings'));
         const data = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
@@ -146,90 +146,103 @@ export default function BookedHospitalsPage() {
           <div className="fixed inset-0 overflow-y-auto">
             <div className="flex min-h-full items-center justify-center p-4">
               <form action="onSubmit" >
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="scale-95 opacity-0"
-                enterTo="scale-100 opacity-100"
-                leave="ease-in duration-200"
-                leaveFrom="scale-100 opacity-100"
-                leaveTo="scale-95 opacity-0"
-              >
-                <Dialog.Panel className="w-full max-w-md sm:max-w-lg bg-teal-50 border border-teal-600 p-6 sm:p-8 rounded-2xl shadow-xl">
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="scale-95 opacity-0"
+                  enterTo="scale-100 opacity-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="scale-100 opacity-100"
+                  leaveTo="scale-95 opacity-0"
+                >
+                  <Dialog.Panel className="w-full max-w-md sm:max-w-lg bg-teal-50 border border-teal-600 p-6 sm:p-8 rounded-2xl shadow-xl">
 
-                  <Dialog.Title className="text-2xl sm:text-3xl font-bold text-teal-800 mb-2 break-words flex items-center gap-2">
-                    <User size={24} /> {selectedBooking?.name}
-                  </Dialog.Title>
-                  <p className="text-sm sm:text-base font-semibold text-teal-800 mb-4 break-words flex items-center gap-1">
-                    <MapPin size={16} /> {selectedBooking?.address}
-                  </p>
-
-                  <div className="text-sm text-teal-800 space-y-2 break-words">
-                    <p>
-                      <Clock size={14} className="inline-block mr-1" />
-                      <strong>Booked On:</strong> {getCurrentDateTime()}
-                    </p>
-                    <p>
-                      <MapPin size={14} className="inline-block mr-1" />
-                      <strong>Distance:</strong> {selectedBooking?.distance?.toFixed(1)} km
-                    </p>
-                    <p>
-                      <BedDouble size={14} className="inline-block mr-1" />
-                      <strong>Bed Type:</strong> {selectedBooking?.bedType}
-                    </p>
-                    <p>
-                      <CalendarDays size={14} className="inline-block mr-1" />
-                      <strong>Appointment Date:</strong> {selectedBooking?.date}
-                    </p>
-                    <p>
-                      <Clock size={14} className="inline-block mr-1" />
-                      <strong>Time:</strong> {selectedBooking?.time}
-                    </p>
-                    <p className="flex items-center gap-1">
-                      <Phone size={16} /> <strong>Phone:</strong> {selectedBooking?.phone}
-                    </p>
-                    <p className="flex items-center gap-1">
-                      <Mail size={16} /> <strong>Email:</strong> {selectedBooking?.email}
+                    <Dialog.Title className="text-2xl sm:text-3xl font-bold text-teal-800 mb-2 break-words flex items-center gap-2">
+                      <User size={24} /> {selectedBooking?.name}
+                    </Dialog.Title>
+                    <p className="text-sm sm:text-base font-semibold text-teal-800 mb-4 break-words flex items-center gap-1">
+                      <MapPin size={16} /> {selectedBooking?.address}
                     </p>
 
-                    {getWaitTime(selectedBooking) && (
-                      <p className="flex items-center gap-1">
-                        <Clock size={16} /> <strong>Wait Time:</strong> {getWaitTime(selectedBooking)}
+                    <div className="text-sm text-teal-800 space-y-2 break-words">
+                      <p>
+                        <Clock size={14} className="inline-block mr-1" />
+                        <strong>Booked On:</strong> {getCurrentDateTime()}
                       </p>
-                    )}
+                      <p>
+                        <MapPin size={14} className="inline-block mr-1" />
+                        <strong>Distance:</strong> {selectedBooking?.distance?.toFixed(1)} km
+                      </p>
+                      <p>
+                        <BedDouble size={14} className="inline-block mr-1" />
+                        <strong>Bed Type:</strong> {selectedBooking?.bedType}
+                      </p>
+                      <p>
+                        <CalendarDays size={14} className="inline-block mr-1" />
+                        <strong>Appointment Date:</strong> {selectedBooking?.date}
+                      </p>
+                      <p>
+                        <Clock size={14} className="inline-block mr-1" />
+                        <strong>Time:</strong> {selectedBooking?.time}
+                      </p>
+                      <p className="flex items-center gap-1">
+                        <Phone size={16} /> <strong>Phone:</strong> {selectedBooking?.phone}
+                      </p>
+                      <p className="flex items-center gap-1">
+                        <Mail size={16} /> <strong>Email:</strong> {selectedBooking?.email}
+                      </p>
 
-                    {selectedBooking?.issue && (
-                      <div>
-                        <p className="font-semibold flex items-center gap-1 mt-3">
-                          <StickyNote size={16} /> Issue:
+                      {getWaitTime(selectedBooking) && (
+                        <p className="flex items-center gap-1">
+                          <Clock size={16} /> <strong>Wait Time:</strong> {getWaitTime(selectedBooking)}
                         </p>
-                        <p className="bg-white text-black border border-teal-800 p-3 rounded whitespace-pre-line break-words">
-                          {selectedBooking.issue}
-                        </p>
-                      </div>
-                    )}
-                  </div>
+                      )}
 
-                  <div className="mt-6 text-center gap-4 flex flex-col sm:flex-row justify-between">
-                    {selectedBooking?.website && (
-                      <a
-                        href={selectedBooking.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="bg-teal-700 hover:bg-black text-white px-4 py-2 rounded block w-full sm:w-1/2 flex items-center justify-center gap-1"
+                      {selectedBooking?.issue && (
+                        <div>
+                          <p className="font-semibold flex items-center gap-1 mt-3">
+                            <StickyNote size={16} /> Issue:
+                          </p>
+                          <p className="bg-white text-black border border-teal-800 p-3 rounded whitespace-pre-line break-words">
+                            {selectedBooking.issue}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="mt-6 text-center gap-4 flex flex-col sm:flex-row justify-between">
+                      {selectedBooking?.website && (
+                        <a
+                          href={selectedBooking.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="bg-teal-700 hover:bg-black text-white px-4 py-2 rounded block w-full sm:w-1/2 flex items-center justify-center gap-1"
+                        >
+                          <Globe size={16} /> Visit Site
+                        </a>
+                      )}
+                      <button
+                        className="bg-red-600 hover:bg-black text-white px-4 py-2 rounded block w-full sm:w-1/2"
+                        onClick={async () => {
+                          if (selectedBooking?.id) {
+                            try {
+                              await deleteDoc(doc(db, 'bookings', selectedBooking.id));
+                              setBookings((prev) => prev.filter((b) => b.id !== selectedBooking.id));
+                              alert(' Booking deleted successfully');
+                              closeDialog();
+                            } catch (err) {
+                              console.error('Error deleting booking:', err);
+                              alert('Failed to delete booking');
+                            }
+                          }
+                        }}
                       >
-                        <Globe size={16} /> Visit Site
-                      </a>
-                    )}
-                    <button
-                      className="bg-teal-700 hover:bg-black text-white px-4 py-2 rounded block w-full sm:w-1/2"
-                      onClick={closeDialog}
-                    >
-                      Close
-                    </button>
-                  </div>
-                </Dialog.Panel>
-              </Transition.Child>
+                        Delete Booking
+                      </button>
+
+                    </div>
+                  </Dialog.Panel>
+                </Transition.Child>
               </form>
 
             </div>

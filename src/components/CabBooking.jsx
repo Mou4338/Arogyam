@@ -59,7 +59,6 @@ export default function CabBookingWidget() {
         >
           <Car size={18} className="inline-block" />
           Book via Uber
-          Book via Uber
         </a>
 
         <a
@@ -73,7 +72,6 @@ export default function CabBookingWidget() {
           } flex items-center justify-center gap-2`}
         >
           <Car size={18} className="inline-block" />
-          Book via Ola
           Book via Ola
         </a>
       </div>

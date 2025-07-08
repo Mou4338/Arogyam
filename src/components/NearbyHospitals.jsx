@@ -3,7 +3,7 @@
 import { useEffect, useState, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { useForm } from 'react-hook-form';
-import { db } from '../lib/firebaseConfig'; // Adjust path as needed
+import { db } from '@/lib/firebaseConfig'; 
 import { collection, addDoc } from 'firebase/firestore';
 
 export default function NearbyHospitals({ addBooking }) {
