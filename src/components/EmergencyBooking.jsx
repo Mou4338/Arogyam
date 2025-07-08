@@ -3,7 +3,7 @@
 import React, { useState, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 
-export default function BookedEmergency({ bookings }) {
+export default function BookedEmergency({ bookings = [] }) {
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -25,7 +25,7 @@ export default function BookedEmergency({ bookings }) {
     setSelectedBooking(null);
   };
 
-  if (bookings.length === 0) {
+  if (!bookings.length) {
     return (
       <div className="mt-4 mb-4 bg-[#3f8578] text-white font-semibold rounded-2xl shadow-xl p-4 text-xl px-4">
         No emergency bookings made yet.
@@ -44,14 +44,15 @@ export default function BookedEmergency({ bookings }) {
             className="max-w-[300px] sm:min-w-[260px] md:min-w-[280px] bg-teal-50 border border-teal-600 rounded-2xl shadow-xl p-4 text-teal-800 flex-shrink-0"
           >
             <p className="text-xl font-bold mb-1">{booking.name}</p>
-            <p className="text-medium ">📍 Address: {booking.address}</p>
-            <p className="text-sm mt-1">🛏️ <strong>{booking.bedType}</strong> bed</p>
-            <p className="text-sm mt-1">⏱️ Arrival: {booking.time}</p>
-            <p className="text-sm mt-1">⏳ Wait: {booking.wait || 'No Waiting'}</p>
+            <p className="text-medium mt-1">Address: {booking.address}</p>
+            <p className="text-sm mt-1">Distance: {booking.distance}</p>
+            <p className="text-sm mt-1">Bed Type: <strong>{booking.bedType}</strong></p>
+            <p className="text-sm mt-1">Arrival: {booking.time}</p>
+            <p className="text-sm mt-1">Wait: {booking.wait || 'No Waiting'}</p>
 
             <button
-              className="mt-3 w-full bg-teal-500 hover:bg-black text-white py-1.5 text-sm rounded transition"
               onClick={() => openDialog(booking)}
+              className="mt-3 w-full bg-teal-500 hover:bg-black text-white py-1.5 text-sm rounded transition"
             >
               View Details
             </button>
@@ -89,40 +90,43 @@ export default function BookedEmergency({ bookings }) {
                   <Dialog.Title className="text-3xl font-bold text-teal-800 mb-2">
                     {selectedBooking?.name}
                   </Dialog.Title>
+
                   <p className="text-medium font-semibold text-teal-700 mb-1">
-                 📍 Address: {selectedBooking?.address}
+                    Address: {selectedBooking?.address}
                   </p>
+
                   <div className="mt-3 space-y-2 text-medium text-teal-800">
-                    <p>📅 Booked On: {getCurrentDateTime()}</p>
-                    <p>📍 Distance: {selectedBooking?.distance}</p>
-                    <p>🚗 Time: {selectedBooking?.Time}</p>
-                    <p>🛏️ Bed Type: {selectedBooking?.bedType}</p>
-                    <p>⏱️ Approx. Arrival Time: {selectedBooking?.time}</p>
-                    <p>⏳ Wait Time: {selectedBooking?.wait}</p>
-                    <p>📞 Phone: {selectedBooking?.phone}</p>
-                    <p>📧 Email: {selectedBooking?.email}</p>
-                    <div>
-                      <p className="font-semibold">📝 Issue:</p>
-                      <p className="text-black border border-teal-800 bg-white p-3 rounded-md mt-2 whitespace-pre-line">
-                        {selectedBooking?.issue}
-                      </p>
-                    </div>
+                    <p>Booked On: {getCurrentDateTime()}</p>
+                    <p>Distance: {selectedBooking?.distance}</p>
+                    <p>Bed Type: {selectedBooking?.bedType}</p>
+                    <p>Approx. Arrival Time: {selectedBooking?.time}</p>
+                    <p>Wait Time: {selectedBooking?.wait || 'No Waiting'}</p>
+                    <p>Phone: {selectedBooking?.phone}</p>
+                    <p>Email: {selectedBooking?.email}</p>
+                    {selectedBooking?.issue && (
+                      <div>
+                        <p className="font-semibold">📝 Issue:</p>
+                        <p className="text-black border border-teal-800 bg-white p-3 rounded-md mt-2 whitespace-pre-line">
+                          {selectedBooking.issue}
+                        </p>
+                      </div>
+                    )}
                   </div>
 
-                  <div className="mt-6 text-center gap-4 flex flex-col sm:flex-row justify-between">
+                  <div className="mt-6 flex flex-col sm:flex-row justify-between gap-3">
                     {selectedBooking?.website && (
                       <a
                         href={selectedBooking.website}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="bg-teal-700 hover:bg-black text-white px-4 py-2 rounded block w-full sm:w-1/2"
+                        className="bg-teal-700 hover:bg-black text-white px-4 py-2 rounded w-full sm:w-1/2 text-center"
                       >
                         Visit Site
                       </a>
                     )}
                     <button
-                      className="bg-teal-700 hover:bg-black text-white px-4 py-2 rounded block w-full sm:w-1/2"
                       onClick={closeDialog}
+                      className="bg-teal-700 hover:bg-black text-white px-4 py-2 rounded w-full sm:w-1/2"
                     >
                       Close
                     </button>

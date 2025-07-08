@@ -2,7 +2,6 @@
 
 import { useEffect, useState, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import FilterSidebar from '@/components/FilterSidebar.jsx';
 
 export default function NearbyHospitals({ addBooking }) {
   const [hospitals, setHospitals] = useState([]);
@@ -12,8 +11,6 @@ export default function NearbyHospitals({ addBooking }) {
   const [appointmentDate, setAppointmentDate] = useState('');
   const [appointmentTime, setAppointmentTime] = useState('');
   const [issueDescription, setIssueDescription] = useState('');
-  const [waitTime, setWaitTime] = useState(60); // Min initially
-  const [distance, setDistance] = useState(5); // Min initially
 
   const origin = [85.8412, 20.2965]; // [lng, lat]
 
@@ -33,6 +30,31 @@ export default function NearbyHospitals({ addBooking }) {
             return { ...hospital, distance };
           })
         );
+
+        const parseWait = (hospital) => {
+          const beds = hospital.beds || {};
+          const wait = hospital.wait || {};
+          const unavailable = Object.entries(beds).filter(
+            ([type, count]) => count === 0 && type.toLowerCase() !== 'emergency'
+          );
+          const waitTimes = unavailable.map(([type]) => {
+            const val = wait[type];
+            if (!val) return Infinity;
+            const num = parseInt(val.match(/\d+/)?.[0]);
+            return isNaN(num) ? Infinity : num;
+          });
+          return waitTimes.length > 0 ? Math.min(...waitTimes) : Infinity;
+        };
+
+        updatedHospitals.sort((a, b) => {
+          const distA = a.distance ?? Infinity;
+          const distB = b.distance ?? Infinity;
+          if (distA !== distB) return distA - distB;
+
+          const waitA = parseWait(a);
+          const waitB = parseWait(b);
+          return waitA - waitB;
+        });
 
         setHospitals(updatedHospitals);
       } catch (err) {
@@ -57,41 +79,18 @@ export default function NearbyHospitals({ addBooking }) {
     setIsOpen(false);
   };
 
-  const filteredHospitals = hospitals.filter((hospital) => {
-    const isWithinDistance = hospital.distance <= distance;
-
-    const hasAcceptableWait = Object.entries(hospital.beds || {})
-      .filter(([type]) => type.toLowerCase() !== 'emergency')
-      .some(([type, count]) => {
-        const wt = Number(hospital.wait?.[type]);
-        return (
-          count > 0 || (wt >= 0 && wt <= waitTime)
-        );
-      });
-
-    return isWithinDistance && hasAcceptableWait;
-  });
-
   return (
     <div className="bg-teal-600 p-5 rounded-xl shadow-xl w-full max-w-sm">
-      <div className="space-y-4">
-        <FilterSidebar
-          waitTime={waitTime}
-          setWaitTime={setWaitTime}
-          distance={distance}
-          setDistance={setDistance}
-        />
-      </div>
-
+      <div className="space-y-4"></div>
       <h3 className="text-xl font-bold text-white mb-4 mt-4 flex items-center gap-2">
-        🏥 Nearby Hospitals
+        Nearby Hospitals
       </h3>
 
       <div className="space-y-2 max-h-[420px] p-2 overflow-y-auto">
-        {filteredHospitals.length === 0 ? (
+        {hospitals.length === 0 ? (
           <p className="text-white text-sm">No hospitals found nearby.</p>
         ) : (
-          filteredHospitals.map((h, i) => {
+          hospitals.map((h, i) => {
             const filteredBeds = h.beds
               ? Object.fromEntries(
                   Object.entries(h.beds).filter(([type]) => type.toLowerCase() !== 'emergency')
@@ -109,14 +108,14 @@ export default function NearbyHospitals({ addBooking }) {
                 <p className="text-base font-semibold">{h.name}</p>
                 <p className="text-sm">{h.address}</p>
                 <p className="text-sm mt-1">
-                  📍 Distance: {h.distance ? `${h.distance.toFixed(1)} km` : '–'}
+                  Distance: {h.distance ? `${h.distance.toFixed(1)} km` : '–'}
                 </p>
 
                 {unavailableBeds.length > 0 && h.wait && (
                   <div className="text-xs mt-1">
                     {unavailableBeds.map(([type]) => (
                       <p className="text-xs" key={type}>
-                        ⏱️ {type}: Wait Time: {h.wait?.[type] || '–'}
+                        {type}: Wait Time: {h.wait?.[type] || '–'}
                       </p>
                     ))}
                   </div>
@@ -140,7 +139,6 @@ export default function NearbyHospitals({ addBooking }) {
         )}
       </div>
 
-      {/* Booking Modal */}
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-50" onClose={closeModal}>
           <Transition.Child
@@ -175,9 +173,9 @@ export default function NearbyHospitals({ addBooking }) {
                   </p>
 
                   <div className="mt-3 text-sm space-y-1 text-teal-800">
-                    <p>📍 Distance: {selectedHospital?.distance ? `${selectedHospital.distance.toFixed(1)} km` : '–'}</p>
-                    <p>📞 Phone: {selectedHospital?.phone}</p>
-                    <p>✉️ Email: {selectedHospital?.email}</p>
+                    <p>Distance: {selectedHospital?.distance ? `${selectedHospital.distance.toFixed(1)} km` : '–'}</p>
+                    <p>Phone: {selectedHospital?.phone}</p>
+                    <p>Email: {selectedHospital?.email}</p>
                   </div>
 
                   {selectedHospital?.beds && selectedHospital?.wait && (
@@ -295,7 +293,7 @@ export default function NearbyHospitals({ addBooking }) {
                           bedTypeCount: selectedHospital.beds,
                           phone: selectedHospital.phone,
                           email: selectedHospital.email,
-                          website: selectedHospital.website,
+                          website: selectedHospital.website
                         };
 
                         addBooking(bookingDetails);

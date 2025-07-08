@@ -44,7 +44,7 @@ export default function BookedHospitalsPage({ bookings }) {
 
   return (
     <div className="bg-teal-600 p-6 rounded-2xl shadow-xl w-full max-w-6xl mx-auto mt-6 space-y-6">
-      <h3 className="text-2xl font-bold text-white mb-4">📋 Booked Hospitals</h3>
+      <h3 className="text-2xl font-bold text-white mb-4">Booked Hospitals</h3>
 
       {filteredBookings.length === 0 ? (
         <p className="text-white font-semibold text-xl">No bed bookings yet.</p>
@@ -59,9 +59,10 @@ export default function BookedHospitalsPage({ bookings }) {
                 <p className="text-lg font-semibold break-words">{b.name}</p>
                 <p className="text-sm mt-1 break-words">{b.address}</p>
                 <div className="text-sm mt-3 space-y-1">
-                  <p>🛏️ Bed Type: <strong>{b.bedType}</strong></p>
-                  <p>📅 Date: {b.date}</p>
-                  <p>⏰ Time: {b.time}</p>
+                  <p>Distance: {b.distance?.toFixed(1)} km</p>
+                  <p>Bed Type: <strong>{b.bedType}</strong></p>
+                  <p>Date: {b.date}</p>
+                  <p>Time: {b.time}</p>
                 </div>
               </div>
               <button
@@ -110,13 +111,13 @@ export default function BookedHospitalsPage({ bookings }) {
                   </p>
 
                   <div className="text-sm text-teal-800 space-y-2 break-words">
-                    <p><strong>📅 Booked On:</strong> {getCurrentDateTime()}</p>
-                    <p><strong>📍 Distance:</strong> {selectedBooking?.distance?.toFixed(1)} km</p>
-                    <p><strong>🛏️ Bed Type:</strong> {selectedBooking?.bedType}</p>
-                    <p><strong>📅 Appointment Date:</strong> {selectedBooking?.date}</p>
-                    <p><strong>⏰ Time:</strong> {selectedBooking?.time}</p>
-                    <p><strong>📞 Phone:</strong> {selectedBooking?.phone}</p>
-                    <p><strong>✉️ Email:</strong> {selectedBooking?.email}</p>
+                    <p><strong>Booked On:</strong> {getCurrentDateTime()}</p>
+                    <p><strong>Distance:</strong> {selectedBooking?.distance?.toFixed(1)} km</p>
+                    <p><strong>Bed Type:</strong> {selectedBooking?.bedType}</p>
+                    <p><strong>Appointment Date:</strong> {selectedBooking?.date}</p>
+                    <p><strong>Time:</strong> {selectedBooking?.time}</p>
+                    <p><strong>Phone:</strong> {selectedBooking?.phone}</p>
+                    <p><strong>Email:</strong> {selectedBooking?.email}</p>
 
                     {getWaitTime(selectedBooking) && (
                       <p><strong>⏱️ Wait Time:</strong> {getWaitTime(selectedBooking)}</p>
@@ -155,7 +156,6 @@ export default function BookedHospitalsPage({ bookings }) {
     </div>
   );
 }
-
 
 
 

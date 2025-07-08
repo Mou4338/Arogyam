@@ -3,6 +3,9 @@
 import { useEffect, useState, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 
+const origin = [85.8412, 20.2965];
+const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+
 export default function NearbyHospitalsHorizontal({ addEmergencyBooking }) {
   const [hospitals, setHospitals] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -13,35 +16,51 @@ export default function NearbyHospitalsHorizontal({ addEmergencyBooking }) {
   useEffect(() => {
     fetch('/api/hospitals')
       .then((res) => res.json())
-      .then((data) => {
-        const emergencyOnly = data
+      .then(async (data) => {
+        const emergencyOnly = data.filter((h) => h.beds?.Emergency !== undefined);
+
+        const hospitalsWithDistance = await Promise.all(
+          emergencyOnly.map(async (h) => {
+            const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${origin[0]},${origin[1]};${h.lng},${h.lat}?overview=false&access_token=${mapboxToken}`;
+            try {
+              const res = await fetch(url);
+              const result = await res.json();
+              const distance = result.routes?.[0]?.distance
+                ? result.routes[0].distance / 1000
+                : null;
+              return { ...h, distance };
+            } catch (err) {
+              console.error('Distance fetch error:', err);
+              return { ...h, distance: null };
+            }
+          })
+        );
+
+        const sorted = hospitalsWithDistance
           .map((h) => {
             const emergencyCount = h.beds?.Emergency || 0;
-            const emergencyWait = emergencyCount === 0 ? h.wait?.Emergency || 'N/A' : null;
-
+            const waitRaw = h.wait?.Emergency || '';
+            const waitMinutes = parseInt(waitRaw.match(/\d+/)?.[0] || '999', 10);
             return {
               name: h.name,
               address: h.address,
               distance: h.distance,
-              Time: h.Time,
               phone: h.phone,
               email: h.email,
               website: h.website,
               beds: { Emergency: emergencyCount },
-              wait: emergencyWait,
+              wait: emergencyCount === 0 ? waitRaw || 'N/A' : null,
+              waitMinutes: emergencyCount === 0 ? waitMinutes : 0,
             };
           })
           .sort((a, b) => {
-            const aBeds = a.beds?.Emergency || 0;
-            const bBeds = b.beds?.Emergency || 0;
-            if (aBeds > 0 && bBeds === 0) return -1;
-            if (aBeds === 0 && bBeds > 0) return 1;
-            const aWait = parseInt((a.wait || '999').match(/\d+/)?.[0] || '999');
-            const bWait = parseInt((b.wait || '999').match(/\d+/)?.[0] || '999');
-            return aWait - bWait;
+            // First sort by wait time
+            if (a.waitMinutes !== b.waitMinutes) return a.waitMinutes - b.waitMinutes;
+            // Then by distance
+            return (a.distance ?? Infinity) - (b.distance ?? Infinity);
           });
 
-        setHospitals(emergencyOnly);
+        setHospitals(sorted);
       })
       .catch((err) => console.error('Failed to fetch hospitals:', err));
   }, []);
@@ -67,8 +86,9 @@ export default function NearbyHospitalsHorizontal({ addEmergencyBooking }) {
     const bookingData = {
       name: selectedHospital.name,
       address: selectedHospital.address,
-      distance: selectedHospital.distance,
-      Time: selectedHospital.Time,
+      distance: typeof selectedHospital.distance === 'number'
+        ? selectedHospital.distance.toFixed(1)
+        : 'N/A',
       bedType: 'Emergency',
       time: approxTime,
       issue: issueDescription,
@@ -86,7 +106,7 @@ export default function NearbyHospitalsHorizontal({ addEmergencyBooking }) {
   return (
     <div className="w-full mt-2">
       <h3 className="text-xl font-bold text-white mb-3 px-2 flex items-center gap-2">
-        🏥 Nearby Hospitals
+        Nearby Hospitals
       </h3>
 
       <div className="flex space-x-4 overflow-x-auto pr-2 scrollbar-thin scrollbar-thumb-teal-400 pb-2">
@@ -103,10 +123,12 @@ export default function NearbyHospitalsHorizontal({ addEmergencyBooking }) {
                 onClick={() => openDialog(h)}
                 className="min-w-[250px] max-h-[250px] bg-white border border-teal-200 rounded-xl p-4 shadow-md shadow-teal-100 text-teal-900 cursor-pointer hover:bg-teal-50 transition"
               >
-                <p className="text-medium font-bold">{h.name}</p>
+                <p className="text-xl font-bold">{h.name}</p>
                 <p className="text-semibold text-medium mt-1 mb-2">Address: {h.address}</p>
-                <p className="text-sm mt-1">📍 Distance {h.distance || '–'}</p>
-                <p className="text-sm mt-1">🚗 Time: {h.Time || '–'}</p>
+                <p className="text-sm mt-1">
+                  Distance:{' '}
+                  {typeof h.distance === 'number' ? `${h.distance.toFixed(1)} km` : '–'}
+                </p>
                 {showWait && (
                   <p className="text-sm mt-1">⏱️ Emergency Wait Time: {h.wait}</p>
                 )}
@@ -152,14 +174,20 @@ export default function NearbyHospitalsHorizontal({ addEmergencyBooking }) {
                     {selectedHospital?.name}
                   </Dialog.Title>
 
-                  <p className="text-medium font-semibold text-teal-800">📍 Address: {selectedHospital?.address}</p>
+                  <p className="text-medium font-semibold text-teal-800">
+                    Address: {selectedHospital?.address}
+                  </p>
                   <div className="mt-3 space-y-1 text-medium text-teal-800">
-                    <p>📏 Distance: {selectedHospital?.distance}</p>
-                    <p>🚗 Time: {selectedHospital?.Time}</p>
-                    <p>📞 Phone: {selectedHospital?.phone}</p>
-                    <p>📧 Email: {selectedHospital?.email}</p>
+                    <p>
+                      Distance:{' '}
+                      {typeof selectedHospital?.distance === 'number'
+                        ? `${selectedHospital.distance.toFixed(1)} km`
+                        : selectedHospital?.distance || '–'}
+                    </p>
+                    <p>Phone: {selectedHospital?.phone}</p>
+                    <p>Email: {selectedHospital?.email}</p>
                     {selectedHospital?.wait && (
-                      <p>⏱️ Estimated Wait: {selectedHospital.wait}</p>
+                      <p>Estimated Wait: {selectedHospital.wait}</p>
                     )}
                   </div>
 
@@ -213,6 +241,3 @@ export default function NearbyHospitalsHorizontal({ addEmergencyBooking }) {
     </div>
   );
 }
-
-
-
