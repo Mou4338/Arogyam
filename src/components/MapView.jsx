@@ -216,7 +216,7 @@ export default function MapSection() {
     <div className="bg-white p-4 rounded shadow">
 
       <FilterControls onFilter={handleFilter} />
-       <h3 className="text-2xl font-bold text-black p-3 mt-3">🗺️ Map View</h3>
+       <h3 className="text-2xl font-bold text-black p-3 mt-3"> Map View</h3>
       <div className="flex flex-wrap gap-3 my-3">
         {['driving', 'walking', 'cycling'].map((mode) => (
           <button
