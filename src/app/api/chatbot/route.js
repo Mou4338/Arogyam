@@ -27,6 +27,7 @@ const remedyMap = {
   severe: "If symptoms persist or worsen, consult a healthcare professional for proper diagnosis and treatment",
   hygiene: "Practice good hygiene to prevent the spread of illnesses",
   hydration: "Drink plenty of fluids to help your body recover",
+  Exercise: "Regular moderate exercise improves circulation, boosts immunity, reduces stress, and supports overall physical and mental health.",
   Thank: "Thank you for using Arogyam AI Shevak",
   Thanks: "Thank you for using Arogyam AI Shevak",
 };

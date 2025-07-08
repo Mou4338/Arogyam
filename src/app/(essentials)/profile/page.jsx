@@ -1,10 +1,28 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getAuth, onAuthStateChanged, signOut, deleteUser } from "firebase/auth";
-import {  getFirestore,  collection,  query,  where,  getDocs,  doc,  getDoc,} from "firebase/firestore";
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut,
+  deleteUser,
+} from "firebase/auth";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import { app } from "@/lib/firebaseConfig";
-import {  UserCircle,  Clock,  Bell,  Stethoscope,} from "lucide-react";
+import {
+  UserCircle,
+  Clock,
+  Bell,
+  Stethoscope,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const ProfilePage = () => {
@@ -83,14 +101,15 @@ const ProfilePage = () => {
   if (loading) return <div className="text-center mt-10 text-gray-700">Loading...</div>;
 
   return (
-    <div className="max-w-4xl bg-slate-100 mx-auto px-4 py-10">
-      <h1 className="text-4xl font-bold text-center text-black mb-8 flex items-center justify-center gap-2">
-        <UserCircle className="text-black" size={32} /> Your Profile
+    <div className="max-w-6xl mt-10 mb-10 bg-[#3f8578] text-white mx-auto px-4 sm:px-6 lg:px-8 py-10 rounded-2xl shadow-xl space-y-8">
+      <h1 className="text-3xl sm:text-4xl font-bold text-center text-white mb-4 flex flex-wrap items-center justify-center gap-2">
+        <UserCircle className="text-white" size={32} /> Your Profile
       </h1>
 
-      {error && <div className="mb-4 text-red-600 font-medium">{error}</div>}
+      {error && <div className="mb-4 text-red-500 font-medium">{error}</div>}
 
-      <div className="bg-[#3f8578] text-white rounded-lg p-6 space-y-4 shadow-lg">
+      {/* Profile Info */}
+      <div className="bg-teal-50 mt-8 text-teal-900 rounded-lg p-6 shadow-md space-y-4">
         <div>
           <span className="block font-semibold">Name:</span>
           <p>
@@ -108,65 +127,70 @@ const ProfilePage = () => {
           <p className="break-all">{user.uid}</p>
         </div>
 
-        <div className="flex gap-4 pt-4">
+        <div className="flex flex-col sm:flex-row gap-4 pt-4">
           <button
             onClick={handleLogout}
-            className="bg-black px-6 py-2 rounded-md text-white font-medium shadow"
+            className="bg-black px-6 py-2 rounded-md text-white font-medium shadow w-full sm:w-auto"
           >
             Log out
           </button>
           <button
             onClick={handleDelete}
-            className="bg-red-500 px-6 py-2 rounded-md text-white font-medium shadow"
+            className="bg-red-500 px-6 py-2 rounded-md text-white font-medium shadow w-full sm:w-auto"
           >
             Delete account
           </button>
         </div>
+      </div>
 
-        <div className="bg-[#3f8578] shadow-xl rounded-lg p-6 hover:shadow-2xl transition duration-300">
-          <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-            <Clock size={22} /> Reminders
-          </h2>
-          {reminders.length === 0 ? (
-            <p>No reminders found.</p>
-          ) : (
-            <ul className="list-disc pl-5 space-y-1">
-              {reminders.map((reminder) => (
-                <li key={reminder.id}>
-                  {reminder.title} — <span className="text-gray-200">{reminder.time}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        <div className="bg-[#3f8578] shadow-xl rounded-lg p-6 hover:shadow-2xl transition duration-300">
-          <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-            <Bell size={22} /> Alerts
-          </h2>
-          {alerts.length === 0 ? (
-            <p>No alerts found.</p>
-          ) : (
-            <ul className="list-disc pl-5 space-y-1">
-              {alerts.map((alert) => (
-                <li key={alert.id}>{alert.title}</li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        <div className="bg-[#3f8578] shadow-xl rounded-lg p-6 hover:shadow-2xl transition duration-300">
-          <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-            <Stethoscope size={22} /> Doctors Consulted
-          </h2>
+      {/* Reminders */}
+      <div className="bg-teal-50 text-teal-900 rounded-lg p-6 shadow-md">
+        <h2 className="text-xl sm:text-2xl font-semibold mb-4 flex items-center gap-2">
+          <Clock size={22} /> Reminders
+        </h2>
+        {reminders.length === 0 ? (
+          <p>No reminders found.</p>
+        ) : (
           <ul className="list-disc pl-5 space-y-1">
-            {demoDoctors.map((doc, idx) => (
-              <li key={idx}>
-                {doc.name} — <span className="text-gray-200">{doc.specialty}</span>
+            {reminders.map((reminder) => (
+              <li key={reminder.id}>
+                {reminder.title} —{" "}
+                <span className="text-gray-600">{reminder.time}</span>
               </li>
             ))}
           </ul>
-        </div>
+        )}
+      </div>
+
+      {/* Alerts */}
+      <div className="bg-teal-50 text-teal-900 rounded-lg p-6 shadow-md">
+        <h2 className="text-xl sm:text-2xl font-semibold mb-4 flex items-center gap-2">
+          <Bell size={22} /> Alerts
+        </h2>
+        {alerts.length === 0 ? (
+          <p>No alerts found.</p>
+        ) : (
+          <ul className="list-disc pl-5 space-y-1">
+            {alerts.map((alert) => (
+              <li key={alert.id}>{alert.title}</li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      {/* Doctors Consulted */}
+      <div className="bg-teal-50 text-teal-900 rounded-lg p-6 shadow-md">
+        <h2 className="text-xl sm:text-2xl font-semibold mb-4 flex items-center gap-2">
+          <Stethoscope size={22} /> Doctors Consulted
+        </h2>
+        <ul className="list-disc pl-5 space-y-1">
+          {demoDoctors.map((doc, idx) => (
+            <li key={idx}>
+              {doc.name} —{" "}
+              <span className="text-gray-600">{doc.specialty}</span>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

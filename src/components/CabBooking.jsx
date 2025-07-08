@@ -37,17 +37,11 @@ export default function CabBookingWidget() {
 
   return (
     <div className="bg-teal-50 border border-teal-500 shadow-xl rounded-2xl p-6 space-y-8">
-      <h4 className="text-lg font-bold text-[#225b5c] mb-2 flex items-center gap-2">
-        {/* <SteeringWheel size={22} className="inline-block" /> */}
-        Need a Ride?
-      </h4>
-      <p className="text-sm mb-3 text-gray-600">
-        Book an Ola or Uber to reach the hospital quickly.
-      </p>
+      <h4 className="text-lg font-bold text-[#225b5c] mb-2">Need a Ride?</h4>
+      <p className="text-sm mb-3 text-gray-600">Book an Ola or Uber to reach the hospital quickly.</p>
 
       {!isReady && (
-        <div className="text-sm text-yellow-600 mb-3 flex items-center gap-2">
-          <MapPin size={18} className="inline-block" />
+        <div className="text-sm text-yellow-600 mb-3">
           Getting your location... Please allow permission.
         </div>
       )}
@@ -65,6 +59,7 @@ export default function CabBookingWidget() {
         >
           <Car size={18} className="inline-block" />
           Book via Uber
+          Book via Uber
         </a>
 
         <a
@@ -78,6 +73,7 @@ export default function CabBookingWidget() {
           } flex items-center justify-center gap-2`}
         >
           <Car size={18} className="inline-block" />
+          Book via Ola
           Book via Ola
         </a>
       </div>

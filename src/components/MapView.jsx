@@ -69,7 +69,7 @@ export default function MapSection() {
       let waitHTML = '';
       if (hospital.wait) {
         for (const bedType in hospital.wait) {
-          waitHTML += `🛏️ ${bedType}: <span class="text-yellow-600 font-medium">${hospital.wait[bedType]}</span><br/>`;
+          waitHTML += `${bedType}: <span class="text-yellow-600 font-medium">${hospital.wait[bedType]}</span><br/>`;
         }
       }
 

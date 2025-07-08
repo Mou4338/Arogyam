@@ -227,7 +227,7 @@ export default function NearbyHospitals({ addBooking }) {
                           .filter(([type, count]) => count === 0 && type.toLowerCase() !== 'emergency')
                           .map(([type]) => (
                             <p key={type}>
-                              ⏱️ {type}: Wait Time: {selectedHospital.wait?.[type] || '–'}
+                              {type}: Wait Time: {selectedHospital.wait?.[type] || '–'}
                             </p>
                           ))}
                       </div>
