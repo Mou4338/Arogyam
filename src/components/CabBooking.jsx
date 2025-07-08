@@ -1,13 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { Car, MapPin, SteeringWheel } from 'lucide-react';
 
 export default function CabBookingWidget() {
-  const [loading, setLoading] = useState(false);
   const [userLoc, setUserLoc] = useState({ lat: null, lng: null });
 
   const hospitalLoc = {
-    lat: 20.2952, // ESI Hospital example
+    lat: 20.2952, 
     lng: 85.8406,
   };
 
@@ -37,12 +37,18 @@ export default function CabBookingWidget() {
 
   return (
     <div className="bg-teal-50 border border-teal-500 shadow-xl rounded-2xl p-6 space-y-8">
-      <h4 className="text-lg font-bold text-[#225b5c] mb-2">🚖 Need a Ride?</h4>
-      <p className="text-sm mb-3 text-gray-600">Book an Ola or Uber to reach the hospital quickly.</p>
+      <h4 className="text-lg font-bold text-[#225b5c] mb-2 flex items-center gap-2">
+        {/* <SteeringWheel size={22} className="inline-block" /> */}
+        Need a Ride?
+      </h4>
+      <p className="text-sm mb-3 text-gray-600">
+        Book an Ola or Uber to reach the hospital quickly.
+      </p>
 
       {!isReady && (
-        <div className="text-sm text-yellow-600 mb-3">
-          📍 Getting your location... Please allow permission.
+        <div className="text-sm text-yellow-600 mb-3 flex items-center gap-2">
+          <MapPin size={18} className="inline-block" />
+          Getting your location... Please allow permission.
         </div>
       )}
 
@@ -55,9 +61,10 @@ export default function CabBookingWidget() {
             isReady
               ? 'bg-[#3f8578] text-white hover:bg-[#326e64] cursor-pointer'
               : 'bg-gray-300 text-gray-600 cursor-not-allowed'
-          }`}
+          } flex items-center justify-center gap-2`}
         >
-          🚘 Book via Uber
+          <Car size={18} className="inline-block" />
+          Book via Uber
         </a>
 
         <a
@@ -68,9 +75,10 @@ export default function CabBookingWidget() {
             isReady
               ? 'bg-[#3f8578] text-white hover:bg-[#326e64] cursor-pointer'
               : 'bg-gray-300 text-gray-600 cursor-not-allowed'
-          }`}
+          } flex items-center justify-center gap-2`}
         >
-          🛺 Book via Ola
+          <Car size={18} className="inline-block" />
+          Book via Ola
         </a>
       </div>
     </div>

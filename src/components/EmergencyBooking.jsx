@@ -1,9 +1,13 @@
 'use client';
 
-import React, { useState, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
+import { db } from '@/lib/firebaseConfig';
+import { collection, getDocs } from 'firebase/firestore';
+import { MapPin, Phone, Mail, Globe, StickyNote } from 'lucide-react';
 
-export default function BookedEmergency({ bookings = [] }) {
+export default function BookedEmergency() {
+  const [bookings, setBookings] = useState([]);
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -25,6 +29,24 @@ export default function BookedEmergency({ bookings = [] }) {
     setSelectedBooking(null);
   };
 
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        const bookingsRef = collection(db, 'emergencyBookings');
+        const snapshot = await getDocs(bookingsRef);
+        const data = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setBookings(data);
+      } catch (error) {
+        console.error('Error fetching bookings:', error);
+      }
+    };
+
+    fetchBookings();
+  }, []);
+
   if (!bookings.length) {
     return (
       <div className="mt-4 mb-4 bg-[#3f8578] text-white font-semibold rounded-2xl shadow-xl p-4 text-xl px-4">
@@ -35,7 +57,10 @@ export default function BookedEmergency({ bookings = [] }) {
 
   return (
     <div className="mt-3 mb-3 w-full bg-[#3f8578] rounded-2xl shadow-xl p-4">
-      <h3 className="text-xl font-bold text-white mb-4">📝 Booked Emergency Beds</h3>
+      <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+        <StickyNote size={22} className="inline-block" />
+        Booked Emergency Beds
+      </h3>
 
       <div className="flex overflow-x-auto space-x-4 scrollbar-thin scrollbar-thumb-teal-400 pb-2">
         {bookings.map((booking, i) => (
@@ -44,7 +69,9 @@ export default function BookedEmergency({ bookings = [] }) {
             className="max-w-[300px] sm:min-w-[260px] md:min-w-[280px] bg-teal-50 border border-teal-600 rounded-2xl shadow-xl p-4 text-teal-800 flex-shrink-0"
           >
             <p className="text-xl font-bold mb-1">{booking.name}</p>
-            <p className="text-medium mt-1">Address: {booking.address}</p>
+            <p className="text-medium mt-1 flex items-center gap-1">
+              <MapPin size={16} /> Address: {booking.address}
+            </p>
             <p className="text-sm mt-1">Distance: {booking.distance}</p>
             <p className="text-sm mt-1">Bed Type: <strong>{booking.bedType}</strong></p>
             <p className="text-sm mt-1">Arrival: {booking.time}</p>
@@ -60,7 +87,7 @@ export default function BookedEmergency({ bookings = [] }) {
         ))}
       </div>
 
-      {/* Details Dialog */}
+      {/* Dialog for details */}
       <Transition appear show={isDialogOpen} as={Fragment}>
         <Dialog as="div" className="relative z-50" onClose={closeDialog}>
           <Transition.Child
@@ -87,12 +114,12 @@ export default function BookedEmergency({ bookings = [] }) {
                 leaveTo="scale-95 opacity-0"
               >
                 <Dialog.Panel className="w-full max-w-md transform rounded-2xl bg-teal-50 border border-teal-600 p-6 shadow-xl transition-all">
-                  <Dialog.Title className="text-3xl font-bold text-teal-800 mb-2">
-                    {selectedBooking?.name}
+                  <Dialog.Title className="text-3xl font-bold text-teal-800 mb-2 flex items-center gap-2">
+                    <StickyNote size={28} /> {selectedBooking?.name}
                   </Dialog.Title>
 
-                  <p className="text-medium font-semibold text-teal-700 mb-1">
-                    Address: {selectedBooking?.address}
+                  <p className="text-medium font-semibold text-teal-700 mb-1 flex items-center gap-1">
+                    <MapPin size={16} /> Address: {selectedBooking?.address}
                   </p>
 
                   <div className="mt-3 space-y-2 text-medium text-teal-800">
@@ -101,11 +128,17 @@ export default function BookedEmergency({ bookings = [] }) {
                     <p>Bed Type: {selectedBooking?.bedType}</p>
                     <p>Approx. Arrival Time: {selectedBooking?.time}</p>
                     <p>Wait Time: {selectedBooking?.wait || 'No Waiting'}</p>
-                    <p>Phone: {selectedBooking?.phone}</p>
-                    <p>Email: {selectedBooking?.email}</p>
+                    <p className="flex items-center gap-1">
+                      <Phone size={16} /> Phone: {selectedBooking?.phone}
+                    </p>
+                    <p className="flex items-center gap-1">
+                      <Mail size={16} /> Email: {selectedBooking?.email}
+                    </p>
                     {selectedBooking?.issue && (
                       <div>
-                        <p className="font-semibold">📝 Issue:</p>
+                        <p className="font-semibold flex items-center gap-1">
+                          <StickyNote size={16} /> Issue:
+                        </p>
                         <p className="text-black border border-teal-800 bg-white p-3 rounded-md mt-2 whitespace-pre-line">
                           {selectedBooking.issue}
                         </p>
@@ -119,9 +152,9 @@ export default function BookedEmergency({ bookings = [] }) {
                         href={selectedBooking.website}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="bg-teal-700 hover:bg-black text-white px-4 py-2 rounded w-full sm:w-1/2 text-center"
+                        className="bg-teal-700 hover:bg-black text-white px-4 py-2 rounded w-full sm:w-1/2 text-center flex items-center justify-center gap-1"
                       >
-                        Visit Site
+                        <Globe size={16} /> Visit Site
                       </a>
                     )}
                     <button

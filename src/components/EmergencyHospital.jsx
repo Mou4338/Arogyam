@@ -1,7 +1,10 @@
 'use client';
 
-import { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "@/lib/firebaseConfig";
+import { useForm } from 'react-hook-form';
 
 const origin = [85.8412, 20.2965];
 const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
@@ -10,8 +13,13 @@ export default function NearbyHospitalsHorizontal({ addEmergencyBooking }) {
   const [hospitals, setHospitals] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedHospital, setSelectedHospital] = useState(null);
-  const [approxTime, setApproxTime] = useState('');
-  const [issueDescription, setIssueDescription] = useState('');
+
+  const { 
+    register, 
+    handleSubmit, 
+    reset, 
+    formState: { errors } 
+  } = useForm();
 
   useEffect(() => {
     fetch('/api/hospitals')
@@ -54,9 +62,7 @@ export default function NearbyHospitalsHorizontal({ addEmergencyBooking }) {
             };
           })
           .sort((a, b) => {
-            // First sort by wait time
             if (a.waitMinutes !== b.waitMinutes) return a.waitMinutes - b.waitMinutes;
-            // Then by distance
             return (a.distance ?? Infinity) - (b.distance ?? Infinity);
           });
 
@@ -67,22 +73,17 @@ export default function NearbyHospitalsHorizontal({ addEmergencyBooking }) {
 
   const openDialog = (hospital) => {
     setSelectedHospital(hospital);
-    setApproxTime('');
-    setIssueDescription('');
     setIsDialogOpen(true);
   };
 
   const closeDialog = () => {
     setIsDialogOpen(false);
     setSelectedHospital(null);
+    reset();
   };
 
-  const handleBookEmergency = () => {
-    if (!approxTime.trim() || !issueDescription.trim()) {
-      alert('Please enter all required details.');
-      return;
-    }
-
+  const onSubmit = async (data) => {
+    if (!selectedHospital) return;
     const bookingData = {
       name: selectedHospital.name,
       address: selectedHospital.address,
@@ -90,17 +91,23 @@ export default function NearbyHospitalsHorizontal({ addEmergencyBooking }) {
         ? selectedHospital.distance.toFixed(1)
         : 'N/A',
       bedType: 'Emergency',
-      time: approxTime,
-      issue: issueDescription,
+      time: data.approxTime,
+      issue: data.issueDescription,
       wait: selectedHospital.wait || 'No Waiting Time',
       phone: selectedHospital.phone,
       email: selectedHospital.email,
       website: selectedHospital.website,
+      timestamp: new Date().toISOString()
     };
 
-    addEmergencyBooking(bookingData);
-    alert(`✅ Emergency bed booked at ${selectedHospital.name} for approx ${approxTime}`);
-    closeDialog();
+    try {
+      await addDoc(collection(db, "emergencyBookings"), bookingData);
+      alert(`Emergency bed booked at ${selectedHospital.name} for approx ${data.approxTime}`);
+      closeDialog();
+    } catch (error) {
+      console.error("Error booking emergency:", error);
+      alert("Failed to book emergency. Try again.");
+    }
   };
 
   return (
@@ -190,18 +197,15 @@ export default function NearbyHospitalsHorizontal({ addEmergencyBooking }) {
                       <p>Estimated Wait: {selectedHospital.wait}</p>
                     )}
                   </div>
-
-                  <div className="mt-4 space-y-4">
+                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <div>
-                      <label className="text-sm font-semibold text-teal-800">
-                        Approximate Arrival Time
-                      </label>
+                      <label className="text-sm font-semibold text-teal-800">Approximate Arrival Time</label>
                       <input
                         type="time"
                         className="w-full mt-1 border border-teal-600 rounded px-3 py-2"
-                        value={approxTime}
-                        onChange={(e) => setApproxTime(e.target.value)}
+                        {...register("approxTime", { required: true })}
                       />
+                      {errors.approxTime && <p className="text-red-500 text-sm">Time is required.</p>}
                     </div>
 
                     <div>
@@ -210,28 +214,28 @@ export default function NearbyHospitalsHorizontal({ addEmergencyBooking }) {
                         rows={3}
                         className="w-full mt-1 border border-teal-600 rounded px-3 py-2 resize-none"
                         placeholder="Describe the emergency or patient condition..."
-                        value={issueDescription}
-                        onChange={(e) => setIssueDescription(e.target.value)}
+                        {...register("issueDescription", { required: true })}
                       />
+                      {errors.issueDescription && <p className="text-red-500 text-sm">Description is required.</p>}
                     </div>
-                  </div>
 
-                  <div className="mt-6 flex gap-4 justify-between text-center">
-                    <button
-                      className="w-1/2 bg-teal-600 hover:bg-black text-white font-semibold py-2 rounded"
-                      onClick={handleBookEmergency}
-                    >
-                      Book Emergency
-                    </button>
-                    <a
-                      href={selectedHospital?.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-1/2 bg-teal-600 hover:bg-black text-white font-semibold py-2 rounded text-center"
-                    >
-                      Visit Site
-                    </a>
-                  </div>
+                    <div className="mt-6 flex gap-4 justify-between text-center">
+                      <button
+                        type="submit"
+                        className="w-1/2 bg-teal-600 hover:bg-black text-white font-semibold py-2 rounded"
+                      >
+                        Book Emergency
+                      </button>
+                      <a
+                        href={selectedHospital?.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-1/2 bg-teal-600 hover:bg-black text-white font-semibold py-2 rounded text-center"
+                      >
+                        Visit Site
+                      </a>
+                    </div>
+                  </form>
                 </Dialog.Panel>
               </Transition.Child>
             </div>

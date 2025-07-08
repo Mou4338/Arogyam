@@ -2,17 +2,24 @@
 
 import { useEffect, useState, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
+import { useForm } from 'react-hook-form';
+import { db } from '../lib/firebaseConfig'; // Adjust path as needed
+import { collection, addDoc } from 'firebase/firestore';
 
 export default function NearbyHospitals({ addBooking }) {
   const [hospitals, setHospitals] = useState([]);
   const [selectedHospital, setSelectedHospital] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedBedType, setSelectedBedType] = useState('');
-  const [appointmentDate, setAppointmentDate] = useState('');
-  const [appointmentTime, setAppointmentTime] = useState('');
-  const [issueDescription, setIssueDescription] = useState('');
 
-  const origin = [85.8412, 20.2965]; // [lng, lat]
+  const origin = [85.8412, 20.2965];
+
+  // react-hook-form setup
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm();
 
   useEffect(() => {
     const fetchAndCalculateDistances = async () => {
@@ -25,7 +32,9 @@ export default function NearbyHospitals({ addBooking }) {
             const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${origin[0]},${origin[1]};${hospital.lng},${hospital.lat}?overview=false&access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`;
             const res = await fetch(url);
             const routeData = await res.json();
-            const distance = routeData.routes?.[0]?.distance ? routeData.routes[0].distance / 1000 : null;
+            const distance = routeData.routes?.[0]?.distance
+              ? routeData.routes[0].distance / 1000
+              : null;
 
             return { ...hospital, distance };
           })
@@ -50,7 +59,6 @@ export default function NearbyHospitals({ addBooking }) {
           const distA = a.distance ?? Infinity;
           const distB = b.distance ?? Infinity;
           if (distA !== distB) return distA - distB;
-
           const waitA = parseWait(a);
           const waitB = parseWait(b);
           return waitA - waitB;
@@ -67,16 +75,45 @@ export default function NearbyHospitals({ addBooking }) {
 
   const openModal = (hospital) => {
     setSelectedHospital(hospital);
-    setSelectedBedType('');
-    setAppointmentDate('');
-    setAppointmentTime('');
-    setIssueDescription('');
     setIsOpen(true);
+    reset();
   };
 
   const closeModal = () => {
     setSelectedHospital(null);
     setIsOpen(false);
+    reset();
+  };
+
+  // Handle form submission
+  const onSubmit = async (data) => {
+    if (!selectedHospital) return;
+
+    const bookingDetails = {
+      ...data,
+      name: selectedHospital.name,
+      address: selectedHospital.address,
+      distance: selectedHospital.distance,
+      wait: selectedHospital.wait,
+      bedTypeCount: selectedHospital.beds,
+      phone: selectedHospital.phone,
+      email: selectedHospital.email,
+      website: selectedHospital.website,
+      createdAt: new Date(),
+    };
+
+    try {
+      await addDoc(collection(db, 'bookings'), bookingDetails);
+      addBooking(bookingDetails);
+      alert(
+        `✅ Booking confirmed for ${data.bedType} bed at ${selectedHospital.name} on ${data.date} at ${data.time}.`
+      );
+      setIsOpen(false);
+      reset();
+    } catch (error) {
+      alert('Error saving booking. Please try again.');
+      console.error(error);
+    }
   };
 
   return (
@@ -173,7 +210,12 @@ export default function NearbyHospitals({ addBooking }) {
                   </p>
 
                   <div className="mt-3 text-sm space-y-1 text-teal-800">
-                    <p>Distance: {selectedHospital?.distance ? `${selectedHospital.distance.toFixed(1)} km` : '–'}</p>
+                    <p>
+                      Distance:{' '}
+                      {selectedHospital?.distance
+                        ? `${selectedHospital.distance.toFixed(1)} km`
+                        : '-'}
+                    </p>
                     <p>Phone: {selectedHospital?.phone}</p>
                     <p>Email: {selectedHospital?.email}</p>
                   </div>
@@ -209,13 +251,13 @@ export default function NearbyHospitals({ addBooking }) {
                     </div>
                   </div>
 
-                  <div className="mt-5 space-y-4">
+                  {/* react-hook-form booking form */}
+                  <form className="mt-5 space-y-4" onSubmit={handleSubmit(onSubmit)}>
                     <div>
                       <label className="text-sm font-semibold text-teal-800">Select Bed Type</label>
                       <select
                         className="w-full mt-1 border border-teal-600 rounded px-3 py-2"
-                        value={selectedBedType}
-                        onChange={(e) => setSelectedBedType(e.target.value)}
+                        {...register('bedType', { required: true })}
                       >
                         <option value="">-- Choose Bed Type --</option>
                         {selectedHospital?.beds &&
@@ -227,6 +269,9 @@ export default function NearbyHospitals({ addBooking }) {
                               </option>
                             ))}
                       </select>
+                      {errors.bedType && (
+                        <span className="text-red-500 text-xs">Please select a bed type.</span>
+                      )}
                     </div>
 
                     <div>
@@ -234,9 +279,11 @@ export default function NearbyHospitals({ addBooking }) {
                       <input
                         type="date"
                         className="w-full mt-1 border border-teal-600 rounded px-3 py-2"
-                        value={appointmentDate}
-                        onChange={(e) => setAppointmentDate(e.target.value)}
+                        {...register('date', { required: true })}
                       />
+                      {errors.date && (
+                        <span className="text-red-500 text-xs">Please select a date.</span>
+                      )}
                     </div>
 
                     <div>
@@ -244,77 +291,47 @@ export default function NearbyHospitals({ addBooking }) {
                       <input
                         type="time"
                         className="w-full mt-1 border border-teal-600 rounded px-3 py-2"
-                        value={appointmentTime}
-                        onChange={(e) => setAppointmentTime(e.target.value)}
+                        {...register('time', { required: true })}
                       />
+                      {errors.time && (
+                        <span className="text-red-500 text-xs">Please select a time.</span>
+                      )}
                     </div>
 
                     <div>
-                      <label className="text-sm font-semibold text-teal-800">Describe Health Issue</label>
+                      <label className="text-sm font-semibold text-teal-800">
+                        Describe Health Issue
+                      </label>
                       <textarea
                         rows={3}
                         className="w-full mt-1 border border-teal-600 rounded px-3 py-2 resize-none"
                         placeholder="Briefly describe the patient’s condition..."
-                        value={issueDescription}
-                        onChange={(e) => setIssueDescription(e.target.value)}
+                        {...register('issue', { required: true })}
                       />
+                      {errors.issue && (
+                        <span className="text-red-500 text-xs">
+                          Please describe the health issue.
+                        </span>
+                      )}
                     </div>
-                  </div>
 
-                  <div className="mt-6 flex gap-4 justify-between text-center">
-                    <button
-                      className="w-1/2 bg-[#3f8578] hover:bg-black text-white font-semibold py-2 rounded"
-                      onClick={() => {
-                        if (
-                          !selectedBedType ||
-                          !appointmentDate ||
-                          !appointmentTime ||
-                          !issueDescription.trim()
-                        ) {
-                          alert('Please fill in all booking details.');
-                          return;
-                        }
-
-                        const bedCount = selectedHospital?.beds?.[selectedBedType] ?? 1;
-                        const waitTime =
-                          bedCount === 0
-                            ? selectedHospital?.wait?.[selectedBedType] || '–'
-                            : null;
-
-                        const bookingDetails = {
-                          name: selectedHospital.name,
-                          address: selectedHospital.address,
-                          distance: selectedHospital.distance,
-                          bedType: selectedBedType,
-                          date: appointmentDate,
-                          time: appointmentTime,
-                          issue: issueDescription,
-                          wait: selectedHospital.wait,
-                          bedTypeCount: selectedHospital.beds,
-                          phone: selectedHospital.phone,
-                          email: selectedHospital.email,
-                          website: selectedHospital.website
-                        };
-
-                        addBooking(bookingDetails);
-
-                        alert(
-                          `✅ Booking confirmed for ${selectedBedType} bed at ${selectedHospital.name} on ${appointmentDate} at ${appointmentTime}.`
-                        );
-                        setIsOpen(false);
-                      }}
-                    >
-                      Book Bed
-                    </button>
-                    <a
-                      href={selectedHospital?.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-1/2 bg-[#3f8578] hover:bg-black text-white font-semibold py-2 rounded text-center"
-                    >
-                      Visit Website
-                    </a>
-                  </div>
+                    <div className="mt-6 flex gap-4 justify-between text-center">
+                      <button
+                        type="submit"
+                        className="w-1/2 bg-[#3f8578] hover:bg-black text-white font-semibold py-2 rounded"
+                      >
+                        Book Bed
+                      </button>
+                      <a
+                        href={selectedHospital?.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-1/2 bg-[#3f8578] hover:bg-black text-white font-semibold py-2 rounded text-center"
+                      >
+                        Visit Website
+                      </a>
+                    </div>
+                  </form>
                 </Dialog.Panel>
               </Transition.Child>
             </div>

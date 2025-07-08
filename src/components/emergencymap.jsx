@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import FilterEmergency from './FilterEmergency.jsx';
+import { Car, Footprints as Walk, Bike } from 'lucide-react';
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
@@ -197,22 +198,29 @@ export default function MapSection() {
     <div>
       <FilterEmergency onFilter={handleFilter} />
       <h3 className="text-2xl font-bold text-black p-3 mt-3">Emergency Bed Map View</h3>
+      
       <div className="flex flex-wrap gap-3 my-3">
         {['driving', 'walking', 'cycling'].map((mode) => (
           <button
             key={mode}
             onClick={() => setTravelMode(mode)}
-            className={`px-3 py-1 rounded text-sm ${
-              travelMode === mode ? 'bg-[#64bcae] text-white' : 'bg-gray-100 text-[#132d2e]'
+            className={`flex items-center gap-2 px-3 py-2 rounded text-sm font-medium transition border ${
+              travelMode === mode
+                ? 'bg-[#64bcae] text-white border-[#64bcae]'
+                : 'bg-white text-[#132d2e] border-gray-300 hover:bg-gray-100'
             }`}
           >
-            {mode === 'driving' && 'Car'}
-            {mode === 'walking' && 'Walk'}
-            {mode === 'cycling' && 'Cycle'}
-            {durations[mode] !== null && ` (${durations[mode]} min)`}
+            {mode === 'driving' && <Car size={16} />}
+            {mode === 'walking' && <Walk size={16} />}
+            {mode === 'cycling' && <Bike size={16} />}
+            <span className="capitalize">{mode}</span>
+            {durations[mode] !== null && (
+              <span className="text-xs text-gray-600">({durations[mode]} min)</span>
+            )}
           </button>
         ))}
       </div>
+
       <div ref={mapRef} className="h-[400px] w-full mt-2 rounded-xl border" />
     </div>
   );
