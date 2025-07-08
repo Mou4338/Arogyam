@@ -45,10 +45,10 @@ export default function BookedEmergency({ bookings = [] }) {
           >
             <p className="text-xl font-bold mb-1">{booking.name}</p>
             <p className="text-medium mt-1">Address: {booking.address}</p>
-            <p className="text-sm mt-1">📍 Distance: {booking.distance}</p>
-            <p className="text-sm mt-1">🛏️ Bed Type: <strong>{booking.bedType}</strong></p>
-            <p className="text-sm mt-1">⏱️ Arrival: {booking.time}</p>
-            <p className="text-sm mt-1">⏳ Wait: {booking.wait || 'No Waiting'}</p>
+            <p className="text-sm mt-1">Distance: {booking.distance}</p>
+            <p className="text-sm mt-1">Bed Type: <strong>{booking.bedType}</strong></p>
+            <p className="text-sm mt-1">Arrival: {booking.time}</p>
+            <p className="text-sm mt-1">Wait: {booking.wait || 'No Waiting'}</p>
 
             <button
               onClick={() => openDialog(booking)}
@@ -96,13 +96,13 @@ export default function BookedEmergency({ bookings = [] }) {
                   </p>
 
                   <div className="mt-3 space-y-2 text-medium text-teal-800">
-                    <p>📅 Booked On: {getCurrentDateTime()}</p>
-                    <p>📍 Distance: {selectedBooking?.distance}</p>
-                    <p>🛏️ Bed Type: {selectedBooking?.bedType}</p>
-                    <p>⏱️ Approx. Arrival Time: {selectedBooking?.time}</p>
-                    <p>⏳ Wait Time: {selectedBooking?.wait || 'No Waiting'}</p>
-                    <p>📞 Phone: {selectedBooking?.phone}</p>
-                    <p>📧 Email: {selectedBooking?.email}</p>
+                    <p>Booked On: {getCurrentDateTime()}</p>
+                    <p>Distance: {selectedBooking?.distance}</p>
+                    <p>Bed Type: {selectedBooking?.bedType}</p>
+                    <p>Approx. Arrival Time: {selectedBooking?.time}</p>
+                    <p>Wait Time: {selectedBooking?.wait || 'No Waiting'}</p>
+                    <p>Phone: {selectedBooking?.phone}</p>
+                    <p>Email: {selectedBooking?.email}</p>
                     {selectedBooking?.issue && (
                       <div>
                         <p className="font-semibold">📝 Issue:</p>
