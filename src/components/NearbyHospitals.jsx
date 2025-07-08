@@ -2,6 +2,7 @@
 
 import { useEffect, useState, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
+import FilterSidebar from '@/components/FilterSidebar.jsx';
 
 export default function NearbyHospitals({ addBooking }) {
   const [hospitals, setHospitals] = useState([]);
@@ -11,12 +12,35 @@ export default function NearbyHospitals({ addBooking }) {
   const [appointmentDate, setAppointmentDate] = useState('');
   const [appointmentTime, setAppointmentTime] = useState('');
   const [issueDescription, setIssueDescription] = useState('');
+  const [waitTime, setWaitTime] = useState(60); // Min initially
+  const [distance, setDistance] = useState(5); // Min initially
+
+  const origin = [85.8412, 20.2965]; // [lng, lat]
 
   useEffect(() => {
-    fetch('/api/hospitals')
-      .then((res) => res.json())
-      .then((data) => setHospitals(data))
-      .catch((err) => console.error('Failed to fetch hospitals:', err));
+    const fetchAndCalculateDistances = async () => {
+      try {
+        const res = await fetch('/api/hospitals');
+        const data = await res.json();
+
+        const updatedHospitals = await Promise.all(
+          data.map(async (hospital) => {
+            const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${origin[0]},${origin[1]};${hospital.lng},${hospital.lat}?overview=false&access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`;
+            const res = await fetch(url);
+            const routeData = await res.json();
+            const distance = routeData.routes?.[0]?.distance ? routeData.routes[0].distance / 1000 : null;
+
+            return { ...hospital, distance };
+          })
+        );
+
+        setHospitals(updatedHospitals);
+      } catch (err) {
+        console.error('Failed to fetch or calculate distances:', err);
+      }
+    };
+
+    fetchAndCalculateDistances();
   }, []);
 
   const openModal = (hospital) => {
@@ -33,17 +57,41 @@ export default function NearbyHospitals({ addBooking }) {
     setIsOpen(false);
   };
 
+  const filteredHospitals = hospitals.filter((hospital) => {
+    const isWithinDistance = hospital.distance <= distance;
+
+    const hasAcceptableWait = Object.entries(hospital.beds || {})
+      .filter(([type]) => type.toLowerCase() !== 'emergency')
+      .some(([type, count]) => {
+        const wt = Number(hospital.wait?.[type]);
+        return (
+          count > 0 || (wt >= 0 && wt <= waitTime)
+        );
+      });
+
+    return isWithinDistance && hasAcceptableWait;
+  });
+
   return (
     <div className="bg-teal-600 p-5 rounded-xl shadow-xl w-full max-w-sm">
-      <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+      <div className="space-y-4">
+        <FilterSidebar
+          waitTime={waitTime}
+          setWaitTime={setWaitTime}
+          distance={distance}
+          setDistance={setDistance}
+        />
+      </div>
+
+      <h3 className="text-xl font-bold text-white mb-4 mt-4 flex items-center gap-2">
         🏥 Nearby Hospitals
       </h3>
 
       <div className="space-y-2 max-h-[420px] p-2 overflow-y-auto">
-        {hospitals.length === 0 ? (
+        {filteredHospitals.length === 0 ? (
           <p className="text-white text-sm">No hospitals found nearby.</p>
         ) : (
-          hospitals.map((h, i) => {
+          filteredHospitals.map((h, i) => {
             const filteredBeds = h.beds
               ? Object.fromEntries(
                   Object.entries(h.beds).filter(([type]) => type.toLowerCase() !== 'emergency')
@@ -60,8 +108,9 @@ export default function NearbyHospitals({ addBooking }) {
               >
                 <p className="text-base font-semibold">{h.name}</p>
                 <p className="text-sm">{h.address}</p>
-                <p className="text-sm mt-1">📍 Distance: {h.distance || '–'}</p>
-                <p className="text-sm mt-1">🚗 Time: {h.Time || '–'}</p>
+                <p className="text-sm mt-1">
+                  📍 Distance: {h.distance ? `${h.distance.toFixed(1)} km` : '–'}
+                </p>
 
                 {unavailableBeds.length > 0 && h.wait && (
                   <div className="text-xs mt-1">
@@ -80,8 +129,7 @@ export default function NearbyHospitals({ addBooking }) {
                         key={type}
                         className="bg-teal-400 rounded px-1 py-1 text-center text-white"
                       >
-                        {type.charAt(0).toUpperCase() + type.slice(1)}:{' '}
-                        <strong>{count}</strong>
+                        {type.charAt(0).toUpperCase() + type.slice(1)}: <strong>{count}</strong>
                       </span>
                     ))}
                   </div>
@@ -92,6 +140,7 @@ export default function NearbyHospitals({ addBooking }) {
         )}
       </div>
 
+      {/* Booking Modal */}
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-50" onClose={closeModal}>
           <Transition.Child
@@ -121,11 +170,12 @@ export default function NearbyHospitals({ addBooking }) {
                   <Dialog.Title className="text-3xl font-bold text-teal-800 mb-2">
                     {selectedHospital?.name}
                   </Dialog.Title>
-                  <p className="text-medium font-semibold text-teal-800">Address: {selectedHospital?.address}</p>
+                  <p className="text-medium font-semibold text-teal-800">
+                    Address: {selectedHospital?.address}
+                  </p>
 
                   <div className="mt-3 text-sm space-y-1 text-teal-800">
-                    <p>📍 Distance: {selectedHospital?.distance}</p>
-                    <p>🚗 Time: {selectedHospital?.Time}</p>
+                    <p>📍 Distance: {selectedHospital?.distance ? `${selectedHospital.distance.toFixed(1)} km` : '–'}</p>
                     <p>📞 Phone: {selectedHospital?.phone}</p>
                     <p>✉️ Email: {selectedHospital?.email}</p>
                   </div>
@@ -237,7 +287,6 @@ export default function NearbyHospitals({ addBooking }) {
                           name: selectedHospital.name,
                           address: selectedHospital.address,
                           distance: selectedHospital.distance,
-                          Time: selectedHospital.Time,
                           bedType: selectedBedType,
                           date: appointmentDate,
                           time: appointmentTime,
@@ -246,7 +295,7 @@ export default function NearbyHospitals({ addBooking }) {
                           bedTypeCount: selectedHospital.beds,
                           phone: selectedHospital.phone,
                           email: selectedHospital.email,
-                          website: selectedHospital.website
+                          website: selectedHospital.website,
                         };
 
                         addBooking(bookingDetails);

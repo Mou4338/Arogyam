@@ -1,11 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 
-export default function FilterSidebar() {
-  const [waitTime, setWaitTime] = useState(30);
-  const [distance, setDistance] = useState(5);
-
+export default function FilterSidebar({ waitTime, setWaitTime, distance, setDistance }) {
   return (
     <div className="bg-teal-50 border border-teal-500 shadow-xl rounded-2xl p-6 space-y-8">
       <h3 className="text-xl font-bold text-teal-800 tracking-wide flex items-center gap-2">
@@ -20,13 +17,13 @@ export default function FilterSidebar() {
         <input
           type="range"
           min="0"
-          max="120"
+          max="60"
           value={waitTime}
-          onChange={(e) => setWaitTime(e.target.value)}
+          onChange={(e) => setWaitTime(Number(e.target.value))}
           className="w-full accent-teal-600"
         />
         <p className="text-xs text-teal-600 mt-1">
-          From 0 to 2 hours
+          From 0 to 1 hour
         </p>
       </div>
 
@@ -37,23 +34,19 @@ export default function FilterSidebar() {
         </label>
         <input
           type="range"
-          min="2"
-          max="15"
+          min="0"
+          max="5"
           value={distance}
-          onChange={(e) => setDistance(e.target.value)}
+          onChange={(e) => setDistance(Number(e.target.value))}
           className="w-full accent-teal-600"
         />
         <p className="text-xs text-teal-600 mt-1">
-          Select between 2 km to 15 km
+          Select up to 5 km
         </p>
       </div>
-
-      {/* Apply Button */}
-      <button className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 rounded-lg shadow-lg transition duration-200">
-        ✅ Apply Filters
-      </button>
     </div>
   );
 }
+
 
 

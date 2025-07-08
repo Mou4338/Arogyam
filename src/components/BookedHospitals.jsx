@@ -25,13 +25,12 @@ export default function BookedHospitalsPage({ bookings }) {
     setIsDialogOpen(false);
   };
 
-  const filteredBookings = bookings?.filter(
-    (b) => b.bedType?.toLowerCase() !== 'emergency'
-  ) || [];
+  const filteredBookings =
+    bookings?.filter((b) => b.bedType?.toLowerCase() !== 'emergency') || [];
 
   const getWaitTime = (booking) => {
     const bedType = booking?.bedType;
-    const count = booking?.bedTypeCount?.[bedType] ?? 1; // default to 1 if undefined
+    const count = booking?.bedTypeCount?.[bedType] ?? 1;
     const wait =
       typeof booking?.waitTimes === 'object'
         ? booking?.waitTimes?.[bedType]
@@ -44,37 +43,37 @@ export default function BookedHospitalsPage({ bookings }) {
   };
 
   return (
-    <div className="bg-teal-600 p-6 sm:p-3 md:p-3 rounded-2xl shadow-xl w-full max-w-6xl mx-auto mt-6 space-y-6">
-      <div>
-        <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">📋 Booked Hospitals</h3>
+    <div className="bg-teal-600 p-6 rounded-2xl shadow-xl w-full max-w-6xl mx-auto mt-6 space-y-6">
+      <h3 className="text-2xl font-bold text-white mb-4">📋 Booked Hospitals</h3>
 
-        {filteredBookings.length === 0 ? (
-          <p className="text-white font-semibold text-xl">No bed bookings yet.</p>
-        ) : (
-          <div className="flex gap-4 overflow-x-auto whitespace-nowrap pr-1 pb-2">
-            {filteredBookings.map((b, idx) => (
-              <div
-                key={idx}
-                className="flex-shrink-0 w-72 sm:w-80 bg-teal-50 text-teal-900 border border-teal-200 rounded-lg p-4 sm:p-5 shadow-md"
-              >
-                <p className="text-base sm:text-lg font-semibold">{b.name}</p>
-                <p className="text-sm">{b.address}</p>
-                <div className="text-sm mt-2 space-y-1">
+      {filteredBookings.length === 0 ? (
+        <p className="text-white font-semibold text-xl">No bed bookings yet.</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filteredBookings.map((b, idx) => (
+            <div
+              key={idx}
+              className="bg-teal-50 text-teal-900 border border-teal-200 rounded-lg p-5 shadow-md flex flex-col justify-between"
+            >
+              <div>
+                <p className="text-lg font-semibold break-words">{b.name}</p>
+                <p className="text-sm mt-1 break-words">{b.address}</p>
+                <div className="text-sm mt-3 space-y-1">
                   <p>🛏️ Bed Type: <strong>{b.bedType}</strong></p>
                   <p>📅 Date: {b.date}</p>
                   <p>⏰ Time: {b.time}</p>
                 </div>
-                <button
-                  className="mt-3 text-sm bg-teal-700 hover:bg-black text-white px-4 py-2 rounded"
-                  onClick={() => openDialog(b)}
-                >
-                  View Full Details
-                </button>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+              <button
+                className="mt-4 text-sm bg-teal-700 hover:bg-black text-white px-4 py-2 rounded"
+                onClick={() => openDialog(b)}
+              >
+                View Full Details
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Full Details Dialog */}
       <Transition appear show={isDialogOpen} as={Fragment}>
@@ -103,17 +102,16 @@ export default function BookedHospitalsPage({ bookings }) {
                 leaveTo="scale-95 opacity-0"
               >
                 <Dialog.Panel className="w-full max-w-md sm:max-w-lg bg-teal-50 border border-teal-600 p-6 sm:p-8 rounded-2xl shadow-xl">
-                  <Dialog.Title className="text-2xl sm:text-3xl font-bold text-teal-800 mb-2">
+                  <Dialog.Title className="text-2xl sm:text-3xl font-bold text-teal-800 mb-2 break-words">
                     {selectedBooking?.name}
                   </Dialog.Title>
-                  <p className="text-sm sm:text-base font-semibold text-teal-800 mb-4">
+                  <p className="text-sm sm:text-base font-semibold text-teal-800 mb-4 break-words">
                     Address: {selectedBooking?.address}
                   </p>
 
-                  <div className="text-sm text-teal-800 space-y-2">
+                  <div className="text-sm text-teal-800 space-y-2 break-words">
                     <p><strong>📅 Booked On:</strong> {getCurrentDateTime()}</p>
-                    <p><strong>📍 Distance:</strong> {selectedBooking?.distance}</p>
-                    <p><strong>🚗 Time:</strong> {selectedBooking?.Time}</p>
+                    <p><strong>📍 Distance:</strong> {selectedBooking?.distance?.toFixed(1)} km</p>
                     <p><strong>🛏️ Bed Type:</strong> {selectedBooking?.bedType}</p>
                     <p><strong>📅 Appointment Date:</strong> {selectedBooking?.date}</p>
                     <p><strong>⏰ Time:</strong> {selectedBooking?.time}</p>
@@ -125,7 +123,7 @@ export default function BookedHospitalsPage({ bookings }) {
                     )}
 
                     <p><strong>📝 Issue:</strong></p>
-                    <p className="bg-white text-black border border-teal-800 p-3 rounded whitespace-pre-line">
+                    <p className="bg-white text-black border border-teal-800 p-3 rounded whitespace-pre-line break-words">
                       {selectedBooking?.issue}
                     </p>
                   </div>
@@ -157,6 +155,7 @@ export default function BookedHospitalsPage({ bookings }) {
     </div>
   );
 }
+
 
 
 

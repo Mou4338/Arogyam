@@ -54,12 +54,10 @@ export default function Home() {
     <div className="bg-slate-50 min-h-screen">
       <main className="grid grid-cols-1 lg:grid-cols-4 gap-6 p-4">
         <div className="lg:col-span-3 space-y-4">
-          <FilterControls />
           <MapSection />
           <BookedHospitals bookings={bookings} />
         </div>
         <div className="space-y-4">
-          <FilterSidebar />
           <NearbyHospitals addBooking={addBooking} />
         </div>
       </main>
