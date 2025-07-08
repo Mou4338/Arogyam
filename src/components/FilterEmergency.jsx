@@ -21,7 +21,7 @@ export default function FilterControls({ onFilter }) {
     setSearchTerm('');
     setBedType('');
     setSortBy('');
-    onFilter({ search: '', bedType: '', sortBy: '', maxWaitMinutes: null, maxDistanceKm: null });
+    onFilter({ search: '', sortBy: '', maxWaitMinutes: null, maxDistanceKm: null });
   };
 
   return (
@@ -33,18 +33,6 @@ export default function FilterControls({ onFilter }) {
         placeholder="🔍 Search hospitals..."
         className="flex-1 px-4 py-2 rounded-lg border border-teal-500 focus:ring-2 focus:ring-teal-600 outline-none w-full sm:w-auto text-teal-800"
       />
-
-      <select
-        value={bedType}
-        onChange={(e) => setBedType(e.target.value)}
-        className="px-4 py-2 rounded-lg border border-teal-500 focus:ring-2 focus:ring-teal-600 outline-none w-full sm:w-auto text-teal-800"
-      >
-        <option value="">🛎️ Bed Type</option>
-        <option value="general">General</option>
-        <option value="icu">ICU</option>
-        <option value="maternity">Maternity</option>
-        <option value="sdu">SDU</option>
-      </select>
 
       <select
         value={sortBy}

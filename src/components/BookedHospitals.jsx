@@ -59,6 +59,7 @@ export default function BookedHospitalsPage({ bookings }) {
                 <p className="text-lg font-semibold break-words">{b.name}</p>
                 <p className="text-sm mt-1 break-words">{b.address}</p>
                 <div className="text-sm mt-3 space-y-1">
+                  <p>📍 Distance: {b.distance?.toFixed(1)} km</p>
                   <p>🛏️ Bed Type: <strong>{b.bedType}</strong></p>
                   <p>📅 Date: {b.date}</p>
                   <p>⏰ Time: {b.time}</p>
@@ -155,7 +156,6 @@ export default function BookedHospitalsPage({ bookings }) {
     </div>
   );
 }
-
 
 
 

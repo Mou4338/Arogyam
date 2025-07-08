@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react"
 import FilterControls from '@/components/FilterControls.jsx'
 import MapSection from '@/components/MapView.jsx'
-import FilterSidebar from '@/components/FilterSidebar.jsx'
+import CabBooking from '@/components/CabBooking.jsx';
 import NearbyHospitals from '@/components/NearbyHospitals.jsx'
 import BookedHospitals from '@/components/BookedHospitals.jsx'
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -59,6 +59,7 @@ export default function Home() {
         </div>
         <div className="space-y-4">
           <NearbyHospitals addBooking={addBooking} />
+          <CabBooking />
         </div>
       </main>
     </div>
