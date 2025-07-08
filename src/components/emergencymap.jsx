@@ -196,7 +196,7 @@ export default function MapSection() {
   return (
     <div>
       <FilterEmergency onFilter={handleFilter} />
-      <h3 className="text-2xl font-bold text-black p-3 mt-3">🗺️ Emergency Bed Map View</h3>
+      <h3 className="text-2xl font-bold text-black p-3 mt-3">Emergency Bed Map View</h3>
       <div className="flex flex-wrap gap-3 my-3">
         {['driving', 'walking', 'cycling'].map((mode) => (
           <button
