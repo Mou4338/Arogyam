@@ -58,16 +58,7 @@ export default function NearbyHospitals({ addBooking }) {
     fetchAndCalculateDistances();
   }, []);
 
-  const applyFilters = () => {
-    let result = hospitals.filter((h) =>
-      h.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    result = result.filter((h) => h.distance !== null && h.distance <= maxDistance);
-    result.sort((a, b) => (a.distance ?? Infinity) - (b.distance ?? Infinity));
-    setFilteredHospitals(result);
-  };
-
-  const applyBedTypeFilter = () => {
+  const applyCombinedFilters = () => {
     let result = hospitals.filter((h) =>
       h.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -149,7 +140,7 @@ export default function NearbyHospitals({ addBooking }) {
 
   return (
     <div className="bg-teal-600 p-5 rounded-xl shadow-xl w-full max-w-sm">
-      <h3 className="text-xl font-bold text-white mb-4 mt-4 flex items-center gap-2">
+      <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
         Nearby Hospitals
       </h3>
 
@@ -162,7 +153,7 @@ export default function NearbyHospitals({ addBooking }) {
           className="w-full p-2 bg-white rounded-md border border-teal-300"
         />
         <button
-          onClick={applyFilters}
+          onClick={applyCombinedFilters}
           className="bg-white text-teal-600 font-semibold px-3 py-2 rounded-md hover:bg-black hover:text-white shadow-md"
         >
           Search
@@ -183,12 +174,6 @@ export default function NearbyHospitals({ addBooking }) {
             className="w-full"
           />
         </div>
-        <button
-          onClick={applyFilters}
-          className="bg-white text-teal-600 font-semibold px-3 py-2 rounded-md hover:bg-black hover:text-white shadow-md"
-        >
-          Filter
-        </button>
       </div>
 
       <div className="flex items-center gap-2 mb-3">
@@ -204,14 +189,12 @@ export default function NearbyHospitals({ addBooking }) {
             </option>
           ))}
         </select>
-        <button
-          onClick={applyBedTypeFilter}
-          className="bg-white text-teal-600 font-semibold px-3 py-2 rounded-md hover:bg-black hover:text-white shadow-md"
-        >
+      </div>
+      <button
+          onClick={applyCombinedFilters}
+          className="w-full mb-4 bg-white text-teal-600 font-semibold py-2 rounded-md hover:bg-black hover:text-white shadow-md">
           Filter
         </button>
-      </div>
-
       <button
         onClick={resetFilters}
         className="w-full mb-4 bg-red-100 text-red-600 font-semibold py-2 rounded-md hover:bg-black hover:text-white shadow-md"
