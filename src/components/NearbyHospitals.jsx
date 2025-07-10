@@ -233,6 +233,7 @@ export default function NearbyHospitals({ addBooking }) {
               : {};
 
             const unavailable = selectedBedType && h.beds?.[selectedBedType] === 0;
+            const unavailableBeds = Object.entries(filteredBeds).filter(([_, count]) => count === 0);
 
             return (
               <div
@@ -254,10 +255,14 @@ export default function NearbyHospitals({ addBooking }) {
                   </p>
                 )}
 
-                {unavailable && h.wait?.[selectedBedType] && (
-                  <p className="text-xs mt-1">
-                    Wait Time: {h.wait[selectedBedType]}
-                  </p>
+                {unavailableBeds.length > 0 && h.wait && (
+                  <div className="text-xs mt-1">
+                    {unavailableBeds.map(([type]) => (
+                      <p className="text-xs" key={type}>
+                        {type}: Wait Time: {h.wait?.[type] || '–'}
+                      </p>
+                    ))}
+                  </div>
                 )}
 
                 {Object.keys(filteredBeds).length > 0 && (

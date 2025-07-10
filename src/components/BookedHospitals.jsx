@@ -3,7 +3,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
-import { useForm } from 'react-hook-form';
 import {
   MapPin,
   Phone,
@@ -40,20 +39,6 @@ export default function BookedHospitalsPage() {
     setIsDialogOpen(false);
   };
 
-  const getWaitTime = (booking) => {
-    const bedType = booking?.bedType;
-    const count = booking?.bedTypeCount?.[bedType] ?? 1;
-    const wait =
-      typeof booking?.waitTimes === 'object'
-        ? booking?.waitTimes?.[bedType]
-        : booking?.waitTimes;
-
-    if (count === 0 && wait) {
-      return wait;
-    }
-    return null;
-  };
-
   useEffect(() => {
     const fetchHospitalBookings = async () => {
       try {
@@ -74,6 +59,17 @@ export default function BookedHospitalsPage() {
   const filteredBookings = bookings.filter(
     (b) => b.bedType?.toLowerCase() !== 'emergency'
   );
+
+  const renderWaitTimes = (waitTimes) => {
+    if (!waitTimes || typeof waitTimes !== 'object') return null;
+
+    return Object.entries(waitTimes).map(([bed, wait], i) => (
+      <p key={i}>
+        <Clock size={14} className="inline-block mr-1" />
+        Wait ({bed}): <strong>{wait}</strong>
+      </p>
+    ));
+  };
 
   return (
     <div className="bg-teal-600 p-6 rounded-2xl shadow-xl w-full max-w-6xl mx-auto mt-6 space-y-6">
@@ -115,6 +111,7 @@ export default function BookedHospitalsPage() {
                       <Clock size={14} className="inline-block mr-1" />
                       Time: {b.time}
                     </p>
+                    {renderWaitTimes(b.wait)}
                   </div>
                 </div>
                 <button
@@ -192,11 +189,7 @@ export default function BookedHospitalsPage() {
                         <Mail size={16} /> <strong>Email:</strong> {selectedBooking?.email}
                       </p>
 
-                      {getWaitTime(selectedBooking) && (
-                        <p className="flex items-center gap-1">
-                          <Clock size={16} /> <strong>Wait Time:</strong> {getWaitTime(selectedBooking)}
-                        </p>
-                      )}
+                      {renderWaitTimes(selectedBooking?.wait)}
 
                       {selectedBooking?.issue && (
                         <div>
@@ -221,6 +214,14 @@ export default function BookedHospitalsPage() {
                           <Globe size={16} /> Visit Site
                         </a>
                       )}
+                      <a
+                          href='https://www.dial4242.com'
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="bg-teal-700 hover:bg-black text-white px-4 py-2 rounded block w-full sm:w-1/2 flex items-center justify-center gap-1"
+                        >
+                          <Globe size={16} /> Ambulance
+                        </a>
                       <button
                         className="bg-red-600 hover:bg-black text-white px-4 py-2 rounded block w-full sm:w-1/2"
                         onClick={async () => {
