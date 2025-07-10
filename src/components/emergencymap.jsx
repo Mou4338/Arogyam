@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import FilterEmergency from './FilterEmergency.jsx';
+import FilterEmergency from './FilterControls.jsx';
 import { Car, Footprints as Walk, Bike } from 'lucide-react';
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
@@ -94,7 +94,7 @@ export default function MapSection() {
             const res = await fetch(url);
             const data = await res.json();
             updatedDurations[profile] = data.routes?.[0]?.duration
-              ? Math.round(data.routes[0].duration / 60)
+              ? (data.routes[0].duration / 60).toFixed(1) // duration in minutes with 1 decimal
               : null;
           })
         );
@@ -106,45 +106,41 @@ export default function MapSection() {
     });
   };
 
-  const handleFilter = ({ search, sortBy, reset }) => {
+  const handleFilter = (filters) => {
     let filtered = [...allHospitals];
 
-    if (reset) {
-      setFilteredHospitals(allHospitals);
-      if (map) {
-        clearRouteFromMap();
-        renderMarkers(allHospitals, map);
-      }
-      return;
-    }
-
-    if (search) {
+    if (filters.search) {
       filtered = filtered.filter((h) =>
-        h.name.toLowerCase().includes(search.toLowerCase())
+        h.name.toLowerCase().includes(filters.search.toLowerCase())
       );
     }
 
-    if (sortBy === 'wait') {
-      filtered = filtered.filter((h) => parseInt(h.wait?.Emergency) <= 15);
-      filtered.sort((a, b) => parseInt(a.wait?.Emergency || 999) - parseInt(b.wait?.Emergency || 999));
-    } else if (sortBy === 'distance') {
-      filtered = filtered.filter((h) => h.distance !== null && h.distance <= 2);
+    if (filters.maxWaitMinutes != null) {
+      filtered = filtered.filter((h) => getFirstWait(h.wait) <= filters.maxWaitMinutes);
+    }
+
+    if (filters.maxDistanceKm != null) {
+      filtered = filtered.filter((h) => h.distance !== null && h.distance <= filters.maxDistanceKm);
+    }
+
+    if (filters.sortBy === 'wait') {
+      filtered.sort((a, b) => getFirstWait(a.wait) - getFirstWait(b.wait));
+    } else if (filters.sortBy === 'distance') {
       filtered.sort((a, b) => a.distance - b.distance);
     }
 
-    setFilteredHospitals(filtered);
-    if (map) {
-      clearRouteFromMap();
-      renderMarkers(filtered, map);
+    const noFiltersApplied = !filters.search && !filters.sortBy && filters.maxWaitMinutes == null && filters.maxDistanceKm == null;
+    if (noFiltersApplied && map) {
+      const routeLayerId = 'route-layer';
+      const routeSourceId = 'route-source';
+      if (map.getLayer(routeLayerId)) map.removeLayer(routeLayerId);
+      if (map.getSource(routeSourceId)) map.removeSource(routeSourceId);
+      setDestination(null);
+      setDurations({ driving: null, walking: null, cycling: null });
     }
-  };
 
-  const clearRouteFromMap = () => {
-    if (!map) return;
-    if (map.getLayer('route-layer')) map.removeLayer('route-layer');
-    if (map.getSource('route-source')) map.removeSource('route-source');
-    setDestination(null);
-    setDurations({ driving: null, walking: null, cycling: null });
+    setFilteredHospitals(filtered);
+    if (map) renderMarkers(filtered, map);
   };
 
   useEffect(() => {
@@ -198,22 +194,21 @@ export default function MapSection() {
     <div>
       <FilterEmergency onFilter={handleFilter} />
       <h3 className="text-2xl font-bold text-black p-3 mt-3">Emergency Bed Map View</h3>
-      
+
       <div className="flex flex-wrap gap-3 my-3">
         {['driving', 'walking', 'cycling'].map((mode) => (
           <button
             key={mode}
             onClick={() => setTravelMode(mode)}
-            className={`flex items-center gap-2 px-3 py-2 rounded text-sm font-medium transition border ${
+            className={`flex items-center gap-2 px-3 py-1 rounded text-sm font-medium transition border ${
               travelMode === mode
                 ? 'bg-[#64bcae] text-white border-[#64bcae]'
                 : 'bg-white text-[#132d2e] border-gray-300 hover:bg-gray-100'
             }`}
           >
-            {mode === 'driving' && <Car size={16} />}
-            {mode === 'walking' && <Walk size={16} />}
-            {mode === 'cycling' && <Bike size={16} />}
-            <span className="capitalize">{mode}</span>
+            {mode === 'driving' && 'Drive'}
+            {mode === 'walking' && 'Walk'}
+            {mode === 'cycling' && 'Cycle'}
             {durations[mode] !== null && (
               <span className="text-xs text-gray-600">({durations[mode]} min)</span>
             )}

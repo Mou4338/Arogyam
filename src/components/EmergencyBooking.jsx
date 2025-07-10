@@ -172,12 +172,13 @@ export default function BookedEmergency() {
                         <Globe size={16} /> Visit Site
                       </a>
                     )}
-                    <button
-                      onClick={closeDialog}
-                      className="bg-teal-700 hover:bg-black text-white px-4 py-2 rounded w-full sm:w-1/2"
-                    >
-                      Close
-                    </button>
+                    <a
+                    href='https://www.dial4242.com'
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-teal-700 hover:bg-black text-white px-4 py-2 rounded block w-full sm:w-1/2 flex items-center justify-center gap-1">
+                    <Phone size={16} /> Ambulance
+                    </a>
                     <button
                       onClick={() => handleDelete(selectedBooking.id)}
                       className="bg-red-600 hover:bg-black text-white px-4 py-2 rounded w-full sm:w-1/2"

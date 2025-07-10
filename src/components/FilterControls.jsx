@@ -53,6 +53,7 @@ export default function FilterControls({ onFilter }) {
         <input
           type="number"
           min={sortBy === 'wait' ? '5' : '1'}
+          max={sortBy === 'wait' ? '120' : '20'}
           placeholder={sortBy === 'wait' ? 'Max Wait (min)' : 'Max Distance (km)'}
           value={customValue}
           onChange={(e) => setCustomValue(e.target.value)}

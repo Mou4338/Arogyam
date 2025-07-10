@@ -126,8 +126,6 @@ export default function MapSection() {
       filtered.sort((a, b) => getFirstWait(a.wait) - getFirstWait(b.wait));
     } else if (filters.sortBy === 'distance') {
       filtered.sort((a, b) => a.distance - b.distance);
-    } else if (filters.sortBy === 'availability') {
-      filtered.sort((a, b) => totalBeds(b.beds) - totalBeds(a.beds));
     }
 
     const noFiltersApplied = !filters.search && !filters.sortBy && filters.maxWaitMinutes == null && filters.maxDistanceKm == null;
@@ -148,11 +146,6 @@ export default function MapSection() {
     if (!wait) return Infinity;
     const times = Object.values(wait).map((v) => parseFloat(v));
     return Math.min(...times);
-  };
-
-  const totalBeds = (beds) => {
-    if (!beds) return 0;
-    return Object.values(beds).reduce((sum, count) => sum + count, 0);
   };
 
   useEffect(() => {
@@ -215,7 +208,7 @@ export default function MapSection() {
               travelMode === mode ? 'bg-[#64bcae] text-white' : 'bg-gray-100 text-[#132d2e]'
             }`}
           >
-            {mode === 'driving' && 'Car'}
+            {mode === 'driving' && 'Drive'}
             {mode === 'walking' && 'Walk'}
             {mode === 'cycling' && 'Cycle'}
             {durations[mode] !== null && ` (${durations[mode]} min)`}

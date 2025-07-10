@@ -36,23 +36,23 @@ export default function Home() {
   return (
     <div className="flex flex-col lg:flex-row bg-slate-100 gap-4 p-4">
       {/* Left Side: Map + Emergency Hospitals */}
-      <div className="w-full lg:w-[70%] flex flex-col gap-4">
+      <div className="w-full lg:w-[75%] flex flex-col gap-4">
         {/* Map Section */}
         <div className="bg-white rounded-lg p-4 shadow">
           <MapSection />
         </div>
 
         {/* Emergency Hospital Section */}
-        <div className="bg-[#3f8578] rounded-lg p-4 shadow text-white">
-          <EmergencyHospital addEmergencyBooking={addEmergencyBooking}/>
+        <div className="gap-4">
+          <EmergencyBooking bookings={bookings} />
         </div>
       </div>
 
-      {/* Right Side: Emergency Call + Tips */}
-      <div className="w-full lg:w-[30%] flex flex-col gap-4">
+      {/* Right Side: Emergency Call + Tips + Nearby Hospitals */}
+      <div className="w-full lg:w-[25%] flex flex-col gap-4">
         {/* Emergency Call Box */}
         <Quicktips />
-        <EmergencyBooking bookings={bookings} />
+        <EmergencyHospital addEmergencyBooking={addEmergencyBooking}/>
         <CabBooking />
       </div>
     </div>
