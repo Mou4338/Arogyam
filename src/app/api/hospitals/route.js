@@ -3,15 +3,12 @@ import { NextResponse } from 'next/server';
 export async function GET() {
   const hospitals = [
     {
-      name: 'Lion’s Eye Hospital',
+      name: 'Matrenity Care Hospital',
       address: 'CRPF Square, Bhubaneswar',
-      lat: 20.283089,
-      lng: 85.833706,
-      beds: { General: 8, ICU: 4, Emergency: 5, Maternity: 0, SDU: 0 },
+      lat: 20.29435,
+      lng: 85.84415,
+      beds: { General: 8, ICU: 4, Emergency: 5, Maternity: 0, SDU: 0, special: 2},
       wait: { Maternity: "10–20 min", SDU: "15–25 min" },
-      Time: '17 min',
-      distance: '1.8 km',
-      distanceKm: 1.8,
       phone: '+91-674-1234567',
       email: 'info@lionshospital.com',
       website: 'https://lionshospital.com',
@@ -30,7 +27,7 @@ export async function GET() {
     {
       name: 'ESI Hospital',
       address: 'Jayadev Vihar Road, Bhubaneswar',
-      lat: 20.2952,
+      lat: 20.2960,
       lng: 85.8406,
       beds: { General: 20, ICU: 0, Emergency: 4, Maternity: 2, SDU: 3 },
       wait: { ICU: "10–15 min" },
@@ -96,8 +93,8 @@ export async function GET() {
     {
       name: 'AIMS Hospital',
       address: 'Near Jan Path, Bhubaneswar',
-      lat: 20.2965,
-      lng: 85.8412,
+      lat: 20.2967,
+      lng: 85.8422,
       beds: { General: 15, ICU: 3, Emergency: 0, Maternity: 8, SDU: 9 },
       wait: { Emergency: "10-15 min" },
       phone: '+91-674-9988776',

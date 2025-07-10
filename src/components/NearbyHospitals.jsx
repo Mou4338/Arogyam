@@ -1,24 +1,28 @@
 'use client';
 
 import { useEffect, useState, Fragment } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
 import { useForm } from 'react-hook-form';
-import { db } from '@/lib/firebaseConfig'; 
+import { Dialog, Transition } from '@headlessui/react';
+import { db } from '@/lib/firebaseConfig';
 import { collection, addDoc } from 'firebase/firestore';
+import HospitalDialog from '@/components/HospitalDialog';
 
 export default function NearbyHospitals({ addBooking }) {
   const [hospitals, setHospitals] = useState([]);
+  const [filteredHospitals, setFilteredHospitals] = useState([]);
   const [selectedHospital, setSelectedHospital] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [maxDistance, setMaxDistance] = useState(20);
+  const [selectedBedType, setSelectedBedType] = useState('');
 
   const origin = [85.8412, 20.2965];
 
-  // react-hook-form setup
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors }
+    formState: { errors },
   } = useForm();
 
   useEffect(() => {
@@ -40,31 +44,12 @@ export default function NearbyHospitals({ addBooking }) {
           })
         );
 
-        const parseWait = (hospital) => {
-          const beds = hospital.beds || {};
-          const wait = hospital.wait || {};
-          const unavailable = Object.entries(beds).filter(
-            ([type, count]) => count === 0 && type.toLowerCase() !== 'emergency'
-          );
-          const waitTimes = unavailable.map(([type]) => {
-            const val = wait[type];
-            if (!val) return Infinity;
-            const num = parseInt(val.match(/\d+/)?.[0]);
-            return isNaN(num) ? Infinity : num;
-          });
-          return waitTimes.length > 0 ? Math.min(...waitTimes) : Infinity;
-        };
+        const sortedHospitals = updatedHospitals
+          .filter(h => h.distance !== null)
+          .sort((a, b) => a.distance - b.distance);
 
-        updatedHospitals.sort((a, b) => {
-          const distA = a.distance ?? Infinity;
-          const distB = b.distance ?? Infinity;
-          if (distA !== distB) return distA - distB;
-          const waitA = parseWait(a);
-          const waitB = parseWait(b);
-          return waitA - waitB;
-        });
-
-        setHospitals(updatedHospitals);
+        setHospitals(sortedHospitals);
+        setFilteredHospitals(sortedHospitals);
       } catch (err) {
         console.error('Failed to fetch or calculate distances:', err);
       }
@@ -72,6 +57,31 @@ export default function NearbyHospitals({ addBooking }) {
 
     fetchAndCalculateDistances();
   }, []);
+
+  const applyCombinedFilters = () => {
+    let result = hospitals.filter((h) =>
+      h.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    result = result.filter((h) => h.distance !== null && h.distance <= maxDistance);
+
+    if (selectedBedType) {
+      const available = result.filter((h) => h.beds?.[selectedBedType] > 0);
+      const unavailable = result
+        .filter((h) => h.beds?.[selectedBedType] === 0)
+        .sort((a, b) => {
+          const distA = a.distance ?? Infinity;
+          const distB = b.distance ?? Infinity;
+          if (distA !== distB) return distA - distB;
+
+          const waitA = parseInt(a.wait?.[selectedBedType]?.match(/\d+/)?.[0] || '999');
+          const waitB = parseInt(b.wait?.[selectedBedType]?.match(/\d+/)?.[0] || '999');
+          return waitA - waitB;
+        });
+      result = [...available.sort((a, b) => a.distance - b.distance), ...unavailable];
+    }
+
+    setFilteredHospitals(result);
+  };
 
   const openModal = (hospital) => {
     setSelectedHospital(hospital);
@@ -85,7 +95,6 @@ export default function NearbyHospitals({ addBooking }) {
     reset();
   };
 
-  // Handle form submission
   const onSubmit = async (data) => {
     if (!selectedHospital) return;
 
@@ -105,9 +114,7 @@ export default function NearbyHospitals({ addBooking }) {
     try {
       await addDoc(collection(db, 'bookings'), bookingDetails);
       addBooking(bookingDetails);
-      alert(
-        `✅ Booking confirmed for ${data.bedType} bed at ${selectedHospital.name} on ${data.date} at ${data.time}.`
-      );
+      alert(`✅ Booking confirmed for ${data.bedType} bed at ${selectedHospital.name} on ${data.date} at ${data.time}.`);
       setIsOpen(false);
       reset();
     } catch (error) {
@@ -116,30 +123,107 @@ export default function NearbyHospitals({ addBooking }) {
     }
   };
 
+  const resetFilters = () => {
+    setSearchTerm('');
+    setMaxDistance(20);
+    setSelectedBedType('');
+    setFilteredHospitals(hospitals);
+  };
+
+  const bedTypes = Array.from(
+    new Set(
+      hospitals.flatMap((h) =>
+        Object.keys(h.beds || {}).filter((t) => t.toLowerCase() !== 'emergency')
+      )
+    )
+  );
+
   return (
     <div className="bg-teal-600 p-5 rounded-xl shadow-xl w-full max-w-sm">
-      <div className="space-y-4"></div>
-      <h3 className="text-xl font-bold text-white mb-4 mt-4 flex items-center gap-2">
+      <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
         Nearby Hospitals
       </h3>
 
+      <div className="flex items-center gap-2 mb-2">
+        <input
+          type="text"
+          placeholder="Search by name..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full p-2 bg-white rounded-md border border-teal-300"
+        />
+        <button
+          onClick={applyCombinedFilters}
+          className="bg-white text-teal-600 font-semibold px-3 py-2 rounded-md hover:bg-black hover:text-white shadow-md"
+        >
+          Search
+        </button>
+      </div>
+
+      <div className="flex mt-4 items-center gap-2 mb-3">
+        <div className="flex-1 p-2 bg-white rounded-md border border-teal-300">
+          <label className="text-black text-sm block mb-1">
+            Max Distance: {maxDistance} km
+          </label>
+          <input
+            type="range"
+            min="1"
+            max="20"
+            value={maxDistance}
+            onChange={(e) => setMaxDistance(Number(e.target.value))}
+            className="w-full"
+          />
+        </div>
+      </div>
+
+      <div className="flex items-center gap-2 mb-3">
+        <select
+          className="w-full bg-white p-2 rounded-md border border-teal-300"
+          value={selectedBedType}
+          onChange={(e) => setSelectedBedType(e.target.value)}
+        >
+          <option value="">Select Bed Type</option>
+          {bedTypes.map((type) => (
+            <option key={type} value={type}>
+              {type.charAt(0).toUpperCase() + type.slice(1)}
+            </option>
+          ))}
+        </select>
+      </div>
+      <button
+          onClick={applyCombinedFilters}
+          className="w-full mb-4 bg-white text-teal-600 font-semibold py-2 rounded-md hover:bg-black hover:text-white shadow-md">
+          Filter
+        </button>
+      <button
+        onClick={resetFilters}
+        className="w-full mb-4 bg-red-100 text-red-600 font-semibold py-2 rounded-md hover:bg-black hover:text-white shadow-md"
+      >
+        Reset
+      </button>
+
       <div className="space-y-2 max-h-[420px] p-2 overflow-y-auto">
-        {hospitals.length === 0 ? (
+        {filteredHospitals.length === 0 ? (
           <p className="text-white text-sm">No hospitals found nearby.</p>
         ) : (
-          hospitals.map((h, i) => {
+          filteredHospitals.map((h, i) => {
             const filteredBeds = h.beds
               ? Object.fromEntries(
-                  Object.entries(h.beds).filter(([type]) => type.toLowerCase() !== 'emergency')
+                  Object.entries(h.beds).filter(
+                    ([type]) => type.toLowerCase() !== 'emergency'
+                  )
                 )
               : {};
 
+            const unavailable = selectedBedType && h.beds?.[selectedBedType] === 0;
             const unavailableBeds = Object.entries(filteredBeds).filter(([_, count]) => count === 0);
 
             return (
               <div
                 key={h.id || `${h.name}-${i}`}
-                className="cursor-pointer bg-white border border-teal-200 rounded-lg p-4 shadow-md shadow-teal-100 text-teal-900 hover:bg-teal-50 transition"
+                className={`cursor-pointer bg-white border border-teal-200 rounded-lg p-4 shadow-md shadow-teal-100 text-teal-900 hover:bg-teal-50 transition ${
+                  unavailable ? 'opacity-80' : ''
+                }`}
                 onClick={() => openModal(h)}
               >
                 <p className="text-base font-semibold">{h.name}</p>
@@ -147,6 +231,12 @@ export default function NearbyHospitals({ addBooking }) {
                 <p className="text-sm mt-1">
                   Distance: {h.distance ? `${h.distance.toFixed(1)} km` : '–'}
                 </p>
+
+                {unavailable && (
+                  <p className="text-xs text-red-600 mt-1 font-semibold">
+                    Unavailable {selectedBedType.charAt(0).toUpperCase() + selectedBedType.slice(1)} bed
+                  </p>
+                )}
 
                 {unavailableBeds.length > 0 && h.wait && (
                   <div className="text-xs mt-1">
@@ -176,168 +266,15 @@ export default function NearbyHospitals({ addBooking }) {
         )}
       </div>
 
-      <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-50" onClose={closeModal}>
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
-          </Transition.Child>
-
-          <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="scale-95 opacity-0"
-                enterTo="scale-100 opacity-100"
-                leave="ease-in duration-200"
-                leaveFrom="scale-100 opacity-100"
-                leaveTo="scale-95 opacity-0"
-              >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden bg-teal-50 border border-teal-600 rounded-2xl shadow-xl p-6 text-left align-middle transition-all">
-                  <Dialog.Title className="text-3xl font-bold text-teal-800 mb-2">
-                    {selectedHospital?.name}
-                  </Dialog.Title>
-                  <p className="text-medium font-semibold text-teal-800">
-                    Address: {selectedHospital?.address}
-                  </p>
-
-                  <div className="mt-3 text-sm space-y-1 text-teal-800">
-                    <p>
-                      Distance:{' '}
-                      {selectedHospital?.distance
-                        ? `${selectedHospital.distance.toFixed(1)} km`
-                        : '-'}
-                    </p>
-                    <p>Phone: {selectedHospital?.phone}</p>
-                    <p>Email: {selectedHospital?.email}</p>
-                  </div>
-
-                  {selectedHospital?.beds && selectedHospital?.wait && (
-                    <div className="mt-2">
-                      <div className="space-y-1 text-sm text-teal-800">
-                        {Object.entries(selectedHospital.beds)
-                          .filter(([type, count]) => count === 0 && type.toLowerCase() !== 'emergency')
-                          .map(([type]) => (
-                            <p key={type}>
-                              {type}: Wait Time: {selectedHospital.wait?.[type] || '–'}
-                            </p>
-                          ))}
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="mt-4">
-                    <h4 className="font-bold text-sm mb-1 text-teal-800">Available Beds:</h4>
-                    <div className="grid grid-cols-2 gap-2 text-sm">
-                      {selectedHospital?.beds &&
-                        Object.entries(selectedHospital.beds)
-                          .filter(([type]) => type.toLowerCase() !== 'emergency')
-                          .map(([type, count]) => (
-                            <div
-                              key={type}
-                              className="mt-1 bg-teal-300 text-teal-800 rounded px-2 py-1 text-center"
-                            >
-                              {type}: <strong>{count}</strong>
-                            </div>
-                          ))}
-                    </div>
-                  </div>
-
-                  {/* react-hook-form booking form */}
-                  <form className="mt-5 space-y-4" onSubmit={handleSubmit(onSubmit)}>
-                    <div>
-                      <label className="text-sm font-semibold text-teal-800">Select Bed Type</label>
-                      <select
-                        className="w-full mt-1 border border-teal-600 rounded px-3 py-2"
-                        {...register('bedType', { required: true })}
-                      >
-                        <option value="">-- Choose Bed Type --</option>
-                        {selectedHospital?.beds &&
-                          Object.keys(selectedHospital.beds)
-                            .filter((type) => type.toLowerCase() !== 'emergency')
-                            .map((type) => (
-                              <option key={type} value={type}>
-                                {type.charAt(0).toUpperCase() + type.slice(1)}
-                              </option>
-                            ))}
-                      </select>
-                      {errors.bedType && (
-                        <span className="text-red-500 text-xs">Please select a bed type.</span>
-                      )}
-                    </div>
-
-                    <div>
-                      <label className="text-sm font-semibold text-teal-800">Appointment Date</label>
-                      <input
-                        type="date"
-                        className="w-full mt-1 border border-teal-600 rounded px-3 py-2"
-                        {...register('date', { required: true })}
-                      />
-                      {errors.date && (
-                        <span className="text-red-500 text-xs">Please select a date.</span>
-                      )}
-                    </div>
-
-                    <div>
-                      <label className="text-sm font-semibold text-teal-800">Appointment Time</label>
-                      <input
-                        type="time"
-                        className="w-full mt-1 border border-teal-600 rounded px-3 py-2"
-                        {...register('time', { required: true })}
-                      />
-                      {errors.time && (
-                        <span className="text-red-500 text-xs">Please select a time.</span>
-                      )}
-                    </div>
-
-                    <div>
-                      <label className="text-sm font-semibold text-teal-800">
-                        Describe Health Issue
-                      </label>
-                      <textarea
-                        rows={3}
-                        className="w-full mt-1 border border-teal-600 rounded px-3 py-2 resize-none"
-                        placeholder="Briefly describe the patient’s condition..."
-                        {...register('issue', { required: true })}
-                      />
-                      {errors.issue && (
-                        <span className="text-red-500 text-xs">
-                          Please describe the health issue.
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="mt-6 flex gap-4 justify-between text-center">
-                      <button
-                        type="submit"
-                        className="w-1/2 bg-[#3f8578] hover:bg-black text-white font-semibold py-2 rounded"
-                      >
-                        Book Bed
-                      </button>
-                      <a
-                        href={selectedHospital?.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-1/2 bg-[#3f8578] hover:bg-black text-white font-semibold py-2 rounded text-center"
-                      >
-                        Visit Website
-                      </a>
-                    </div>
-                  </form>
-                </Dialog.Panel>
-              </Transition.Child>
-            </div>
-          </div>
-        </Dialog>
-      </Transition>
+      <HospitalDialog
+        isOpen={isOpen}
+        closeModal={closeModal}
+        selectedHospital={selectedHospital}
+        register={register}
+        handleSubmit={handleSubmit}
+        onSubmit={onSubmit}
+        errors={errors}
+      />
     </div>
   );
 }

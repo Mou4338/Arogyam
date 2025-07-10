@@ -16,7 +16,6 @@ export default function MapSection() {
   const [durations, setDurations] = useState({ driving: null, walking: null, cycling: null });
   const [allHospitals, setAllHospitals] = useState([]);
   const [filteredHospitals, setFilteredHospitals] = useState([]);
-  const [selectedBedType, setSelectedBedType] = useState('');
 
   const markersRef = useRef([]);
 
@@ -48,24 +47,17 @@ export default function MapSection() {
 
         setAllHospitals(updatedHospitals);
         setFilteredHospitals(updatedHospitals);
-        renderMarkers(updatedHospitals, initMap, selectedBedType);
+        renderMarkers(updatedHospitals, initMap);
       });
 
     return () => initMap.remove();
   }, []);
 
-  const renderMarkers = (hospitals, mapInstance, bedTypeFilter = '') => {
+  const renderMarkers = (hospitals, mapInstance) => {
     markersRef.current.forEach((m) => m.remove());
     markersRef.current = [];
 
     hospitals.forEach((hospital) => {
-      if (
-        bedTypeFilter &&
-        (!hospital.beds || hospital.beds[bedTypeFilter] === 0 || hospital.beds[bedTypeFilter] == null)
-      ) {
-        return; // Skip rendering this marker
-      }
-
       let waitHTML = '';
       if (hospital.wait) {
         for (const bedType in hospital.wait) {
@@ -101,7 +93,7 @@ export default function MapSection() {
             const res = await fetch(url);
             const data = await res.json();
             updatedDurations[profile] = data.routes?.[0]?.duration
-              ? Math.round(data.routes[0].duration / 60)
+              ? (data.routes[0].duration / 60).toFixed(1) // duration in minutes with 1 decimal
               : null;
           })
         );
@@ -122,25 +114,23 @@ export default function MapSection() {
       );
     }
 
-    if (filters.bedType) {
-      const bedKey = filters.bedType.toLowerCase();
-      filtered = filtered.filter((h) => h.beds?.[bedKey] > 0);
-      setSelectedBedType(bedKey);
-    } else {
-      setSelectedBedType('');
+    if (filters.maxWaitMinutes != null) {
+      filtered = filtered.filter((h) => getFirstWait(h.wait) <= filters.maxWaitMinutes);
+    }
+
+    if (filters.maxDistanceKm != null) {
+      filtered = filtered.filter((h) => h.distance !== null && h.distance <= filters.maxDistanceKm);
     }
 
     if (filters.sortBy === 'wait') {
-      filtered = filtered.filter((h) => getFirstWait(h.wait) <= 12);
       filtered.sort((a, b) => getFirstWait(a.wait) - getFirstWait(b.wait));
     } else if (filters.sortBy === 'distance') {
-      filtered = filtered.filter((h) => h.distance !== null && h.distance <= 2);
       filtered.sort((a, b) => a.distance - b.distance);
     } else if (filters.sortBy === 'availability') {
       filtered.sort((a, b) => totalBeds(b.beds) - totalBeds(a.beds));
     }
 
-    const noFiltersApplied = !filters.search && !filters.bedType && !filters.sortBy;
+    const noFiltersApplied = !filters.search && !filters.sortBy && filters.maxWaitMinutes == null && filters.maxDistanceKm == null;
     if (noFiltersApplied && map) {
       const routeLayerId = 'route-layer';
       const routeSourceId = 'route-source';
@@ -151,12 +141,12 @@ export default function MapSection() {
     }
 
     setFilteredHospitals(filtered);
-    if (map) renderMarkers(filtered, map, filters.bedType?.toLowerCase() || '');
+    if (map) renderMarkers(filtered, map);
   };
 
   const getFirstWait = (wait) => {
     if (!wait) return Infinity;
-    const times = Object.values(wait).map((v) => parseInt(v));
+    const times = Object.values(wait).map((v) => parseFloat(v));
     return Math.min(...times);
   };
 
@@ -214,9 +204,8 @@ export default function MapSection() {
 
   return (
     <div className="bg-white p-4 rounded shadow">
-
       <FilterControls onFilter={handleFilter} />
-       <h3 className="text-2xl font-bold text-black p-3 mt-3"> Map View</h3>
+      <h3 className="text-2xl font-bold text-black p-3 mt-3"> Map View</h3>
       <div className="flex flex-wrap gap-3 my-3">
         {['driving', 'walking', 'cycling'].map((mode) => (
           <button
@@ -233,10 +222,8 @@ export default function MapSection() {
           </button>
         ))}
       </div>
-
       <div ref={mapRef} className="h-[400px] w-full mt-2 rounded-xl border" />
     </div>
   );
 }
-
 
