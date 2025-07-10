@@ -84,53 +84,54 @@ export default function BookedHospitalsPage() {
       {filteredBookings.length === 0 ? (
         <p className="text-white font-semibold text-xl">No bed bookings yet.</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredBookings.map((b, idx) => (
-            <div
-              key={idx}
-              className="bg-teal-50 text-teal-900 border border-teal-200 rounded-lg p-5 shadow-md flex flex-col justify-between"
-            >
-              <div>
-                <p className="text-lg font-semibold break-words flex items-center gap-2">
-                  <User size={18} /> {b.name}
-                </p>
-                <p className="text-sm mt-1 break-words flex items-center gap-1">
-                  <MapPin size={16} /> {b.address}
-                </p>
-                <div className="text-sm mt-3 space-y-1">
-                  <p>
-                    <MapPin size={14} className="inline-block mr-1" />
-                    Distance: {b.distance?.toFixed(1)} km
-                  </p>
-                  <p>
-                    <BedDouble size={14} className="inline-block mr-1" />
-                    Bed Type: <strong>{b.bedType}</strong>
-                  </p>
-                  <p>
-                    <CalendarDays size={14} className="inline-block mr-1" />
-                    Date: {b.date}
-                  </p>
-                  <p>
-                    <Clock size={14} className="inline-block mr-1" />
-                    Time: {b.time}
-                  </p>
-                </div>
-              </div>
-              <button
-                className="mt-4 text-sm bg-teal-700 hover:bg-black text-white px-4 py-2 rounded"
-                onClick={() => openDialog(b)}
+        <div className="overflow-x-auto">
+          <div className="flex space-x-4 pb-2">
+            {filteredBookings.map((b, idx) => (
+              <div
+                key={idx}
+                className="min-w-[300px] max-w-sm bg-teal-50 text-teal-900 border border-teal-200 rounded-lg p-5 shadow-md flex flex-col justify-between"
               >
-                View Full Details
-              </button>
-            </div>
-          ))}
+                <div>
+                  <p className="text-lg font-semibold break-words flex items-center gap-2">
+                    <User size={18} /> {b.name}
+                  </p>
+                  <p className="text-sm mt-1 break-words flex items-center gap-1">
+                    <MapPin size={16} /> {b.address}
+                  </p>
+                  <div className="text-sm mt-3 space-y-1">
+                    <p>
+                      <MapPin size={14} className="inline-block mr-1" />
+                      Distance: {b.distance?.toFixed(1)} km
+                    </p>
+                    <p>
+                      <BedDouble size={14} className="inline-block mr-1" />
+                      Bed Type: <strong>{b.bedType}</strong>
+                    </p>
+                    <p>
+                      <CalendarDays size={14} className="inline-block mr-1" />
+                      Date: {b.date}
+                    </p>
+                    <p>
+                      <Clock size={14} className="inline-block mr-1" />
+                      Time: {b.time}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  className="mt-4 text-sm bg-teal-700 hover:bg-black text-white px-4 py-2 rounded"
+                  onClick={() => openDialog(b)}
+                >
+                  View Full Details
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
       {/* Full Details Dialog */}
       <Transition appear show={isDialogOpen} as={Fragment}>
         <Dialog as="div" className="relative z-50" onClose={closeDialog}>
-
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -145,7 +146,7 @@ export default function BookedHospitalsPage() {
 
           <div className="fixed inset-0 overflow-y-auto">
             <div className="flex min-h-full items-center justify-center p-4">
-              <form action="onSubmit" >
+              <form action="onSubmit">
                 <Transition.Child
                   as={Fragment}
                   enter="ease-out duration-300"
@@ -156,7 +157,6 @@ export default function BookedHospitalsPage() {
                   leaveTo="scale-95 opacity-0"
                 >
                   <Dialog.Panel className="w-full max-w-md sm:max-w-lg bg-teal-50 border border-teal-600 p-6 sm:p-8 rounded-2xl shadow-xl">
-
                     <Dialog.Title className="text-2xl sm:text-3xl font-bold text-teal-800 mb-2 break-words flex items-center gap-2">
                       <User size={24} /> {selectedBooking?.name}
                     </Dialog.Title>
@@ -239,12 +239,10 @@ export default function BookedHospitalsPage() {
                       >
                         Delete Booking
                       </button>
-
                     </div>
                   </Dialog.Panel>
                 </Transition.Child>
               </form>
-
             </div>
           </div>
         </Dialog>

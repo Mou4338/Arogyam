@@ -16,7 +16,6 @@ export default function MapSection() {
   const [durations, setDurations] = useState({ driving: null, walking: null, cycling: null });
   const [allHospitals, setAllHospitals] = useState([]);
   const [filteredHospitals, setFilteredHospitals] = useState([]);
-  const [selectedBedType, setSelectedBedType] = useState('');
 
   const markersRef = useRef([]);
 
@@ -48,24 +47,17 @@ export default function MapSection() {
 
         setAllHospitals(updatedHospitals);
         setFilteredHospitals(updatedHospitals);
-        renderMarkers(updatedHospitals, initMap, selectedBedType);
+        renderMarkers(updatedHospitals, initMap);
       });
 
     return () => initMap.remove();
   }, []);
 
-  const renderMarkers = (hospitals, mapInstance, bedTypeFilter = '') => {
+  const renderMarkers = (hospitals, mapInstance) => {
     markersRef.current.forEach((m) => m.remove());
     markersRef.current = [];
 
     hospitals.forEach((hospital) => {
-      if (
-        bedTypeFilter &&
-        (!hospital.beds || hospital.beds[bedTypeFilter] === 0 || hospital.beds[bedTypeFilter] == null)
-      ) {
-        return; // Skip rendering this marker
-      }
-
       let waitHTML = '';
       if (hospital.wait) {
         for (const bedType in hospital.wait) {
@@ -122,14 +114,6 @@ export default function MapSection() {
       );
     }
 
-    if (filters.bedType) {
-      const bedKey = filters.bedType.toLowerCase();
-      filtered = filtered.filter((h) => h.beds?.[bedKey] > 0);
-      setSelectedBedType(bedKey);
-    } else {
-      setSelectedBedType('');
-    }
-
     if (filters.sortBy === 'wait') {
       filtered = filtered.filter((h) => getFirstWait(h.wait) <= 12);
       filtered.sort((a, b) => getFirstWait(a.wait) - getFirstWait(b.wait));
@@ -140,7 +124,7 @@ export default function MapSection() {
       filtered.sort((a, b) => totalBeds(b.beds) - totalBeds(a.beds));
     }
 
-    const noFiltersApplied = !filters.search && !filters.bedType && !filters.sortBy;
+    const noFiltersApplied = !filters.search && !filters.sortBy;
     if (noFiltersApplied && map) {
       const routeLayerId = 'route-layer';
       const routeSourceId = 'route-source';
@@ -151,7 +135,7 @@ export default function MapSection() {
     }
 
     setFilteredHospitals(filtered);
-    if (map) renderMarkers(filtered, map, filters.bedType?.toLowerCase() || '');
+    if (map) renderMarkers(filtered, map);
   };
 
   const getFirstWait = (wait) => {
@@ -214,9 +198,8 @@ export default function MapSection() {
 
   return (
     <div className="bg-white p-4 rounded shadow">
-
       <FilterControls onFilter={handleFilter} />
-       <h3 className="text-2xl font-bold text-black p-3 mt-3"> Map View</h3>
+      <h3 className="text-2xl font-bold text-black p-3 mt-3"> Map View</h3>
       <div className="flex flex-wrap gap-3 my-3">
         {['driving', 'walking', 'cycling'].map((mode) => (
           <button
@@ -233,10 +216,7 @@ export default function MapSection() {
           </button>
         ))}
       </div>
-
       <div ref={mapRef} className="h-[400px] w-full mt-2 rounded-xl border" />
     </div>
   );
 }
-
-

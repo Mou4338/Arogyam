@@ -35,18 +35,6 @@ export default function FilterControls({ onFilter }) {
       />
 
       <select
-        value={bedType}
-        onChange={(e) => setBedType(e.target.value)}
-        className="px-4 py-2 rounded-lg border border-teal-500 focus:ring-2 focus:ring-teal-600 outline-none w-full sm:w-auto text-teal-800"
-      >
-        <option value="">🛎️ Bed Type</option>
-        <option value="general">General</option>
-        <option value="icu">ICU</option>
-        <option value="maternity">Maternity</option>
-        <option value="sdu">SDU</option>
-      </select>
-
-      <select
         value={sortBy}
         onChange={(e) => setSortBy(e.target.value)}
         className="px-4 py-2 rounded-lg border border-teal-700 focus:ring-2 focus:ring-teal-600 outline-none w-full sm:w-auto text-teal-800"

@@ -41,7 +41,7 @@ const quickactions = [
   {
     icon: <ExternalLink className="w-6 h-6 text-white" />,
     text: 'Order via Medicine Partners',
-    href: '#', // Replace with your preferred partner
+    href: 'https://www.netmeds.com/shipping-and-delivery-policy?source_attribution=ADW-CPC-Pmax_pharma-PY-Netmeds_Vib_PMax_FP&utm_source=ADW-CPC-Pmax_pharma-PY-Netmeds_Vib_PMax_FP&utm_medium=CPC&utm_campaign=ADW-CPC-Pmax_pharma-PY-Netmeds_Vib_PMax_FP&gad_source=1&gad_campaignid=18029363466&gbraid=0AAAAADRV5Ng3kPJNWgcMBrcE3M0WF7LqP&gclid=CjwKCAjwg7PDBhBxEiwAf1CVu23Cgd1jIjJvwCJYAh3xU4WQwv2hw8EzBPYEOg75PgKfHBXT3DdEIhoC7owQAvD_BwE', // Replace with your preferred partner
     external: true,
   },
 ];
