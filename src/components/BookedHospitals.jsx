@@ -220,7 +220,7 @@ export default function BookedHospitalsPage() {
                           rel="noopener noreferrer"
                           className="bg-teal-700 hover:bg-black text-white px-4 py-2 rounded block w-full sm:w-1/2 flex items-center justify-center gap-1"
                         >
-                          <Globe size={16} /> Ambulance
+                          <Phone size={16} /> Ambulance
                         </a>
                       <button
                         className="bg-red-600 hover:bg-black text-white px-4 py-2 rounded block w-full sm:w-1/2"
