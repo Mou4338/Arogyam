@@ -3,16 +3,16 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import emailjs from '@emailjs/browser';
-import { getAuth } from 'firebase/auth';
 import { app, db } from '@/lib/firebaseConfig';
 import { doc, setDoc, collection } from 'firebase/firestore';
 
-const AddReminder = ({ existingReminder = null, onSuccess }) => {
+const AddReminder = ({ existingReminder = null, onSuccess, user }) => {
   const {
     register,
     handleSubmit,
     reset,
     watch,
+    setValue,
     formState: { errors },
   } = useForm();
 
@@ -26,59 +26,64 @@ const AddReminder = ({ existingReminder = null, onSuccess }) => {
     }
   }, [existingReminder, reset]);
 
-  const sendEmail = async (data, userEmail) => {
-    const extraInfo =
-      data.frequency === 'weekly'
-        ? `Day: ${data.weekDay}`
-        : data.frequency === 'monthly'
-        ? `Date: ${data.monthDate}`
-        : data.frequency === 'specific'
-        ? `Specific Date: ${data.specificDate}`
-        : '';
-
-    const timeSlots = Array.from({ length: slotCount }, (_, i) => data[`time${i + 1}`]).join(', ');
-
-    const templateParams = {
-      from_name: 'Krishna Mohanty',
-      from_email: 'mohantykrishna57@gmail.com',
-      to_email: userEmail,
-      message: `Reminder: ${data.title}
-    Description: ${data.description || 'N/A'}
-    Times: ${timeSlots}
-    Frequency: ${data.frequency}
-    ${extraInfo}
-    Category: ${data.category}`,
-    };
-
-    try {
-      await emailjs.send(
-        'service_5smqzqa',
-        'template_kp8umah',
-        templateParams,
-        'h2k2x1Wt5R_6KFdOC'
-      );
-    } catch (error) {
-      console.error('Email FAILED...', error);
+useEffect(() => {
+    if (user?.email) {
+      setValue('email', user.email);
     }
-  };
+  }, [user, setValue]);
+//   const sendEmail = async (data, userEmail) => {
+//     const slotCount = Object.keys(data).filter((key) => key.startsWith('time')).length;
+
+//     const extraInfo =
+//       data.frequency === 'weekly'
+//         ? `Day: ${data.weekDay}`
+//         : data.frequency === 'monthly'
+//           ? `Date: ${data.monthDate}`
+//           : data.frequency === 'specific'
+//             ? `Specific Date: ${data.specificDate}`
+//             : '';
+
+//     const timeSlots = Array.from({ length: slotCount }, (_, i) => data[`time${i + 1}`]).join(', ');
+
+//     const templateParams = {
+//       from_name: 'Krishna Mohanty',
+//       from_email: 'mohantykrishna57@gmail.com',
+//       to_email: userEmail,
+//       message: `Reminder: ${data.title}
+// Description: ${data.description || 'N/A'}
+// Times: ${timeSlots}
+// Frequency: ${data.frequency}
+// ${extraInfo}
+// Category: ${data.category}`,
+//     };
+
+//     try {
+//       const result = await emailjs.send(
+//         'service_5smqzqa',
+//         'template_kp8umah',
+//         templateParams,
+//         'h2k2x1Wt5R_6KFdOC'
+//       );
+//       console.log("Email sent", result);
+//     } catch (error) {
+//       console.error('Email FAILED ', JSON.stringify(error, null, 2));
+//     }
+//   };
+
 
   const onSubmit = async (data) => {
     try {
-      const auth = getAuth(app);
-      const user = auth.currentUser;
-      const userEmail = user?.email;
-
-      if (!userEmail) {
-        console.error("User not logged in, can't send email.");
-        return;
-      }
 
       const docRef = existingReminder
         ? doc(db, 'reminders', existingReminder.id)
         : doc(collection(db, 'reminders'));
 
-      await setDoc(docRef, data);
-      await sendEmail(data, userEmail);
+      await setDoc(docRef, {
+        ...data,
+        userEmail:user.email,
+      });
+
+      // await sendEmail(data, userEmail);
 
       setSuccessMsg('Reminder saved and email sent!');
       reset();
@@ -91,9 +96,9 @@ const AddReminder = ({ existingReminder = null, onSuccess }) => {
 
   return (
     <div className="min-h-screen p-3 md:p-3 max-w-3xl mx-auto">
-      <h2 className="text-3xl font-bold mb-2 text-white">🩺 Add Health Reminder</h2>
+      <h2 className="text-3xl font-bold mb-2 text-white"> Add Health Reminder</h2>
       <p className="text-sm mb-6 text-white">
-        Schedule alerts to stay consistent with your wellness routines – hydration, medication, exercise, and more.
+        Schedule alerts to stay consistent with your wellness routines - hydration, medication, exercise, and more.
       </p>
 
       {successMsg && (
@@ -126,7 +131,6 @@ const AddReminder = ({ existingReminder = null, onSuccess }) => {
           />
         </div>
 
-        {/* Category */}
         <div className="bg-white rounded-lg shadow p-4">
           <label className="block font-medium text-gray-800 mb-1">Category *</label>
           <select
@@ -226,7 +230,7 @@ const AddReminder = ({ existingReminder = null, onSuccess }) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {Array.from({ length: slotCount }, (_, i) => (
             <div key={`time${i + 1}`} className="bg-white rounded-lg shadow p-4 flex flex-col">
-                              <label className="font-medium text-gray-800 mb-1">Slot {i + 1}</label>
+              <label className="font-medium text-gray-800 mb-1">Slot {i + 1}</label>
               <input
                 type="time"
                 className="p-2 border border-gray-300 rounded text-black"

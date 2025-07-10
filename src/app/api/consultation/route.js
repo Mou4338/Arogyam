@@ -12,7 +12,9 @@ export async function POST(req) {
         date: body.date,
         time: body.time,
         timezone: body.timezone,
+        email: body.email,
         createdAt: new Date(),
+
     });
 
     return new Response(JSON.stringify({ message: "Consultation added", id: docRef.id }), {

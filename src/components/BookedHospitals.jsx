@@ -143,7 +143,7 @@ export default function BookedHospitalsPage() {
 
           <div className="fixed inset-0 overflow-y-auto">
             <div className="flex min-h-full items-center justify-center p-4">
-              <form action="onSubmit">
+              
                 <Transition.Child
                   as={Fragment}
                   enter="ease-out duration-300"
@@ -243,7 +243,8 @@ export default function BookedHospitalsPage() {
                     </div>
                   </Dialog.Panel>
                 </Transition.Child>
-              </form>
+              
+
             </div>
           </div>
         </Dialog>

@@ -45,11 +45,11 @@ export default function Home() {
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="lg:w-2/3 space-y-8">
               <DoctorCard />
-              <Consultation />
+              <Consultation user={user}/>
             </div>
 
             <div className="lg:w-1/3">
-              <ScheduleCard />
+              <ScheduleCard user={user}/>
             </div>
           </div>
         </main>

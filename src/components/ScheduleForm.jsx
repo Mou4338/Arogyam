@@ -1,12 +1,13 @@
 "use client";
 
-import React from 'react';
+import React,{useEffect} from 'react';
 import { useForm } from 'react-hook-form';
 
-export default function ScheduleForm() {
+export default function ScheduleForm({user}) {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors }
   } = useForm({
     defaultValues: {
@@ -17,7 +18,11 @@ export default function ScheduleForm() {
       timezone: 'Asia/Kolkata (IST)',
     },
   });
-
+useEffect(() => {
+    if (user?.email) {
+      setValue('email', user.email);
+    }
+  }, [user, setValue]);
   const onSubmit = async (data) => {
     console.log(data);
     try {

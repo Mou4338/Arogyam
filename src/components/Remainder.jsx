@@ -8,17 +8,19 @@ import {
   getDocs,
   doc,
   deleteDoc,
+  query, where
 } from 'firebase/firestore';
 import { db } from '@/lib/firebaseConfig';
-import { Trash2, Pencil, Info } from 'lucide-react';
+import {Clock, Trash2, Pencil, Info, Calendar } from 'lucide-react';
 import AddReminder from '@/components/AddRemainder.jsx';
 import { Dialog } from '@headlessui/react';
+
 
 const weekDays = [
   'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday',
 ];
 
-const Remainder = () => {
+const Remainder = ({user}) => {
   const [reminders, setReminders] = useState([]);
   const [enabledMap, setEnabledMap] = useState({});
   const [editingReminder, setEditingReminder] = useState(null);
@@ -45,19 +47,31 @@ const Remainder = () => {
     setShowForm(true);
   };
 
-  const fetchReminders = async () => {
+const fetchReminders = async () => {
     try {
-      const snapshot = await getDocs(collection(db, 'reminders'));
-      const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      if (!user?.email) return;
+      const q = query(
+        collection(db, 'reminders'),
+        where("userEmail", "==", user.email)
+      );
+      const snapshot = await getDocs(q);
+      const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data()
+      }));
       setReminders(data);
     } catch (error) {
-      console.error('Error fetching reminders:', error);
+      console.error("Error fetching reminders:", error);
     }
   };
 
+
+
   useEffect(() => {
+  if (user?.email) {
     fetchReminders();
-  }, []);
+  }
+}, [user]);
 
   const formatDate = (date) => date?.toISOString().split('T')[0];
   const getWeekdayName = (date) => date?.toLocaleDateString('en-US', { weekday: 'long' });
@@ -68,6 +82,7 @@ const Remainder = () => {
   const selectedMonthDay = getDayOfMonth(selectedDate);
 
   const filteredReminders = reminders.filter((reminder) => {
+    
     const isDaily = reminder.frequency?.toLowerCase() === 'daily';
     const isSpecificMatch = reminder.specificDate === selectedDateStr;
     const isWeeklyByDate = reminder.weekDay === selectedDateWeekDay;
@@ -128,7 +143,7 @@ const Remainder = () => {
             .filter((key) => key.startsWith('time'))
             .map((key) => (
               <p key={key}>
-                ⏰ <span className="font-medium">{key.replace('time', 'Time Slot ')}:</span> {reminder[key]}
+                <Clock className="w-4 h-4 text-red-600"/> <span className="font-medium">{key.replace('time', 'Time Slot ')}:</span> {reminder[key]}
               </p>
             ))}
         </div>
@@ -147,7 +162,7 @@ const Remainder = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-4 rounded-xl">
-      <h3 className="text-3xl font-bold mb-6 text-black">Your Reminders</h3>
+      <h3 className="text-3xl font-bold mb-6 ">Your Reminders</h3>
 
       {/* Filters */}
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between bg-teal-50 rounded-2xl shadow-xl p-5 border border-black gap-4 mb-4">
@@ -162,7 +177,7 @@ const Remainder = () => {
           />
         </div>
         <div>
-          <label className="block font-bold text-[#3f8578] mb-1">🗓️ Filter by Weekday</label>
+          <label className="block font-bold text-[#3f8578] mb-1"><Calendar className="inline-block w-4 h-4 mr-1" /> Filter by Weekday</label>
           <select
             value={selectedWeekDay}
             onChange={(e) => setSelectedWeekDay(e.target.value)}
@@ -175,7 +190,7 @@ const Remainder = () => {
           </select>
         </div>
         <div className="self-start sm:self-end">
-          <label className="block font-bold text-[#3f8578] mb-1">🔄 Reset Filters</label>
+          <label className="block font-bold text-[#3f8578] mb-1">Reset Filters</label>
           <button onClick={resetFilters} className="mt-4 sm:mt-0 text-sm text-white bg-[#3f8578] px-8 py-1.5 rounded hover:bg-[#30695f] transition">
             Reset
           </button>

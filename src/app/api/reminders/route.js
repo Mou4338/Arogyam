@@ -13,6 +13,7 @@ export async function POST(req) {
       frequency,
       time,
       createdAt: new Date(),
+      userEmail: body.userEmail, 
     });
 
     return new Response(JSON.stringify({ message: "Reminder added", id: docRef.id }), {
