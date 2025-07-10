@@ -49,7 +49,7 @@ export default function Home() {
             </div>
 
             <div className="lg:w-1/3">
-              <ScheduleCard />
+              <ScheduleCard user={user}/>
             </div>
           </div>
         </main>

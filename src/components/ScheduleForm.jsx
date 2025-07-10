@@ -3,7 +3,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
-export default function ScheduleForm() {
+export default function ScheduleForm({user}) {
   const {
     register,
     handleSubmit,
@@ -14,6 +14,7 @@ export default function ScheduleForm() {
       description: '',
       date: '',
       time: '',
+      email:user?.email ,
       timezone: 'Asia/Kolkata (IST)',
     },
   });
