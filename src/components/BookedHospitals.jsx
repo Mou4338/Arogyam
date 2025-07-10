@@ -3,7 +3,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
-import { useForm } from 'react-hook-form';
 import {
   MapPin,
   Phone,
@@ -145,7 +144,7 @@ export default function BookedHospitalsPage() {
 
           <div className="fixed inset-0 overflow-y-auto">
             <div className="flex min-h-full items-center justify-center p-4">
-              <form action="onSubmit" >
+              
                 <Transition.Child
                   as={Fragment}
                   enter="ease-out duration-300"
@@ -243,7 +242,7 @@ export default function BookedHospitalsPage() {
                     </div>
                   </Dialog.Panel>
                 </Transition.Child>
-              </form>
+              
 
             </div>
           </div>

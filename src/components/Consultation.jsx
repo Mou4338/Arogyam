@@ -97,7 +97,7 @@ const Consultation = ({user}) => {
                         <p><strong>Time:</strong> {item.time}</p>
                       </div>
 
-                      {item.date === now && item.time === now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }) && (
+                      {item.date === now && item.time === now.toString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }) && (
                         <div className="mt-4 text-right">
                           <button
                             onClick={() => setChatOpen(true)}
