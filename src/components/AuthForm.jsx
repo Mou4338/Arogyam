@@ -36,8 +36,9 @@ export default function AuthForm({ type = 'login', onSubmit }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token }),
       });
-
       alert('Google login successful!');
+      window.location.href = "/reminders";
+
     } catch (error) {
       console.error('Google Auth Error:', error);
       alert('Google login failed!');
