@@ -5,7 +5,7 @@ import { db } from '@/lib/firebaseConfig';
 import { Dialog, Transition } from '@headlessui/react';
 import { CalendarClock, ChevronDown, ChevronUp, Send } from 'lucide-react';
 
-const Consultation = () => {
+const Consultation = ({user}) => {
   const [consultation, setConsultation] = useState([]);
   const [openIndex, setOpenIndex] = useState(null);
   const [chatOpen, setChatOpen] = useState(false);
