@@ -132,10 +132,10 @@ Modern healthcare systems suffer from:
 
 ## 👨‍💻 Team
 
-* Enakshy Mondal
-* Diya Sarkar
 * Moumita Das
 * Krishna Mohanty
+* Enakshy Mondal
+* Diya Sarkar
 
 ---
 
